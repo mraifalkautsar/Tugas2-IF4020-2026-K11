@@ -1,0 +1,6 @@
+This is a predetermined text file for comparing the five encryption modes.
+The same repeated blocks below make ECB's pattern leakage easy to observe.
+REPEAT-16-BYTES!REPEAT-16-BYTES!REPEAT-16-BYTES!REPEAT-16-BYTES!
+REPEAT-16-BYTES!REPEAT-16-BYTES!REPEAT-16-BYTES!REPEAT-16-BYTES!
+REPEAT-16-BYTES!REPEAT-16-BYTES!REPEAT-16-BYTES!REPEAT-16-BYTES!
+This final line deliberately ends at a non-block boundary.
