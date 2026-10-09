@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "docktui": "^0.1.1"
+  },
+  "scripts": {
+    "dev": "docker compose up -d --build && docktui",
+    "down": "docker compose down"
+  }
+}

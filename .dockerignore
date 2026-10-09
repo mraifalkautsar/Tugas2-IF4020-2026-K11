@@ -1,0 +1,12 @@
+.git
+.gitignore
+*.md
+reports/
+.vscode/
+.idea/
+node_modules/
+package*.json
+frontend/node_modules/
+frontend/dist/
+*.log
+.env*
