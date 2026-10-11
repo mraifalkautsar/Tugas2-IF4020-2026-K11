@@ -57,7 +57,6 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
 
   return (
     <div className="bg-white border-[2.5px] border-black shadow-[4px_4px_0px_#000000] p-5 md:p-6 space-y-6">
-      {/* Panel Top Heading */}
       <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b-2 border-black">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-sm bg-[#BE4BCE] border-2 border-black flex items-center justify-center text-white shadow-[1px_1px_0px_#000000]">
@@ -74,16 +73,13 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
         </div>
       </div>
 
-      {/* Grid Configuration Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Field 1: Master Key */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <label className="text-xs font-bold uppercase tracking-wider text-black flex items-center gap-1.5">
               <KeyRound className="w-4 h-4 stroke-[2.5]" />
               Master Key (16 Bytes / 128-Bit)
             </label>
-            {/* Validity Badge */}
             <span
               className={`text-[10px] font-mono font-bold px-2 py-0.5 border-2 border-black flex items-center gap-1 ${
                 isKeyValid
@@ -127,7 +123,6 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
           </p>
         </div>
 
-        {/* Field 3: Initialization Vector (IV) */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <label className="text-xs font-bold uppercase tracking-wider text-black flex items-center gap-1.5">
@@ -194,9 +189,7 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
         </div>
       </div>
 
-      {/* Row 2: Mode of Operation & Padding Scheme */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t-2 border-black">
-        {/* Field 2: Mode Operasi (Segmented Radio Pills) */}
         <div className="space-y-2">
           <label className="text-xs font-bold uppercase tracking-wider text-black block">
             Mode of Operation
@@ -229,7 +222,6 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
           </p>
         </div>
 
-        {/* Field 4: Padding Scheme */}
         <div className="space-y-2">
           <label className="text-xs font-bold uppercase tracking-wider text-black block">
             Padding Scheme
@@ -259,9 +251,7 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
         </div>
       </div>
 
-      {/* Action Buttons: Encrypt & Decrypt */}
       <div className="pt-4 border-t-[2.5px] border-black grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Encrypt Button: Royal Blue #4542E0 */}
         <button
           type="button"
           disabled={!canExecute || !isKeyValid || (!isIvValid && !isEcbMode) || isLoading}
@@ -272,7 +262,6 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
           {isLoading ? 'Processing...' : '🔒 Encrypt Payload'}
         </button>
 
-        {/* Decrypt Button: Deep Blush #E75FA8 */}
         <button
           type="button"
           disabled={!canExecute || !isKeyValid || (!isIvValid && !isEcbMode) || isLoading}

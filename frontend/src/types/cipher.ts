@@ -1,4 +1,4 @@
-export type Matrix4x4 = number[][]; // 4 rows x 4 cols (byte values 0-255)
+export type Matrix4x4 = number[][];
 
 export type CipherMode = 'ECB' | 'CBC' | 'CFB' | 'OFB' | 'CTR';
 export type PaddingScheme = 'PKCS7' | 'Zero' | 'ANSI_X923';
@@ -14,8 +14,8 @@ export interface RoundTrace {
 }
 
 export interface TraceResponse {
-  sbox: number[][]; // 16x16
-  round_keys: Matrix4x4[]; // 10 rounds
+  sbox: number[][];
+  round_keys: Matrix4x4[];
   rounds: RoundTrace[];
 }
 

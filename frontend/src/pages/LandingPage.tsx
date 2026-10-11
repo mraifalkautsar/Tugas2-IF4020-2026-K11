@@ -46,10 +46,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
   return (
     <div className="relative min-h-screen bg-white text-black flex flex-col items-center justify-between px-4 py-8 md:py-12 selection:bg-[#EC8DD1] selection:text-black">
-      {/* Decorative Floating Bubbles in Background */}
       <FloatingBubbles />
-
-      {/* Hidden File Input */}
       <input
         ref={fileInputRef}
         type="file"
@@ -57,42 +54,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         onChange={handleFileChange}
       />
 
-      {/* Top Banner Tag */}
       <header className="relative z-10 w-full max-w-4xl flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-md bg-[#4542E0] border-[2.5px] border-black flex items-center justify-center text-white font-mono font-black text-sm shadow-[2px_2px_0px_#000000]">
             67
           </div>
           <span className="font-mono text-xs font-black tracking-wider uppercase bg-[#DEC3A1] border-2 border-black px-2 py-1 shadow-[2px_2px_0px_#000000]">
-            BRAINROT CIPHER STUDIO
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-mono font-bold bg-[#EC8DD1] border-2 border-black px-2.5 py-1 shadow-[2px_2px_0px_#000000]">
-            <Sparkles className="w-3.5 h-3.5" />
-            128-BIT SPN ENGINE
+            Brainrot Cipher
           </span>
         </div>
       </header>
 
-      {/* Central Content Section */}
       <main className="relative z-10 w-full max-w-2xl my-auto py-8 flex flex-col items-center text-center space-y-6">
-        {/* Main Title Badge */}
-        <div className="inline-block bg-[#DEC3A1] border-2 border-black px-3 py-1 text-xs font-mono font-black uppercase tracking-widest shadow-[2px_2px_0px_#000000] rotate-[-1deg]">
-          ✦ K11 CRYPTO SYSTEM ✦
-        </div>
-
-        {/* Main Header / Judul Utama */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-black leading-[1.1] uppercase">
           Triple T has blessed you
         </h1>
-
-        <p className="text-sm md:text-base font-bold text-gray-700 max-w-lg leading-relaxed">
-          Drop any binary payload or launch the studio to encrypt & decrypt with the custom 10-round SPN cipher.
-        </p>
-
-        {/* Central Dropzone Box */}
         <div
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -127,13 +103,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <span className="bg-white border-2 border-black px-2 py-0.5 shadow-[1px_1px_0px_#000000]">
               .PNG
             </span>
-            <span className="bg-white border-2 border-black px-2 py-0.5 shadow-[1px_1px_0px_#000000]">
-              ALL PAYLOADS
-            </span>
           </div>
         </div>
 
-        {/* Action Button: Explore / Enter Studio */}
         <div className="pt-2 w-full max-w-xl flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
             type="button"
@@ -146,18 +118,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </div>
       </main>
 
-      {/* Footer Features Bar */}
       <footer className="relative z-10 w-full max-w-4xl pt-6 border-t-2 border-black flex flex-wrap items-center justify-between gap-4 text-xs font-mono font-bold text-gray-700">
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-black stroke-[2.5]" />
-          <span>Neo-Brutalist Cryptography Lab</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1">
-            <Cpu className="w-3.5 h-3.5" /> 16-Byte Blocks
-          </span>
-          <span>•</span>
-          <span>CBC / ECB / CFB / OFB / CTR</span>
+          <span>K11 - IF4020</span>
         </div>
       </footer>
     </div>

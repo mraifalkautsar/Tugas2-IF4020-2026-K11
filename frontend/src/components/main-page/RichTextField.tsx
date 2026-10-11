@@ -64,7 +64,6 @@ export const RichTextField: React.FC<RichTextFieldProps> = ({
           />
         )}
 
-        {/* Bottom Counter Bar */}
         <div className="border-t-[2.5px] border-black bg-white px-3 py-2 flex items-center justify-between text-xs font-mono">
           <span className="text-gray-500 font-medium">128-Bit / 16B Blocks</span>
           <div className="font-bold text-black bg-[#DEC3A1] px-2 py-0.5 border border-black shadow-[1px_1px_0px_#000000]">

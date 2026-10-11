@@ -98,7 +98,6 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         }`}
       >
         {isDimmedDueToText ? (
-          /* Disabled State when text is typed */
           <div className="p-6 flex-1 flex flex-col items-center justify-center text-center">
             <AlertCircle className="w-8 h-8 text-gray-500 mb-2 stroke-[2]" />
             <p className="text-xs font-bold text-gray-700">Dropzone Locked</p>
@@ -107,7 +106,6 @@ export const UploadField: React.FC<UploadFieldProps> = ({
             </p>
           </div>
         ) : file ? (
-          /* File Loaded Card State */
           <div className="p-4 flex-1 flex flex-col justify-between">
             <div className="flex items-start justify-between gap-3 bg-amber-50 border-2 border-black p-3.5 shadow-[2px_2px_0px_#000000]">
               <div className="flex items-center gap-3 overflow-hidden">
@@ -143,7 +141,6 @@ export const UploadField: React.FC<UploadFieldProps> = ({
             </div>
           </div>
         ) : (
-          /* Empty / Waiting for Drop State */
           <div className="p-6 flex-1 flex flex-col items-center justify-center text-center">
             <div className="w-12 h-12 rounded-full bg-[#DEC3A1] border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_#000000] mb-3">
               <UploadCloud className="w-6 h-6 stroke-[2.5] text-black" />
@@ -161,7 +158,6 @@ export const UploadField: React.FC<UploadFieldProps> = ({
           </div>
         )}
 
-        {/* Bottom Status Bar */}
         <div className="border-t-[2.5px] border-black bg-white px-3 py-2 flex items-center justify-between text-xs font-mono">
           <span className="text-gray-500 font-medium">Binary / Stream Source</span>
           <div className="font-bold text-black bg-[#DEC3A1] px-2 py-0.5 border border-black shadow-[1px_1px_0px_#000000]">
