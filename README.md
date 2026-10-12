@@ -29,6 +29,25 @@ Pastikan Go sudah terpasang:
 go version
 ```
 
+Untuk mencoba enkripsi dan dekripsi teks melalui PowerShell, gunakan kunci sepanjang 32 karakter heksadesimal (16 byte):
+
+```powershell
+$key = "00112233445566778899aabbccddeeff"
+```
+
+```powershell
+$ciphertext = go -C src run -work ./cmd/crypt -op encrypt -mode CBC -key-hex $key -input "Halo Brainrot"
+$ciphertext
+```
+
+```powershell
+go -C src run -work ./cmd/crypt -op decrypt -mode CBC -key-hex $key -input $ciphertext
+```
+
+Enkripsi menyimpan hasil hex ke variabel `$ciphertext`; baris `$ciphertext` menampilkannya di terminal. Dekripsi menggunakan hasil tersebut dan menampilkan teks awal, yaitu `Halo Brainrot`.
+
+Mode default adalah CBC. Ganti `-mode CBC` dengan `-mode ECB`, `-mode CFB`, `-mode OFB`, atau `-mode CTR` pada kedua perintah untuk mencoba mode lain. Gunakan kunci dan mode yang sama saat dekripsi. Untuk mode selain ECB, IV dibuat otomatis dan disertakan di depan ciphertext sehingga tidak perlu dimasukkan secara terpisah.
+
 Jalankan program analisis dengan konfigurasi default:
 
 ```sh
