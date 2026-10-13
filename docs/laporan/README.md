@@ -1,4 +1,4 @@
-# Laporan Tugas 2 IF4020 — Brainrot Cipher
+# Laporan Tugas 2 IF4020 — Brainrot Cipher v2
 
 Kerangka laporan mengikuti bagian **Laporan** pada
 [`Tugas2-IF4020-2026.md`](../../Tugas2-IF4020-2026.md).
@@ -9,8 +9,10 @@ pernyataan dari tugas lama juga tidak digunakan karena tidak diminta oleh
 spesifikasi tugas ini.
 
 Teks awal rancangan dan implementasi berasal dari kode saat penyiapan
-template; tinjau kembali jika kode berubah. Hasil pengujian dan kesimpulan
-belum diisi. `---` pada tabel berarti **belum diisi**, bukan nol atau lulus.
+template dan diperbarui untuk v2; tinjau kembali jika kode berubah.
+Tabel hasil dan histogram v2 telah dihasilkan dari eksperimen teks/biner,
+sedangkan pembahasan lanjutan dan kesimpulan masih berupa isian.
+`---` pada tabel berarti **belum diisi**, bukan nol atau lulus.
 Seluruh identitas anggota memakai placeholder sesuai permintaan.
 
 ## Mulai menulis
@@ -45,22 +47,22 @@ Seluruh identitas anggota memakai placeholder sesuai permintaan.
 
 | Ketentuan / bukti | Kondisi kode saat template disiapkan |
 | --- | --- |
-| Cipher dan kunci minimal 64 bit | Brainrot memakai blok/kunci 128 bit dan 10 putaran |
-| Substitusi, permutasi, operasi tambahan | S-box turunan AES, rotasi baris, XOR, rotasi bit pada pembentukan S-box, pencampuran GF(2⁸) |
+| Cipher dan kunci minimal 64 bit | Brainrot v2 memakai blok/kunci 128 bit, 10 putaran, dan 21 subkunci |
+| Substitusi, permutasi, operasi tambahan | S-box turunan AES, rotasi baris, MixColumns, BPT revisi sesudah MixColumns, FCM putaran genap, penjumlahan modulo, dan XOR |
 | Rancangan baru dan penjelasan komponen | Struktur dan key schedule menyerupai AES-128; jelaskan asal ide dan perubahan yang dibuat terhadap pembanding |
 | Lima mode operasi | ECB, CBC, CFB-128, OFB, CTR tersedia di `src/modes` |
 | Padding | PKCS#7 untuk ECB/CBC; CFB/OFB/CTR memproses sisa byte tanpa padding |
 | Masukan/keluaran teks dan berkas biner | API mode menerima byte; `crypt` hanya menerima argumen teks/hex. CLI analisis membaca berkas uji, tetapi belum menjadi antarmuka enkripsi/dekripsi berkas |
 | Verifikasi hasil dekripsi | Analisis memeriksa `bytes.Equal`; belum ada autentikasi/tag integritas pada cipherteks |
-| Avalanche, entropi, histogram semua mode | CLI analisis menghitung dan mengekspor JSON; grafik dan pembahasan perlu dibuat |
-| Bukti pengujian | Unit test yang tersedia memakai cipher XOR uji; analisis Brainrot menjalankan round-trip kelima mode. Tambahkan cakupan uji Brainrot dan berkas biner |
+| Avalanche, entropi, histogram semua mode | Tabel dan grafik dari JSON v2 tersedia di Bab V; pembahasan lanjutan masih perlu dilengkapi |
+| Bukti pengujian | Vektor independen, subkunci, 66 snapshot, invers, batas difusi, serta pengujian mode/statistik khusus v2 tersedia; XOR uji dipertahankan untuk chaining |
 
 Analisis bawaan dapat dijalankan dari root repositori:
 
 ```sh
 go -C src test ./...
 go -C src run ./cmd/analyze -cipher brainrot -modes all \
-  -trials 256 -seed 42 -output ../reports/brainrot.json
+  -trials 256 -seed 42 -output ../reports/brainrot-v2/text-seed42.json
 ```
 
 Gunakan `-input testdata/...` untuk berkas lain; path masukan relatif terhadap
@@ -69,6 +71,15 @@ Gunakan nama laporan berbeda untuk tiap berkas agar hasil tidak tertimpa.
 `reports/toy.json` adalah hasil infrastruktur cipher XOR, bukan hasil Brainrot.
 JSON dan pesan terminal menandai eksperimen; nilai statistik bukan bukti
 keamanan kriptografis. Metode lengkap ada di [`../methodology.md`](../methodology.md).
+
+Spesifikasi v2 tersedia di [`../../addition.md`](../../addition.md).
+Cipherteks lama tidak kompatibel dan format hex CLI belum memuat penanda versi.
+Hasil yang direkam, benchmark, dan manifest ada di
+[`../../reports/brainrot-v2/README.md`](../../reports/brainrot-v2/README.md).
+Tabel terbangkitkan di `data/v2/` dan histogram di `gambar/` dapat diperbarui
+dengan `python3 scripts/render_brainrot_results.py` dari root repositori
+(memerlukan matplotlib untuk rendering). PDF memakai berkas yang sudah
+termasuk di folder laporan, sehingga kompilasi tidak memerlukan Python.
 
 ## Kompilasi
 

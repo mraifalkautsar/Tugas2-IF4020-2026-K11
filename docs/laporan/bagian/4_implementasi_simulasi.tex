@@ -5,7 +5,11 @@ Program menggunakan Go 1.23 atau lebih baru. Cipher dan mode operasi
 diimplementasikan dalam repositori tanpa pustaka kriptografi pihak ketiga.
 Pustaka standar \texttt{crypto/rand} dipakai oleh CLI untuk membangkitkan
 IV; \texttt{math/rand} hanya dipakai untuk eksperimen yang dapat diulang.
+Grafik histogram dibangkitkan dari JSON melalui skrip Python dengan
+matplotlib sebagai kakas dokumentasi. Referensi cipher Python hanya
+memakai pustaka standar. Keduanya tidak dipakai pada proses enkripsi Go.
 
+\input{data/v2/roundtrip}
 \begin{table}[htbp]
   \centering\small
   \caption{Komponen kode sumber.}
@@ -17,7 +21,7 @@ IV; \texttt{math/rand} hanya dipakai untuk eksperimen yang dapat diulang.
     \path{src/cmd/crypt/main.go} & CLI enkripsi teks dan dekripsi hex.\\
     \path{src/cmd/analyze/main.go} & CLI analisis berkas uji dan keluaran JSON.\\
     \path{src/analysis/} & Statistik distribusi dan eksperimen perubahan bit.\\
-    \path{src/tests/} & Pengujian infrastruktur dengan cipher XOR uji.\\
+    \path{src/tests/} & Pengujian mode dan analisis dengan XOR uji serta Brainrot v2.\\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -30,6 +34,11 @@ masukan berupa hex hasil enkripsi. Mode selain ECB menyimpan IV 16 byte
 di depan badan cipherteks: $\mathrm{IV}\Vert C$. Mode ECB hanya menyimpan $C$.
 Mode dan kunci tidak disertakan dalam keluaran; pengguna memasukkan
 keduanya lagi saat dekripsi.
+Brainrot v2 menggantikan cipher lama. Cipherteks lama tidak kompatibel;
+tidak ada fallback atau penanda versi pada format hex saat ini.
+Kontrak Block, Factory, dan Tracer tetap sama. Tracer menghasilkan
+66 snapshot: satu whitening, lima putaran dengan enam operasi, serta
+lima putaran dengan tujuh operasi. Setiap snapshot menyimpan salinan state.
 
 \begin{lstlisting}[language={},numbers=none,caption={Contoh simulasi CBC dari root repositori pada Bash.}]
 key_hex=00112233445566778899aabbccddeeff
@@ -89,19 +98,19 @@ simulasi argumen teks sebagai bukti dukungan berkas biner.}
 
 \begin{table}[htbp]
   \centering\small
-  \caption{Isian bukti pemulihan data untuk seluruh mode.}
+  \caption{Pemulihan fixture melalui CLI analisis dan API mode, seed 42.}
   \label{tab:simulasi}
   \begin{tabularx}{\linewidth}{@{}lYYYY@{}}
-    \toprule Mode & Teks: berkas / ukuran & Biner: berkas / ukuran &
-      Panjang keluaran & Byte hasil dekripsi sama\\ \midrule
-    ECB & --- & --- & --- & ---\\
-    CBC & --- & --- & --- & ---\\
-    CFB & --- & --- & --- & ---\\
-    OFB & --- & --- & --- & ---\\
-    CTR & --- & --- & --- & ---\\
+    \toprule Mode & Teks (byte) & Biner (byte) &
+      Badan teks / biner (byte) & Byte hasil dekripsi sama\\ \midrule
+    \VTwoRoundTripRows
     \bottomrule
   \end{tabularx}
 \end{table}
+Teks berasal dari \path{repeated-text.txt} dan biner dari
+\path{byte-pattern.bin}; lokasi lengkap dan hash tercatat pada manifest
+hasil. Bukti pemulihan ini berasal dari analisis yang membaca fixture
+dan memanggil API mode, bukan antarmuka enkripsi/dekripsi berkas umum.
 
 \section{Verifikasi Integritas dan Kasus Gagal}
 Analisis menggunakan \texttt{bytes.Equal} untuk memeriksa bahwa hasil
