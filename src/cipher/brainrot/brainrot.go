@@ -35,7 +35,6 @@ var (
 	_ cipher.Tracer  = (*Block)(nil)
 )
 
-// Ekspansi key
 func New(key []byte) (*Block, error) {
 	if len(key) != KeySize {
 		return nil, fmt.Errorf("brainrot: %w: want %d bytes, got %d", cipher.ErrKeySize, KeySize, len(key))
@@ -47,7 +46,10 @@ func New(key []byte) (*Block, error) {
 
 func (*Block) BlockSize() int { return BlockSize }
 
-// enkrip 1 blok
+func (b *Block) RoundKeys() [Rounds + 1][BlockSize]byte { return b.roundKeys }
+
+func SBoxTable() [256]byte { return sbox67 }
+
 func (b *Block) EncryptBlock(dst, src []byte) {
 	checkBlockBuffers(dst, src)
 	s := stateFromBlock(src)
@@ -55,7 +57,6 @@ func (b *Block) EncryptBlock(dst, src []byte) {
 	stateToBlock(dst, &s)
 }
 
-// dekrip 1 blok
 func (b *Block) DecryptBlock(dst, src []byte) {
 	checkBlockBuffers(dst, src)
 	s := stateFromBlock(src)
