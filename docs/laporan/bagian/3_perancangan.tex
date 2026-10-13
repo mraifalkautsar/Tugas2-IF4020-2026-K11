@@ -112,16 +112,15 @@ S-box yang sama juga dipakai pada substitusi dalam ekspansi kunci.
 
 
 \subsection{ShiftRows67}
-Setiap baris $r$ diputar ke kanan sejauh $o_r=(6+r)\bmod4$ posisi:
-\begin{equation}
-  s'_{r,(c+o_r)\bmod4}=s_{r,c}.
-\end{equation}
+Setiap baris $r$ genap diputar ke kanan sejauh $o_r=(6+r)\bmod4$. dan baris ganjil sejauh $o_r=(7+r)\bmod4$
+
 \begin{table}[htbp]
   \centering
   \caption{Offset permutasi baris dalam implementasi.}
   \begin{tabular}{@{}lrrrr@{}}
     \toprule Baris $r$ & 0 & 1 & 2 & 3\\
-    \midrule Offset kanan $o_r$ & 2 & 3 & 0 & 1\\
+    \midrule Offset kanan genap $o_r$ & 2 & 3 & 0 & 1\\
+    \midrule Offset kanan ganjil $o_r$ & 1 & 2 & 3 & 0\\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -132,23 +131,21 @@ Setiap kolom dikalikan dengan matriks $M$ pada $\mathrm{GF}(2^8)$.
 Seluruh elemen berikut ditulis dalam heksadesimal:
 \begin{equation}
   M=\begin{bmatrix}
-    \mathtt{0c}&\mathtt{0a}&\mathtt{06}&\mathtt{06}\\
-    \mathtt{07}&\mathtt{0e}&\mathtt{09}&\mathtt{07}\\
-    \mathtt{06}&\mathtt{06}&\mathtt{0c}&\mathtt{0a}\\
-    \mathtt{09}&\mathtt{07}&\mathtt{07}&\mathtt{0e}
+    \mathtt{67}&\mathtt{06}&\mathtt{07}&\mathtt{07}\\
+    \mathtt{06}&\mathtt{67}&\mathtt{06}&\mathtt{07}\\
+    \mathtt{07}&\mathtt{06}&\mathtt{67}&\mathtt{06}\\
+    \mathtt{07}&\mathtt{07}&\mathtt{06}&\mathtt{67}
   \end{bmatrix},\quad
   M^{-1}=\begin{bmatrix}
-    \mathtt{f4}&\mathtt{ba}&\mathtt{79}&\mathtt{03}\\
-    \mathtt{8e}&\mathtt{02}&\mathtt{78}&\mathtt{6a}\\
-    \mathtt{79}&\mathtt{03}&\mathtt{f4}&\mathtt{ba}\\
-    \mathtt{78}&\mathtt{6a}&\mathtt{8e}&\mathtt{02}
+    \mathtt{7a}&\mathtt{c5}&\mathtt{a0}&\mathtt{23}\\
+    \mathtt{c5}&\mathtt{fa}&\mathtt{c6}&\mathtt{a0}\\
+    \mathtt{a0}&\mathtt{c6}&\mathtt{fa}&\mathtt{c5}\\
+    \mathtt{23}&\mathtt{a0}&\mathtt{c5}&\mathtt{7a}
   \end{bmatrix}.
 \end{equation}
 Penjumlahan medan menggunakan XOR. Perkalian menggunakan pergeseran bit
-dan reduksi dengan konstanta $\mathtt{1b}$ setelah bit tertinggi melimpah.
+dan reduksi dengan konstanta $\mathtt{1b}$ setelah bit tertinggi melimpah. Matriks dipilih karena invertable dan memiliki elemen2 identik dengan 6 dan 7
 
-\Isi{Jelaskan pemilihan matriks dan bukti invers atau sifat difusi yang
-telah diperiksa.}
 
 \subsection{AddRoundKey67}
 Untuk kunci putaran $K_j$, setiap elemen diperbarui sebagai
