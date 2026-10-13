@@ -1,34 +1,34 @@
 {
   "cipher": "Brainrot Cipher",
-  "provenance": "scripts/brainrot_reference.py; algebraic S-box, polynomial GF multiplication",
+  "provenance": "scripts/brainrot_reference.py; independent matrix S-box, polynomial GF multiplication",
   "vectors": [
     {
       "name": "zero",
       "key_hex": "00000000000000000000000000000000",
       "plaintext_hex": "00000000000000000000000000000000",
-      "ciphertext_hex": "4055521fadad97dc002e3ee658ff3dc7",
+      "ciphertext_hex": "d1c025110adfa7638eeb6ced5c8541a5",
       "subkeys_hex": [
         "00000000000000000000000000000000",
-        "44222222442222224422222244222222",
-        "f9fafae8bdd8d8caf9fafae8bdd8d8ca",
-        "dbbbdc7e666304b49f99fe5c22412696",
-        "0a18f7a66c7bf312f3e20d4ed1a32bd8",
-        "3911b676556a4564a688482a772b63f2",
-        "77ee7f8722843ae3840c72c9f327113b",
-        "51a3ae4c732794aff72be666040cf75d",
-        "2af8cdf159df595eaef4bf38aaf84865",
-        "e3fe53ddba210a8314d5b5bbbe2dfdde",
-        "449385d3feb28f50ea673aeb544ac735",
-        "3ae8c660c45a49302e3d73db7a77b4ee",
-        "74326c0ab068253a9e5556e1e422e20f",
-        "60947e72d0fc5b484ea90da9aa8befa6",
-        "bae6235e6a1a781624b375bf8e389a19",
-        "f7b09c9a9daae48cb919913337210b2a",
-        "6ae7270df74dc3814e5452b279755998",
-        "6208e1d295452253db1170e1a2642979",
-        "24803e38b1c51c6b6ad46c8ac8b045f3",
-        "e027f52551e2e94e3b3685c4f386c037",
-        "3c7362ee6d918ba056a70e64a521ce53"
+        "32545454325454543254545432545454",
+        "828181c1b0d5d595828181c1b0d5d595",
+        "a6c60e9e1613db0b94925aca24478f5f",
+        "1ebf471908ac9c129c3ec6d8b8794987",
+        "c666c7bbceca5ba952f49d71ea8dd4f6",
+        "ad511658639b4df1316fd080dbe20476",
+        "61c5dcff025e910e3331418ee8d345f8",
+        "b0e5902db2bb0123818a40ad69590555",
+        "9e27b1252c9cb006ad16f0abc44ff5fe",
+        "d42a1d9bf8b6ad9d55a05d3691efa8c8",
+        "6421cd7e9c9760e3c9373dd558d8951d",
+        "e0aebd2f7c39ddccb50ee019edd67504",
+        "ec8d29c990b4f40525ba141cc86c6118",
+        "ef9252197f26a61c5a9cb20092f0d318",
+        "eba4290a94828f16ce1e3d165ceeee0e",
+        "55529522c1d01a340fce27225320c92c",
+        "b21838f673c822c27c0605e02f26cccc",
+        "ac3717efdfff352da3f930cd8cdffc01",
+        "12bb866acd44b3476ebd838ae2627f8b",
+        "414b02818c0fb1c6e2b2324c00d04dc7"
       ],
       "snapshots": [
         {
@@ -39,327 +39,327 @@
         {
           "round": 1,
           "operation": "SubBytes67",
-          "state_hex": "cececececececececececececececece"
+          "state_hex": "3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d"
         },
         {
           "round": 1,
           "operation": "ShiftRows67",
-          "state_hex": "cececececececececececececececece"
+          "state_hex": "3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d"
         },
         {
           "round": 1,
           "operation": "MixColumns67",
-          "state_hex": "925c925c925c925c925c925c925c925c"
+          "state_hex": "8eb38eb38eb38eb38eb38eb38eb38eb3"
         },
         {
           "round": 1,
           "operation": "BitPlaneTranspose",
-          "state_hex": "8618f3cfaeba79e71c71451441041041"
+          "state_hex": "f3cf3cf3df7d6596cb2c30c31c71c71c"
         },
         {
           "round": 1,
           "operation": "ModularAddition",
-          "state_hex": "ca3a15f1f2dc9b096093673685263263"
+          "state_hex": "2523904711d1b9eafd8084174ec51b70"
         },
         {
           "round": 1,
           "operation": "AddRoundKey67",
-          "state_hex": "7083ac5a0c470080da2ade9d7bbda9ea"
+          "state_hex": "e4e152c5e2472f3c3c424695bd538da6"
         },
         {
           "round": 2,
           "operation": "SubBytes67",
-          "state_hex": "7f19848a9cae2266ddbbd6086496a114"
+          "state_hex": "eddba6bfebd7199f9f3c5e8f98d42c27"
         },
         {
           "round": 2,
           "operation": "ShiftRows67",
-          "state_hex": "ddae841464bb228a7f96d6669c19a108"
+          "state_hex": "9fd75e9f983c2c8fedd4a627ebdb19bf"
         },
         {
           "round": 2,
           "operation": "MixColumns67",
-          "state_hex": "e64fd361998d44a654f60e23eb81ae65"
+          "state_hex": "39bebf629e412f5fd29512704e08e6aa"
         },
         {
           "round": 2,
           "operation": "BitPlaneTranspose",
-          "state_hex": "eebf063c9bb0965278b91a4f8860dd15"
+          "state_hex": "763c9ab816fe64c39eacee21bf543208"
         },
         {
           "round": 2,
           "operation": "FeistelCrossMix",
-          "state_hex": "dfc7694332cc22c42b655d0f397e4237"
+          "state_hex": "c491b7844172b47bc46e5dfbc75467cd"
         },
         {
           "round": 2,
           "operation": "ModularAddition",
-          "state_hex": "ba8245c1982f2678cafe5b6b5bbf68cd"
+          "state_hex": "6a57c52257858f865800b7c5eb9bf62c"
         },
         {
           "round": 2,
           "operation": "AddRoundKey67",
-          "state_hex": "f3d9f124b71796297a5f1566c95f0056"
+          "state_hex": "37abc1781c6a50d7877d325e10a1fce8"
         },
         {
           "round": 3,
           "operation": "SubBytes67",
-          "state_hex": "cbe867c55f172b886a82535c7a8222b2"
+          "state_hex": "d6a406627f095976801c9548ce9b8cd2"
         },
         {
           "round": 3,
           "operation": "ShiftRows67",
-          "state_hex": "6a1767b27a822bc5cb8253885fe8225c"
+          "state_hex": "80099576ce1c8c48d69b06d27fa45962"
         },
         {
           "round": 3,
           "operation": "MixColumns67",
-          "state_hex": "90861f3a3f252a2f8c7273f97c6772d4"
+          "state_hex": "7cdbcca7499736e4c8e9e8d2ac569405"
         },
         {
           "round": 3,
           "operation": "BitPlaneTranspose",
-          "state_hex": "dda08bcc525e6c36037a6fad4c4b771b"
+          "state_hex": "3e419db77861f328d79a51db8850a657"
         },
         {
           "round": 3,
           "operation": "ModularAddition",
-          "state_hex": "16b14142a7c8b19aa902b7d7c376da0d"
+          "state_hex": "04a76472462b4ed1298eee4c72dd7a4d"
         },
         {
           "round": 3,
           "operation": "AddRoundKey67",
-          "state_hex": "221c7d86c60fc83a6e4d865d73128875"
+          "state_hex": "eab5316966f340635ba27d8fea7c3d78"
         },
         {
           "round": 4,
           "operation": "SubBytes67",
-          "state_hex": "d80beb7dcf121d50033a7d63fd24b431"
+          "state_hex": "e381ef086f923a0290051c79e30c7262"
         },
         {
           "round": 4,
           "operation": "ShiftRows67",
-          "state_hex": "0312eb31fd3a1d7dd8247d50cf0bb463"
+          "state_hex": "90921c02e3057279e30cef626f813a08"
         },
         {
           "round": 4,
           "operation": "MixColumns67",
-          "state_hex": "4a900ff7940f07714ace029bb9686c99"
+          "state_hex": "1d9288e7e0121b0c8334054f23902146"
         },
         {
           "round": 4,
           "operation": "BitPlaneTranspose",
-          "state_hex": "39781078ce45e8d6c69103f16d644e4d"
+          "state_hex": "1e7ad085315121c8ca04e44460cac870"
         },
         {
           "round": 4,
           "operation": "FeistelCrossMix",
-          "state_hex": "cc2ddbd0f687cfd9334299a3e00162aa"
+          "state_hex": "56d9ed07c3d919307390ee56402dba4e"
         },
         {
           "round": 4,
           "operation": "ModularAddition",
-          "state_hex": "1dd0891c69ae63882a6d7f09e40d5907"
+          "state_hex": "b79ec906c537aa3ea6c12fe42800ff46"
         },
         {
           "round": 4,
           "operation": "AddRoundKey67",
-          "state_hex": "746b07ae73327995c7da83720db65221"
+          "state_hex": "44381a6834cfe85e64082c0a021ab950"
         },
         {
           "round": 5,
           "operation": "SubBytes67",
-          "state_hex": "1cfc7734fd7cdf217bdd1915c3cce6d5"
+          "state_hex": "10044061e2c8d2481289adf4fc40a359"
         },
         {
           "round": 5,
           "operation": "ShiftRows67",
-          "state_hex": "7b7c77d5c3dddf341ccc1921fdfce615"
+          "state_hex": "12c8ad48fc89a3f410404059e204d261"
         },
         {
           "round": 5,
           "operation": "MixColumns67",
-          "state_hex": "d65b03853cc4648cb9c62b342ea640c4"
+          "state_hex": "21b3917fb8cbe264203f9aa35b842adf"
         },
         {
           "round": 5,
           "operation": "BitPlaneTranspose",
-          "state_hex": "ed51dd9c9384d013391816e6088aa0cb"
+          "state_hex": "5639334e515728576c6d9a57987c6cd4"
         },
         {
           "round": 5,
           "operation": "ModularAddition",
-          "state_hex": "d04f30794da5da964dedcba1c6b79da9"
+          "state_hex": "f460e4737df3d85d19838a025ccb61d2"
         },
         {
           "round": 5,
           "operation": "AddRoundKey67",
-          "state_hex": "d79ff6e9f0541685e4c9b209d1be19df"
+          "state_hex": "6309baabc60636830f6094778e678a59"
         },
         {
           "round": 6,
           "operation": "SubBytes67",
-          "state_hex": "ba13230561b3ab65787a83a4d00ebf58"
+          "state_hex": "028a86a4cf5a3f7dbd698e072d608352"
         },
         {
           "round": 6,
           "operation": "ShiftRows67",
-          "state_hex": "78b32358d07aab05ba0e83656113bfa4"
+          "state_hex": "bd5a8e7d2d69830702608652cf8a3fa4"
         },
         {
           "round": 6,
           "operation": "MixColumns67",
-          "state_hex": "85a845757763463d778814d35eaf768f"
+          "state_hex": "13c549e84529fbd43b0727c777fb9e69"
         },
         {
           "round": 6,
           "operation": "BitPlaneTranspose",
-          "state_hex": "b5a2097c458f6ae979a4ce791dcdc7cc"
+          "state_hex": "1d56ec20e5a03bfa6f61fb8d21f7798e"
         },
         {
           "round": 6,
           "operation": "FeistelCrossMix",
-          "state_hex": "c5828f9fac06bc94d9920dbbb74169a0"
+          "state_hex": "c351c2b25963fed9f19d73ad45f4ab7b"
         },
         {
           "round": 6,
           "operation": "ModularAddition",
-          "state_hex": "ff6a55ff706005c407cf809631b81d8e"
+          "state_hex": "27728f30f5fa5ebcbad4b0829dcc4098"
         },
         {
           "round": 6,
           "operation": "AddRoundKey67",
-          "state_hex": "c81b7ab6834b63bddad9953496d9bcc2"
+          "state_hex": "849f715cca80c0334c9913d8335976df"
         },
         {
           "round": 7,
           "operation": "SubBytes67",
-          "state_hex": "1d476acc191fff96dde821382be82dc2"
+          "state_hex": "8d5c6b284bb6c90fdc74673b0f52caba"
         },
         {
           "round": 7,
           "operation": "ShiftRows67",
-          "state_hex": "dd1f6ac22be8ffcc1de8219619472d38"
+          "state_hex": "dcb6670f0f74ca3b8d526bba4b5cc928"
         },
         {
           "round": 7,
           "operation": "MixColumns67",
-          "state_hex": "f0f0a1cf8f826da9c9e97439523eb397"
+          "state_hex": "3c23933d31e2bb39d4cafe3047ec6248"
         },
         {
           "round": 7,
           "operation": "BitPlaneTranspose",
-          "state_hex": "f36b9594006fd96429fe2ed8f790647e"
+          "state_hex": "43a3abda3783601388f23f7eb54dac42"
         },
         {
           "round": 7,
           "operation": "ModularAddition",
-          "state_hex": "53ff1306d06b34ac77a73b81a11b5324"
+          "state_hex": "2f30d4a3c7375418adac539a7db90d5a"
         },
         {
           "round": 7,
           "operation": "AddRoundKey67",
-          "state_hex": "aa5a731bf9320ff910570d7d6c608a7e"
+          "state_hex": "83e1c5f9fb52b147b473a2d9ac0a9d01"
         },
         {
           "round": 8,
           "operation": "SubBytes67",
-          "state_hex": "2c8afd47817c12813e42c3eb89321676"
+          "state_hex": "7ddbbf4da9a650d7178b05a578f4c391"
         },
         {
           "round": 8,
           "operation": "ShiftRows67",
-          "state_hex": "3e7cfd76894212472c32c381818a16eb"
+          "state_hex": "17a605d7788bc3a57df4bf91a9db504d"
         },
         {
           "round": 8,
           "operation": "MixColumns67",
-          "state_hex": "316996cd716fd481b3c85af95d860649"
+          "state_hex": "2ee5e0cd608771dadc6d83fdcc021ee1"
         },
         {
           "round": 8,
           "operation": "BitPlaneTranspose",
-          "state_hex": "6240afb8638358cb3173d85fdc8d4ac5"
+          "state_hex": "52d54ca2ec85566aa5f05cd5fa3af055"
         },
         {
           "round": 8,
           "operation": "FeistelCrossMix",
-          "state_hex": "0771c8f04a8f1399b59769f361053320"
+          "state_hex": "c5fdc6d657cf6c9f723ea1c3debfc49a"
         },
         {
           "round": 8,
           "operation": "ModularAddition",
-          "state_hex": "fe21648ae739f7256eb0fa2698263e4a"
+          "state_hex": "b0a1efe0eb51fbb5405cded93aadb2a8"
         },
         {
           "round": 8,
           "operation": "AddRoundKey67",
-          "state_hex": "d78500c4533777e763a7ebd7a2102491"
+          "state_hex": "a6b0398169c2a2c20cd1bab82ace38c7"
         },
         {
           "round": 9,
           "operation": "SubBytes67",
-          "state_hex": "ba6522c14597f130ffed5abaea3ec5d3"
+          "state_hex": "275f324e089e059e7e1686a2e7c70457"
         },
         {
           "round": 9,
           "operation": "ShiftRows67",
-          "state_hex": "ff9722d3eaedf1c1ba3e5a304565c5ba"
+          "state_hex": "7e9e869ee71604a227c73257085f054e"
         },
         {
           "round": 9,
           "operation": "MixColumns67",
-          "state_hex": "9966977edc98f94d89485b01c73c4300"
+          "state_hex": "d5b9bf1ead2018660d34159eb1f30f2c"
         },
         {
           "round": 9,
           "operation": "BitPlaneTranspose",
-          "state_hex": "8709abc93a42114aac7baeb235c27a68"
+          "state_hex": "9f9ed2646b52cd005768b38852af8f78"
         },
         {
           "round": 9,
           "operation": "ModularAddition",
-          "state_hex": "e9118c9bcf87339d878c1e93d726a3e1"
+          "state_hex": "51b60a5ade1aefc2d36eb86881d55b44"
         },
         {
           "round": 9,
           "operation": "AddRoundKey67",
-          "state_hex": "8ed2f1e03d016cb5ae1b315a5cd5a551"
+          "state_hex": "bec25ef642a699ac33d4cbe64e49e406"
         },
         {
           "round": 10,
           "operation": "SubBytes67",
-          "state_hex": "c4366786ec8f892e34472f8afb8e0a02"
+          "state_hex": "119e48d13c2774780f3797c1a1d9ed5a"
         },
         {
           "round": 10,
           "operation": "ShiftRows67",
-          "state_hex": "348f6702fb478986c48e2f2eec360a8a"
+          "state_hex": "0f279778a137edc111d9485a3c9e74d1"
         },
         {
           "round": 10,
           "operation": "MixColumns67",
-          "state_hex": "3feb313dfa42d85b5af94f7b566ca154"
+          "state_hex": "7dec53ace8ee220c9ba6996243b9cc65"
         },
         {
           "round": 10,
           "operation": "BitPlaneTranspose",
-          "state_hex": "512aab5cb4b95c8ffcdaffd6d75ac070"
+          "state_hex": "555d82b603a3b399d849cea691ebb955"
         },
         {
           "round": 10,
           "operation": "FeistelCrossMix",
-          "state_hex": "5f3e7e8d329d76f1da94eefdcb17f0a0"
+          "state_hex": "c10dde69f84fa29fc15d9a583db4d096"
         },
         {
           "round": 10,
           "operation": "ModularAddition",
-          "state_hex": "3f6573b2837f5f3f15ca73c1be9db0d7"
+          "state_hex": "d3c864d3c59355e62f1a1de21f164f21"
         },
         {
           "round": 10,
           "operation": "AddRoundKey67",
-          "state_hex": "4055521fadad97dc002e3ee658ff3dc7"
+          "state_hex": "d1c025110adfa7638eeb6ced5c8541a5"
         }
       ]
     },
@@ -367,29 +367,29 @@
       "name": "ones",
       "key_hex": "ffffffffffffffffffffffffffffffff",
       "plaintext_hex": "ffffffffffffffffffffffffffffffff",
-      "ciphertext_hex": "c8505f0d55d3888f88dae2bd01a59686",
+      "ciphertext_hex": "8bee7e4a3eb18c123780a48648910ea9",
       "subkeys_hex": [
         "ffffffffffffffffffffffffffffffff",
-        "4b2d2d2db4d2d2d24b2d2d2db4d2d2d2",
-        "181b1bf7acc9c925e7e4e408533636da",
-        "4c2cc6b2e0e50f970701eb9f5437dd45",
-        "b452610154b76e9653b685090781584c",
-        "234c5e7677fb30e0244db5e923cceda5",
-        "bf9054f3c86b6413ec26d1facfea3c5f",
-        "8c9dd60044f6b213a8d063e9673a5fb6",
-        "3b1f1a9b7fe9a888d739cb61b00394d7",
-        "d41fa05babf608d37ccfc3b2cccc5765",
-        "5e5d3e80f5ab36538964f5e145a8a284",
-        "b4b73927411c0f74c878fa958dd05811",
-        "22a9748563b57bf1abcd8164261dd975",
-        "1b41452678f43ed7d339bfb3f52466c6",
-        "f41d8ab68ce9b4615fd00bd2aaf46d14",
-        "7d872a9af16e9efbaebe9529044af83d",
-        "4032c627b15c58dc1fe2cdf51ba835c8",
-        "9871db60292d83bc36cf4e492d677b81",
-        "d8153b96f138b82ac7f7f663ea908de2",
-        "85b79d82748f25a8b378d3cb59e85e29",
-        "bb70156dcfff30c57c87e30e256fbd27"
+        "dabcbcbc25434343dabcbcbc25434343",
+        "82818109a7c2c24a7d7e7ef6583d3db5",
+        "93f300583431c212494fbce411728151",
+        "a1bde142958c2350dcc39fb4cdb11ee5",
+        "86cccbdb1340e88bcf83773f023269da",
+        "54c40f274784e7ac880790938a35f949",
+        "4d89d6a40a0d3108820aa19b083f58d2",
+        "1ad8e32d10d5d22592df73be9ae02b6c",
+        "ad2fcac3bdfa18e62f256b58b5c54034",
+        "43152842feef30a4d1ca5bfc640f1bc8",
+        "f5cdf8500b22c8f4dae89308bee788c0",
+        "3dae3141368cf9b5ec646abd5283e27d",
+        "8c452de7bac9d45256adbeef042e5c92",
+        "be6d3e7304a4ea21520954ce5627085c",
+        "85e416428140fc63d349a8ad856ea0f1",
+        "7f7eec71fe3e10122d77b8bfa819184e",
+        "45054d7abb3b5d68964ce5d73e55fd99",
+        "bf99393c04a2645492ee8183acbb7c1a",
+        "2d95794429371d10bbd99c931762e089",
+        "7e5ea4455769b955ecb025c6fbd2c54f"
       ],
       "snapshots": [
         {
@@ -400,327 +400,327 @@
         {
           "round": 1,
           "operation": "SubBytes67",
-          "state_hex": "cececececececececececececececece"
+          "state_hex": "3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d"
         },
         {
           "round": 1,
           "operation": "ShiftRows67",
-          "state_hex": "cececececececececececececececece"
+          "state_hex": "3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d"
         },
         {
           "round": 1,
           "operation": "MixColumns67",
-          "state_hex": "925c925c925c925c925c925c925c925c"
+          "state_hex": "8eb38eb38eb38eb38eb38eb38eb38eb3"
         },
         {
           "round": 1,
           "operation": "BitPlaneTranspose",
-          "state_hex": "8618f3cfaeba79e71c71451441041041"
+          "state_hex": "f3cf3cf3df7d6596cb2c30c31c71c71c"
         },
         {
           "round": 1,
           "operation": "ModularAddition",
-          "state_hex": "d14520fc628c4bb9679e7241f5d6e213"
+          "state_hex": "cd8bf8af04c0a8d9a5e8ec7f41b40a5f"
         },
         {
           "round": 1,
           "operation": "AddRoundKey67",
-          "state_hex": "8a1d78488d06c1dfc339d50ae5a3978a"
+          "state_hex": "0c493ae5e04129d09bd5d1ca5aca74a9"
         },
         {
           "round": 2,
           "operation": "SubBytes67",
-          "state_hex": "16f57306a2b84a5811558e4c87446016"
+          "state_hex": "7ed9242acbe06ee82b47164b534b2275"
         },
         {
           "round": 2,
           "operation": "ShiftRows67",
-          "state_hex": "11b8731687554a0616448e58a2f5604c"
+          "state_hex": "2be016e85347224b7e4b2475cbd96e2a"
         },
         {
           "round": 2,
           "operation": "MixColumns67",
-          "state_hex": "55d9251af9fdb3aab4f6a3db291091e6"
+          "state_hex": "47eeaedb14e603123be17a15bbd08d56"
         },
         {
           "round": 2,
           "operation": "BitPlaneTranspose",
-          "state_hex": "189db4df60f4f53b505dd60d6a0beeb3"
+          "state_hex": "1a41407c9fe3fdc71a5681c63ab1dabb"
         },
         {
           "round": 2,
           "operation": "FeistelCrossMix",
-          "state_hex": "5f174b47dd6e68775a598f9d182b266c"
+          "state_hex": "14f596cb5a17a21e41b54d83e146b584"
         },
         {
           "round": 2,
           "operation": "ModularAddition",
-          "state_hex": "ab4311f9bd53770e615a7a3c6c6203b1"
+          "state_hex": "a7e896238e4864308a040967f2b836d5"
         },
         {
           "round": 2,
           "operation": "AddRoundKey67",
-          "state_hex": "5c5233bbaaa75adb71afbc7628a018be"
+          "state_hex": "45163422588704231584d5907c4a6b73"
         },
         {
           "round": 3,
           "operation": "SubBytes67",
-          "state_hex": "fbe64be22ced8a1a92792de362f2f70e"
+          "state_hex": "2000e2fe5180940e1e8d47e40ce9738b"
         },
         {
           "round": 3,
           "operation": "ShiftRows67",
-          "state_hex": "92ed4b0e62798ae2fbf22d1a2ce6f7e3"
+          "state_hex": "1e80470e0c8d73e420e9e28b510094fe"
         },
         {
           "round": 3,
           "operation": "MixColumns67",
-          "state_hex": "efad2c65d2f3f69bc40415c515460605"
+          "state_hex": "52780cd90a6ffbaf36864d29863801ad"
         },
         {
           "round": 3,
           "operation": "BitPlaneTranspose",
-          "state_hex": "b09b6dade40bac49b3a0d5419643fa44"
+          "state_hex": "45d6bc54a88db5d13a4b2443750766a5"
         },
         {
           "round": 3,
           "operation": "ModularAddition",
-          "state_hex": "d3e7cb235b06dc29d7ed8a2ab90fe7e9"
+          "state_hex": "cba2872fbbcd9d5c09ce9b827739cf7f"
         },
         {
           "round": 3,
           "operation": "AddRoundKey67",
-          "state_hex": "2f34dc93d02efb797888189335a698f5"
+          "state_hex": "dc25cb4bbf0a39b3c28a4852be4f7575"
         },
         {
           "round": 4,
           "operation": "SubBytes67",
-          "state_hex": "d738f9ac298df4df73b4f7ac435dc690"
+          "state_hex": "6cb597ea4ff432f89e83aba6111b2323"
         },
         {
           "round": 4,
           "operation": "ShiftRows67",
-          "state_hex": "738df99043b4f4acd75df7df2938c6ac"
+          "state_hex": "9ef4abf8118323a66c1b97234fb532ea"
         },
         {
           "round": 4,
           "operation": "MixColumns67",
-          "state_hex": "0ae8a53056ec4c64073d1e183b516d64"
+          "state_hex": "3142b823965bde6a9d37d26121a3b7e2"
         },
         {
           "round": 4,
           "operation": "BitPlaneTranspose",
-          "state_hex": "3eb7006c801a598bbc0123365af10f39"
+          "state_hex": "6bbca2ab31ff34332727e4c582d04d38"
         },
         {
           "round": 4,
           "operation": "FeistelCrossMix",
-          "state_hex": "d459cccc72a02d49897d8cb96d7f88fc"
+          "state_hex": "30d91b5aa889cc9ef776daa904682dc1"
         },
         {
           "round": 4,
           "operation": "ModularAddition",
-          "state_hex": "60f6a2ccb696df5c314defa2d4b9e7b2"
+          "state_hex": "7d62f1feb296fda679807b440ca78593"
         },
         {
           "round": 4,
           "operation": "AddRoundKey67",
-          "state_hex": "18aafb148a3c3497a537678027f93026"
+          "state_hex": "24f95190e1006cc0a81c4bb9d504edbc"
         },
         {
           "round": 5,
           "operation": "SubBytes67",
-          "state_hex": "f72cf4a0160d38600a979b66018195a3"
+          "state_hex": "874de1e4db5429c90b7feaa34794e688"
         },
         {
           "round": 5,
           "operation": "ShiftRows67",
-          "state_hex": "0a0df4a3019738a0f7819b60162c9566"
+          "state_hex": "0b54eac9477fe6a38794e188db4d29e4"
         },
         {
           "round": 5,
           "operation": "MixColumns67",
-          "state_hex": "e3213c0b90224ef359a82c3ed789ebf6"
+          "state_hex": "80f6d6d6a7d16623ec1cadb29f2c1c71"
         },
         {
           "round": 5,
           "operation": "BitPlaneTranspose",
-          "state_hex": "e02e4e1c8de5ec046ee4b8f6d7a10f32"
+          "state_hex": "f3df1be35a587e656880009f1d2a3ece"
         },
         {
           "round": 5,
           "operation": "ModularAddition",
-          "state_hex": "b44dee7738dbf4d7eab37ba8a36d6697"
+          "state_hex": "a00ee5a61752964b97a56bf7d2ef7e02"
         },
         {
           "round": 5,
           "operation": "AddRoundKey67",
-          "state_hex": "a95393b48e3381c72094cd0aa5868750"
+          "state_hex": "a0588ea7aafee5ac052c7348f5a32689"
         },
         {
           "round": 6,
           "operation": "SubBytes67",
-          "state_hex": "a145acdac44be07b6b00684c0a7d3be5"
+          "state_hex": "9a512d5558ac2a78c2ad8bab0d9dc5dd"
         },
         {
           "round": 6,
           "operation": "ShiftRows67",
-          "state_hex": "6b4bace50a00e0daa17d687bc4453b4c"
+          "state_hex": "c2ac8b780dadc5ab9a9d2ddd58512a55"
         },
         {
           "round": 6,
           "operation": "MixColumns67",
-          "state_hex": "97f3e99ce4a7f5ac98e52b41faf6ca3a"
+          "state_hex": "27664c9b7d34c49e5177c6518801e1af"
         },
         {
           "round": 6,
           "operation": "BitPlaneTranspose",
-          "state_hex": "bf5db5d0b9a11b0e2b74dfa33a3fe45b"
+          "state_hex": "2476244f9cf4561a22dec468989dd33d"
         },
         {
           "round": 6,
           "operation": "FeistelCrossMix",
-          "state_hex": "239e2f4767f2a2b9d2868d6b63bcaf84"
+          "state_hex": "bb37e9321d86476fa7d323412a271d45"
         },
         {
           "round": 6,
           "operation": "ModularAddition",
-          "state_hex": "d755686ea80eb12d9afe8700f08c0795"
+          "state_hex": "b004e18228a80f6381bbb649e80ea505"
         },
         {
           "round": 6,
           "operation": "AddRoundKey67",
-          "state_hex": "b6bf5fa888f8899f7270452795d29da3"
+          "state_hex": "cee993805d67b5952e9c9fb7f9ce043b"
         },
         {
           "round": 7,
           "operation": "SubBytes67",
-          "state_hex": "cc1b82e1b4b54913157fa70121360844"
+          "state_hex": "c7d314b66560818f18685c564dc79425"
         },
         {
           "round": 7,
           "operation": "ShiftRows67",
-          "state_hex": "15b58244217f49e1cc36a713b41b0801"
+          "state_hex": "18605c8f4d689456c7c7142565d381b6"
         },
         {
           "round": 7,
           "operation": "MixColumns67",
-          "state_hex": "f01e31ad618d0e8975dc71dee9eca514"
+          "state_hex": "9134a777761f5eb802ea894747f47f9b"
         },
         {
           "round": 7,
           "operation": "BitPlaneTranspose",
-          "state_hex": "a9f1d73459b2e00c50d36f59cfca18e3"
+          "state_hex": "a320dd7b274d21fc6835ef73126e5e7d"
         },
         {
           "round": 7,
           "operation": "ModularAddition",
-          "state_hex": "c4321c5ad1a61ee3230c2e0cc4ee7ea9"
+          "state_hex": "2f650a62e116f54ebee2ad62169cba0f"
         },
         {
           "round": 7,
           "operation": "AddRoundKey67",
-          "state_hex": "736cd5af1e0ce9c13f9f669d2d5950fe"
+          "state_hex": "d24b7752a6f15c2cafa8baef03f8f110"
         },
         {
           "round": 8,
           "operation": "SubBytes67",
-          "state_hex": "fd898e79ee9c054ad9135c08f6efe5f8"
+          "state_hex": "35ea07a627fa28ada80b86bb394cface"
         },
         {
           "round": 8,
           "operation": "ShiftRows67",
-          "state_hex": "d99c8ef8f6130579fdef5c4aee89e508"
+          "state_hex": "a8fa86ad390bfabb354c07ce27ea28a6"
         },
         {
           "round": 8,
           "operation": "MixColumns67",
-          "state_hex": "5b9cfd92a95f438df8cf23a1d137c9b0"
+          "state_hex": "257adb2ce4aa3a13290d84d4688273c2"
         },
         {
           "round": 8,
           "operation": "BitPlaneTranspose",
-          "state_hex": "575c97d1c8e5ab17b3998eb9263a5ba3"
+          "state_hex": "0a3b5202770576281365eab49cd9a0e8"
         },
         {
           "round": 8,
           "operation": "FeistelCrossMix",
-          "state_hex": "b0d099494a1a91e07b45fd28cc2f3dde"
+          "state_hex": "72b51482fb3e85803d64dd57859b32b6"
         },
         {
           "round": 8,
           "operation": "ModularAddition",
-          "state_hex": "2d57c3e33b882fdb29039251d079351b"
+          "state_hex": "f7992ac47c7e81e310ad85040a09d2a7"
         },
         {
           "round": 8,
           "operation": "AddRoundKey67",
-          "state_hex": "2e264687c997344475a21ce788924390"
+          "state_hex": "cba485f6c103d2b27e997ef8e15389aa"
         },
         {
           "round": 9,
           "operation": "SubBytes67",
-          "state_hex": "8da33c3b7a6038ca31ea0b30b4face59"
+          "state_hex": "97da33d106393542ff74ff4cdbd4dd58"
         },
         {
           "round": 9,
           "operation": "ShiftRows67",
-          "state_hex": "31603c59b4ea383b8dfa0bca7aa3ce30"
+          "state_hex": "ff39ff42db74dd4c97d4335806da35d1"
         },
         {
           "round": 9,
           "operation": "MixColumns67",
-          "state_hex": "ffb2ba1ee5385132c826d8e80e8124a4"
+          "state_hex": "6a1d6893ed09eace96df98fd63f5f28f"
         },
         {
           "round": 9,
           "operation": "BitPlaneTranspose",
-          "state_hex": "d23c9ae7f7468418aac3c08afa098558"
+          "state_hex": "4df875d6c1f6e7b8be3d7d7bc21c790c"
         },
         {
           "round": 9,
           "operation": "ModularAddition",
-          "state_hex": "6aad7547207307d4e0920ed3277000d9"
+          "state_hex": "92fdc2507c31442054896252007176a5"
         },
         {
           "round": 9,
           "operation": "AddRoundKey67",
-          "state_hex": "f1fb0d929208fcbd6426bbf38ea3ce78"
+          "state_hex": "6e27b82f3bd063378524a092ef8949fc"
         },
         {
           "round": 10,
           "operation": "SubBytes67",
-          "state_hex": "67f4c3fafa6946969da3e2cbc444b773"
+          "state_hex": "b2c6a21925e802d633879a13bbddd98c"
         },
         {
           "round": 10,
           "operation": "ShiftRows67",
-          "state_hex": "9d69c373c4a346fa6744e296faf4b7cb"
+          "state_hex": "33e89ad6bb87d913b2dda28c25c60219"
         },
         {
           "round": 10,
           "operation": "MixColumns67",
-          "state_hex": "fc353ee6d07232882fc7d5a855008e37"
+          "state_hex": "36ec53ddbe55ed67ee35af3a006e9ee2"
         },
         {
           "round": 10,
           "operation": "BitPlaneTranspose",
-          "state_hex": "c0de9e3f6263a8dd82361c80d2f3bac4"
+          "state_hex": "75dea3eb823c56e375ec23c7f53ab4db"
         },
         {
           "round": 10,
           "operation": "FeistelCrossMix",
-          "state_hex": "abac6ca165e0d66104a66f250ea10ab9"
+          "state_hex": "895e2008016459f4dd9a2670d99ea81c"
         },
         {
           "round": 10,
           "operation": "ModularAddition",
-          "state_hex": "30630923d96ffb09b71e42f0678968e2"
+          "state_hex": "b6f3994c2a9b76049873c203f00088a5"
         },
         {
           "round": 10,
           "operation": "AddRoundKey67",
-          "state_hex": "c8505f0d55d3888f88dae2bd01a59686"
+          "state_hex": "8bee7e4a3eb18c123780a48648910ea9"
         }
       ]
     },
@@ -728,29 +728,29 @@
       "name": "incrementing",
       "key_hex": "000102030405060708090a0b0c0d0e0f",
       "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
-      "ciphertext_hex": "00e0bdba29341f59128a09203dbbbb6d",
+      "ciphertext_hex": "c32057a3893a43daa4e8688b7aee1bb0",
       "subkeys_hex": [
         "000102030405060708090a0b0c0d0e0f",
-        "a53c109fa1391698a9301c93a53d129c",
-        "2c1890958d21860d24119a9e812c8802",
-        "e0ac80756d8d0678499c9ce6c8b014e4",
-        "4f0cf8682281fe106b1d62f6a3ad7612",
-        "66efdc2c446e223c2f7340ca8cde36d8",
-        "f7d89d15b3b6bf299cc5ffe3101bc93b",
-        "97a24c2b2414f302b8d10ce1a8cac5da",
-        "566f91ca727b62c8caaa6e296260abf3",
-        "18fe5a536a85389ba02f56b2c24ffd41",
-        "0793e4916d16dc0acd398ab80f7677f9",
-        "ef6265838274b9894f4d3331403b44c8",
-        "81a878f303dcc17a4c91f24b0caab683",
-        "6164616f62b8a0152e29525e2283e4dd",
-        "521c1fb730a4bfa21e8dedfc3c0e0921",
-        "92b8cabaa21c7518bc9198e4809f91c5",
-        "c96b07dc6b7772c4d7e6ea2057797be5",
-        "2f0f809e4478f25a939e187ac4e7639f",
-        "c4f0935f808861051316797fd7f11ae0",
-        "a74c15e527c474e034d20d9fe323177f",
-        "835b3d71a49f4991904d440e736e5371"
+        "73bdbf7d77b8b97a7fb1b37173bcbd7e",
+        "9e2540f6e99df98c962c4afde590f783",
+        "19913ddcf00cc45066208ead83b0792e",
+        "293e25a1d932e1f1bf126f5c3ca21672",
+        "5b3e783e820c99cf3d1ef69301bce0e1",
+        "94f5a3af16f93a602be7ccf32a5b2c12",
+        "23585e4835a164281e46a8db341d84c9",
+        "b4d514aa817470829f32d859ab2f5c90",
+        "d1fdf00e5089808ccfbb58d564940445",
+        "0e69d01c5ee05090915b0845f5cf0c00",
+        "cd17841193f7d48102acdcc4f763d0c4",
+        "70ff3aa5e308ee24e1a432e016c7e224",
+        "eb14bda5081c5381e9b86161ff7f8345",
+        "31699de63975ce67d0cdaf062fb22c43",
+        "8ec4a0ffb7b16e98677cc19e48ceeddd",
+        "0122dc54b693b2ccd1ef735299219e8f",
+        "e70ca520519f17ec807064be1951fa31",
+        "ddff4a238c605dcf0c1039711541c340",
+        "3933703db5532df2b9431483ac02d7c3",
+        "6445bc45d11691b768558534c45752f7"
       ],
       "snapshots": [
         {
@@ -761,327 +761,327 @@
         {
           "round": 1,
           "operation": "SubBytes67",
-          "state_hex": "cececececececececececececececece"
+          "state_hex": "3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d"
         },
         {
           "round": 1,
           "operation": "ShiftRows67",
-          "state_hex": "cececececececececececececececece"
+          "state_hex": "3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d"
         },
         {
           "round": 1,
           "operation": "MixColumns67",
-          "state_hex": "925c925c925c925c925c925c925c925c"
+          "state_hex": "8eb38eb38eb38eb38eb38eb38eb38eb3"
         },
         {
           "round": 1,
           "operation": "BitPlaneTranspose",
-          "state_hex": "8618f3cfaeba79e71c71451441041041"
+          "state_hex": "f3cf3cf3df7d6596cb2c30c31c71c71c"
         },
         {
           "round": 1,
           "operation": "ModularAddition",
-          "state_hex": "2b54036e4ff38f7fc5a161a7e64122dd"
+          "state_hex": "668cfb7056351e104adde3348f2d849a"
         },
         {
           "round": 1,
           "operation": "AddRoundKey67",
-          "state_hex": "440fd0b881914a31a2f3b87a242ee99c"
+          "state_hex": "bbeaf8c5fceba4df9fb2ea8a29fe305a"
         },
         {
           "round": 2,
           "operation": "SubBytes67",
-          "state_hex": "ca1229e4e0d3752feacbe46ac58d0580"
+          "state_hex": "96e34cbf8cb7daba5c42e3836eacb153"
         },
         {
           "round": 2,
           "operation": "ShiftRows67",
-          "state_hex": "ead32980c5cb75e4ca8de42fe012056a"
+          "state_hex": "5cb7e3ba6e42b18396ac4c538ce3dabf"
         },
         {
           "round": 2,
           "operation": "MixColumns67",
-          "state_hex": "3069166a8f99dcaf860f6845214a8fde"
+          "state_hex": "ca6e7c2bf04a8c8fa4a5e983cbec5c0f"
         },
         {
           "round": 2,
           "operation": "BitPlaneTranspose",
-          "state_hex": "2c99e6a5226c14d4316f751f95744e2a"
+          "state_hex": "a59827bed9419629da472d621f7e5a96"
         },
         {
           "round": 2,
           "operation": "FeistelCrossMix",
-          "state_hex": "fe37d43c391fa7a472fe3e5cc9c7d9a0"
+          "state_hex": "52d8793e2ff94a20fc3b111e13f6bd0e"
         },
         {
           "round": 2,
           "operation": "ModularAddition",
-          "state_hex": "dee354b1a6acad1cbb9ada429177ed84"
+          "state_hex": "6b69b61a1f050e70625b9fcb96a6363c"
         },
         {
           "round": 2,
           "operation": "AddRoundKey67",
-          "state_hex": "d2acef9ac76e104f93c4fbf77199d8d5"
+          "state_hex": "0114d0f88574acc29e0ab3d4e947630d"
         },
         {
           "round": 3,
           "operation": "SubBytes67",
-          "state_hex": "368472567b033e4eacc1f45b92ad418e"
+          "state_hex": "911de84c3322789e2ef4f837d3d70215"
         },
         {
           "round": 3,
           "operation": "ShiftRows67",
-          "state_hex": "ac03728e92c13e5636adf44e7b84415b"
+          "state_hex": "2e22f89ed3f4023791d7e815331d784c"
         },
         {
           "round": 3,
           "operation": "MixColumns67",
-          "state_hex": "b133bae2225dc8cc9cbab1f001e64dcc"
+          "state_hex": "d383df800f7707f4f97e811e25553c75"
         },
         {
           "round": 3,
           "operation": "BitPlaneTranspose",
-          "state_hex": "c7c0b7b753de40512701f5b5926e0833"
+          "state_hex": "be74cfa79699e3354698939d60a30f9d"
         },
         {
           "round": 3,
           "operation": "ModularAddition",
-          "state_hex": "2daf93e3974c628d5674357f1e4c3e0b"
+          "state_hex": "19b247e518a57c0483b68930615fef7e"
         },
         {
           "round": 3,
           "operation": "AddRoundKey67",
-          "state_hex": "99344db567b99ee789f289df4d14b473"
+          "state_hex": "ce04a7094d1f0527eb1206800847802f"
         },
         {
           "round": 4,
           "operation": "SubBytes67",
-          "state_hex": "ad383a2e9b04253049c949583aa0dafd"
+          "state_hex": "c794558a82cdc2c6b7fd5ab689d7b619"
         },
         {
           "round": 4,
           "operation": "ShiftRows67",
-          "state_hex": "49043afd3ac9252eada049309b38da58"
+          "state_hex": "b7cd5ac689fdb6b6c7d755198294c28a"
         },
         {
           "round": 4,
           "operation": "MixColumns67",
-          "state_hex": "cde8de1c82e88cccbc53942064646e8a"
+          "state_hex": "f35a6f787e5dba19b7c14b981629286a"
         },
         {
           "round": 4,
           "operation": "BitPlaneTranspose",
-          "state_hex": "ffab2fe2029e92119675ada0103582c0"
+          "state_hex": "81a4b8d9f688facb1a5fa607c7fe2389"
         },
         {
           "round": 4,
           "operation": "FeistelCrossMix",
-          "state_hex": "89e92a0ce96c0b22f65047195658fe02"
+          "state_hex": "f776720b6c322d168df1fef2343bd3d2"
         },
         {
           "round": 4,
           "operation": "ModularAddition",
-          "state_hex": "208b76370d80fe24ae2153fafe22c3dc"
+          "state_hex": "1aced053a1d3913eab37a6cd6858579b"
         },
         {
           "round": 4,
           "operation": "AddRoundKey67",
-          "state_hex": "35a7a4be3cb8dfaf27c87e90df012b6c"
+          "state_hex": "ed5887ba63e4a2ff77463dd780344848"
         },
         {
           "round": 5,
           "operation": "SubBytes67",
-          "state_hex": "43edc80e0de45879011d7659588f0989"
+          "state_hex": "e651808602ed0543075e7276b6e2abab"
         },
         {
           "round": 5,
           "operation": "ShiftRows67",
-          "state_hex": "01e4c889581d580e438f76790ded0959"
+          "state_hex": "07ed7243b65eab76e6e280ab02510586"
         },
         {
           "round": 5,
           "operation": "MixColumns67",
-          "state_hex": "234852f2b0b1643a0a56d75c4f8756dc"
+          "state_hex": "6a798c70abeb823eb03f205a23df86c0"
         },
         {
           "round": 5,
           "operation": "BitPlaneTranspose",
-          "state_hex": "205b4b6f875656f63932cca5c84f2d00"
+          "state_hex": "0e1931e085bdf551db29551dd1590f92"
         },
         {
           "round": 5,
           "operation": "ModularAddition",
-          "state_hex": "3859a5c2f1db8e91d96122578a9e2a41"
+          "state_hex": "df1621eed54675ddaae4adf235ed13d7"
         },
         {
           "round": 5,
           "operation": "AddRoundKey67",
-          "state_hex": "7c890210df8e11d8571bebacc6ab1efb"
+          "state_hex": "923cb2b1c8e5660e78fce6f483615c94"
         },
         {
           "round": 6,
           "operation": "SubBytes67",
-          "state_hex": "a849103e58c44d4142475a84cf91eef4"
+          "state_hex": "139f4250d02a6fbc628cc1937d1f288e"
         },
         {
           "round": 6,
           "operation": "ShiftRows67",
-          "state_hex": "42c410f4cf474d3ea8915a415849ee84"
+          "state_hex": "622ac1bc7d8c2893131f428ed09f6f50"
         },
         {
           "round": 6,
           "operation": "MixColumns67",
-          "state_hex": "b26beb918275fbb426babf7b062e9d8f"
+          "state_hex": "a40824ca92c6225a8c200616846c5da1"
         },
         {
           "round": 6,
           "operation": "BitPlaneTranspose",
-          "state_hex": "c7caad77b63e72b37b047253f32764b7"
+          "state_hex": "81cf49a80c4d6463544005a08320a235"
         },
         {
           "round": 6,
           "operation": "FeistelCrossMix",
-          "state_hex": "ce8e73174cfa7ebf99972ced89f8a88c"
+          "state_hex": "cae59e8c84d32398cce519f8b6631fa0"
         },
         {
           "round": 6,
           "operation": "ModularAddition",
-          "state_hex": "bdf0d89ace6e3748e8e45f1ec933ec54"
+          "state_hex": "97fc229d17caf719ce91f5bcadc6ef64"
         },
         {
           "round": 6,
           "operation": "AddRoundKey67",
-          "state_hex": "7f1be32a8ef1b571e736ee1686da1994"
+          "state_hex": "a4405b7bb7815a7e6c76841ff8424e03"
         },
         {
           "round": 7,
           "operation": "SubBytes67",
-          "state_hex": "284794bbc4672e923037aaab7dddbf00"
+          "state_hex": "da3a9038564e53ff29ca8dcd4c3ca139"
         },
         {
           "round": 7,
           "operation": "ShiftRows67",
-          "state_hex": "306794007d372ebb28ddaa92c447bfab"
+          "state_hex": "294e8dff4ccaa1cdda3c9039563a5338"
         },
         {
           "round": 7,
           "operation": "MixColumns67",
-          "state_hex": "d5944344b430b6ef78cc7290bfa10098"
+          "state_hex": "1a6413888bf447ba9790597c1bbb219f"
         },
         {
           "round": 7,
           "operation": "BitPlaneTranspose",
-          "state_hex": "bd18bc196b86ee460c9286900c0dbdca"
+          "state_hex": "61e9c695879e7d85a94e460a79871d25"
         },
         {
           "round": 7,
           "operation": "ModularAddition",
-          "state_hex": "1e7c1d88cd3e8e5b3abbd8ee2e90a1a7"
+          "state_hex": "4cfd833a8fbad0069206a76b7806a06a"
         },
         {
           "round": 7,
           "operation": "AddRoundKey67",
-          "state_hex": "0f23417cbed972ba6775765151ddebc5"
+          "state_hex": "3ed75d9ff58c5d2201884b2e14f7cf6a"
         },
         {
           "round": 8,
           "operation": "SubBytes67",
-          "state_hex": "1285bea80ee815339b31e302027e5acd"
+          "state_hex": "4676655c0d8565fe9163ea181db4c809"
         },
         {
           "round": 8,
           "operation": "ShiftRows67",
-          "state_hex": "9be8becd023115a8127ee3330e855a02"
+          "state_hex": "9185eafe1d63c81846b465090d76655c"
         },
         {
           "round": 8,
           "operation": "MixColumns67",
-          "state_hex": "15c7cb3c4af32a042f9f6e55d6ef9649"
+          "state_hex": "bb9abae0b9adf819d2d4ca3fbb7ee519"
         },
         {
           "round": 8,
           "operation": "BitPlaneTranspose",
-          "state_hex": "1793c9711b397abb0b6afb9701d5f1c6"
+          "state_hex": "db79f3babeb049c6fb9ba52bcf4d6825"
         },
         {
           "round": 8,
           "operation": "FeistelCrossMix",
-          "state_hex": "547df890b480111265f07ac76c6047a1"
+          "state_hex": "140d3a913b15ace99715dbac58afc056"
         },
         {
           "round": 8,
           "operation": "ModularAddition",
-          "state_hex": "e635c24a569c862a218112abecffd866"
+          "state_hex": "a2d1da90f2c61a81fe919c4aa07dad33"
         },
         {
           "round": 8,
           "operation": "AddRoundKey67",
-          "state_hex": "6c1d86d57ea8b7adb524bbc8f8c5e0c0"
+          "state_hex": "e0b045870716eb0e6c3dac5b7a1f70ff"
         },
         {
           "round": 9,
           "operation": "SubBytes67",
-          "state_hex": "89f57d8e76e15f5e2ec5e21db5cd8654"
+          "state_hex": "cb5f20805b00b7bc297278900acd6a43"
         },
         {
           "round": 9,
           "operation": "ShiftRows67",
-          "state_hex": "2ee17d54b5c55f8e89cde25e76f5861d"
+          "state_hex": "290078bc0a726a90cbcd20435b5fb780"
         },
         {
           "round": 9,
           "operation": "MixColumns67",
-          "state_hex": "b5fc80c90eea8994200a0d793131870f"
+          "state_hex": "5953143b0b7612b3e10427c35b584a5a"
         },
         {
           "round": 9,
           "operation": "BitPlaneTranspose",
-          "state_hex": "df43b42404295951106de052f007d9ac"
+          "state_hex": "001296c17449bd07c8ecd96c0de74e83"
         },
         {
           "round": 9,
           "operation": "ModularAddition",
-          "state_hex": "0e5234c248a14baba30bf8ccb4ee3c4b"
+          "state_hex": "e71e3be1c5e8d4f3485c3d2a263848b4"
         },
         {
           "round": 9,
           "operation": "AddRoundKey67",
-          "state_hex": "89e1e4de8b6a69edf35ec2f0205c65e8"
+          "state_hex": "79a232810acbca7f070f4718703ac8b7"
         },
         {
           "round": 10,
           "operation": "SubBytes67",
-          "state_hex": "495278d6f0b6a9dccbc7c2616bfb9e9f"
+          "state_hex": "af05954ef4974bf05bbdd77b6a24d056"
         },
         {
           "round": 10,
           "operation": "ShiftRows67",
-          "state_hex": "cbb6789f6bc7a9d649fbc2dcf0529e61"
+          "state_hex": "5b97d7f06abdd07baf249556f4054b4e"
         },
         {
           "round": 10,
           "operation": "MixColumns67",
-          "state_hex": "d77cb26e2c4e352771fbf7dc1a89d41b"
+          "state_hex": "aac237b9e74170fb4a6b9bf32018931d"
         },
         {
           "round": 10,
           "operation": "BitPlaneTranspose",
-          "state_hex": "a602d232e3f3dc7718dfc0307fdeb5df"
+          "state_hex": "d8480646f62a55bfe4f046db875e663c"
         },
         {
           "round": 10,
           "operation": "FeistelCrossMix",
-          "state_hex": "19acaea3a724a1ab8db201ce2a7394e0"
+          "state_hex": "abf33868661c643cd6bb9a7951f83341"
         },
         {
           "round": 10,
           "operation": "ModularAddition",
-          "state_hex": "c0f8c388cee8158bc1840e6d0d96ab5f"
+          "state_hex": "e426a8a51b6f912e8ffeaefcfdfa0a04"
         },
         {
           "round": 10,
           "operation": "AddRoundKey67",
-          "state_hex": "00e0bdba29341f59128a09203dbbbb6d"
+          "state_hex": "c32057a3893a43daa4e8688b7aee1bb0"
         }
       ]
     },
@@ -1089,29 +1089,29 @@
       "name": "fixture",
       "key_hex": "00112233445566778899aabbccddeeff",
       "plaintext_hex": "456d6261726b206174206461776e210a",
-      "ciphertext_hex": "1ab2aaf1b41239405a6653a180b22107",
+      "ciphertext_hex": "b2b0824b4f12cff57c8b4ea0ae9d402f",
       "subkeys_hex": [
         "00112233445566778899aabbccddeeff",
-        "18bbf0e85cee969fd4773c2418aad2db",
-        "518dea1f0d637c80d91440a4c1be927f",
-        "3c77c2553114bed5e800fe7129be6c0e",
-        "5dfeffdd6cea410884eabf79ad54d377",
-        "99de0e83f5344f8b71def0f2dc8a2385",
-        "c85b6b7a3d6f24f14cb1d403903bf786",
-        "3e001623036f32d24fdee6d1dfe51157",
-        "5e4d547b5d2266a912fc8078cd19912f",
-        "9d9e8313c0bce5bad24065c21f59f4ed",
-        "23ea5f7fe356bac53116df072e4f2bea",
-        "66e34bf285b5f137b4a32e309aec05da",
-        "d50a96a450bf6793e41c49a37ef04c79",
-        "783549d2288a2e41cc9667e2b2662b9b",
-        "0e3c265126b60810ea206ff258464469",
-        "cff68f4fe940875f0360e8ad5b26acc4",
-        "24724ef6cd32c9a9ce52210495748dc0",
-        "01d01ad7cce2d37e02b0f27a97c47fba",
-        "1bf829b7d71afac9d5aa08b3426e7709",
-        "1c098d3bcb1377f21eb97f415cd70848",
-        "07608bc0cc73fc32d2ca83738e1d8b3b"
+        "1ae7611c5eb2076bd62badd01af6432f",
+        "aeda785cf0687f372643d2e73cb591c8",
+        "4c3fa8c3bc57d7f49a140513a6a194db",
+        "b8b10fe404e6d8109ef2dd03385349d8",
+        "1b6834e01f8eecf0817c31f3b92f782b",
+        "450ac3435a842fb3dbf81e4062d7666b",
+        "1465b0b14ee19f0295198142f7cee729",
+        "3412de057af34107efeac0451824276c",
+        "cfd4f77eb527b6795acd763c42e95150",
+        "4d35ae42f812183ba2df6e07e0363f57",
+        "7985ef898197f7b2234899b5c37ea6e2",
+        "39a20445b835f3f79b7d6a425803cca0",
+        "cc8d9e1474b86de3efc507a1b7c6cb01",
+        "291a0f425da262a1b267650005a1ae01",
+        "4f609e8012c2fc21a0a59921a5043720",
+        "93b640a68174bc8721d125a684d51286",
+        "ed4b742b6c3fc8ac4deeed0ac93bff8c",
+        "1308f1617f3739cd32d9d4c7fbe22b4b",
+        "fcff1bc883c82205b111f6c24af3dd89",
+        "cf83c6214c4be424fd5a12e6b7a9cf6f"
       ],
       "snapshots": [
         {
@@ -1122,327 +1122,327 @@
         {
           "round": 1,
           "operation": "SubBytes67",
-          "state_hex": "b8d9934d31ebe98b1bd4a2adb56139cc"
+          "state_hex": "5ab0391a231cc2214ff32c744cf985a0"
         },
         {
           "round": 1,
           "operation": "ShiftRows67",
-          "state_hex": "1beb93ccb5d4e94db861a28b31d939ad"
+          "state_hex": "4f1c2c214cf385745af939a023b0c21a"
         },
         {
           "round": 1,
           "operation": "MixColumns67",
-          "state_hex": "b9212114810a19327024005339612fe8"
+          "state_hex": "9fee6b4449acaced8e93fc50e55dcce9"
         },
         {
           "round": 1,
           "operation": "BitPlaneTranspose",
-          "state_hex": "893c806024854c00c0a1f30cba244df0"
+          "state_hex": "bc87adb29a3653d8960befae1735bd47"
         },
         {
           "round": 1,
           "operation": "ModularAddition",
-          "state_hex": "a1f770488073e29f94182f30d2ce1fcb"
+          "state_hex": "d66e0ecef8e85a436c369c7e312b0076"
         },
         {
           "round": 1,
           "operation": "AddRoundKey67",
-          "state_hex": "b339d914ce53dd5c0e4f2cd75033cef7"
+          "state_hex": "3bf735d14bc3663709360dda4eddd2fd"
         },
         {
           "round": 2,
           "operation": "SubBytes67",
-          "state_hex": "5155e8a0b7457efb3d4eafbae54bb75b"
+          "state_hex": "25b43e16eacc6fd68a3f15c4a17c359c"
         },
         {
           "round": 2,
           "operation": "ShiftRows67",
-          "state_hex": "3d45e85be54e7ea0514baffbb755b7ba"
+          "state_hex": "8acc15d6a13f35c4257c3e9ceab46f16"
         },
         {
           "round": 2,
           "operation": "MixColumns67",
-          "state_hex": "145bdf8ff89ac586fa14add03f2097f6"
+          "state_hex": "27962ea740c7e73c7309712a3dbab108"
         },
         {
           "round": 2,
           "operation": "BitPlaneTranspose",
-          "state_hex": "2f5fbeaf52f55eac3aed52c6280a8ae2"
+          "state_hex": "7d61380097e329a963828451ebd6bee3"
         },
         {
           "round": 2,
           "operation": "FeistelCrossMix",
-          "state_hex": "43803b64c9f2eefb572946108c838cf5"
+          "state_hex": "53dbf7b8cbcd683ceceb56ee85ee31c0"
         },
         {
           "round": 2,
           "operation": "ModularAddition",
-          "state_hex": "7ff7fdb9fa06acd03f294481b541f803"
+          "state_hex": "9f1a9f7b87243f3086ff5b012b8fc59b"
         },
         {
           "round": 2,
           "operation": "AddRoundKey67",
-          "state_hex": "614a4127d5afae9bf880b8bb5b566837"
+          "state_hex": "64e8d3dcc081a4635b4ec541509fcf00"
         },
         {
           "round": 3,
           "operation": "SubBytes67",
-          "state_hex": "9875be018e79346fb566e4e2b9b2de97"
+          "state_hex": "12d2366cc94eda0290a1bfe0595cc854"
         },
         {
           "round": 3,
           "operation": "ShiftRows67",
-          "state_hex": "b579be97b966340198b2e46f8e75dee2"
+          "state_hex": "904ebf0259a1c8e0125c3654c9d2da6c"
         },
         {
           "round": 3,
           "operation": "MixColumns67",
-          "state_hex": "dc3f368202d895ad7510aba1f5cb5dc5"
+          "state_hex": "e31aa3815744ab94e151f2faf71600dd"
         },
         {
           "round": 3,
           "operation": "BitPlaneTranspose",
-          "state_hex": "ecc1be277bdc882391811d2637a2dfa6"
+          "state_hex": "ce403d8ede1ee90f5992ea4ce294288f"
         },
         {
           "round": 3,
           "operation": "ModularAddition",
-          "state_hex": "859fccaa7010d7ae025f0d18132c022b"
+          "state_hex": "e9a8716efdacd5ffda0e1b3f9bc3a0ba"
         },
         {
           "round": 3,
           "operation": "AddRoundKey67",
-          "state_hex": "0e87e4930e3cb01c0dad9a58c054b6ee"
+          "state_hex": "efe1f16ee46bb90f42b5463cba578592"
         },
         {
           "round": 4,
           "operation": "SubBytes67",
-          "state_hex": "3d3b78ac3d0dc00bc35e561e54b3ccaa"
+          "state_hex": "bbdbfab2ed73a3bd3c815e9f86413313"
         },
         {
           "round": 4,
           "operation": "ShiftRows67",
-          "state_hex": "c30d78aa545ec0ac3db3560b3d3bcc1e"
+          "state_hex": "3c735ebd8681339fbb41fa13eddba3b2"
         },
         {
           "round": 4,
           "operation": "MixColumns67",
-          "state_hex": "cbd7ec27d45d1fe7403a82216846ff89"
+          "state_hex": "24b6e238cab0ec1289bdc0eaf924f9d1"
         },
         {
           "round": 4,
           "operation": "BitPlaneTranspose",
-          "state_hex": "fe28152bb074b63b87a1b9712e64567d"
+          "state_hex": "7b3931d35e3c0e2c604a68b4daf1b834"
         },
         {
           "round": 4,
           "operation": "FeistelCrossMix",
-          "state_hex": "2cf17a7f3f86c8501283d1923b78e59d"
+          "state_hex": "0ce36d9f9d8d8d2d5536c797557f4d91"
         },
         {
           "round": 4,
           "operation": "ModularAddition",
-          "state_hex": "6af190a242f5fa226161b7631a5df6f4"
+          "state_hex": "20481d50eb6e2c2fea4f48d94c4d34ba"
         },
         {
           "round": 4,
           "operation": "AddRoundKey67",
-          "state_hex": "77ff879a5c94dfc830de745894072498"
+          "state_hex": "57198016d2de2e6b46e6cbdf172a5095"
         },
         {
           "round": 5,
           "operation": "SubBytes67",
-          "state_hex": "f1d23b56fb00581d95d61c1e0077c5c6"
+          "state_hex": "4103b60035aa18735ec197ba01e7598f"
         },
         {
           "round": 5,
           "operation": "ShiftRows67",
-          "state_hex": "95003bc600d65856f1771c1dfbd2c51e"
+          "state_hex": "5eaa977301c159ba41e7b68f35031800"
         },
         {
           "round": 5,
           "operation": "MixColumns67",
-          "state_hex": "9e5a8138793f65ee5df27b94c12a71b3"
+          "state_hex": "a376e3afbb49fffa1b30c1c8294114c7"
         },
         {
           "round": 5,
           "operation": "BitPlaneTranspose",
-          "state_hex": "a7a4d459d897543eb5df0eab21cbac37"
+          "state_hex": "aa48342ef6dc36a1244fe7cdfaca3d54"
         },
         {
           "round": 5,
           "operation": "ModularAddition",
-          "state_hex": "4442576c985339f8871f736d4024a024"
+          "state_hex": "791c2bacab03ec1a7e1c5d093cb38ea4"
         },
         {
           "round": 5,
           "operation": "AddRoundKey67",
-          "state_hex": "24eb4b503846c07ef54aef292d28c88d"
+          "state_hex": "776ac6ad1052b7629f80704d9fc6f2b0"
         },
         {
           "round": 6,
           "operation": "SubBytes67",
-          "state_hex": "c55a1fe5b03c547690757288f6621da2"
+          "state_hex": "0709cff1cea656f25cb66a825ccffb5f"
         },
         {
           "round": 6,
           "operation": "ShiftRows67",
-          "state_hex": "903c1fa2f67554e5c5627276b05a1d88"
+          "state_hex": "5ca66af25cb6fb8207cfcf5fce0956f1"
         },
         {
           "round": 6,
           "operation": "MixColumns67",
-          "state_hex": "ba0a7913e01b42e1aa91e075007cf1b8"
+          "state_hex": "d0ceca130010712fcec8c5289a1351bb"
         },
         {
           "round": 6,
           "operation": "BitPlaneTranspose",
-          "state_hex": "c12cc7d3907563acb60343e1871c44a2"
+          "state_hex": "d68680d33a449fa43b9604f06c063524"
         },
         {
           "round": 6,
           "operation": "FeistelCrossMix",
-          "state_hex": "5fa61a3fefdf84434ccbce390b47e6a1"
+          "state_hex": "6835fc9cce5297ed82326b4d7441e293"
         },
         {
           "round": 6,
           "operation": "ModularAddition",
-          "state_hex": "c58965317494757a006efc69a533eb7b"
+          "state_hex": "e1baeb254fe98e9fa57a040237bf8875"
         },
         {
           "round": 6,
           "operation": "AddRoundKey67",
-          "state_hex": "53c0b0d6676851aaa731f6899880e441"
+          "state_hex": "9b5bac23b49f3e2b7d442d032cff0796"
         },
         {
           "round": 7,
           "operation": "SubBytes67",
-          "state_hex": "4554c0719bde022ced2f2349c66678be"
+          "state_hex": "2b90780e175c46f71c10ae39ad435b44"
         },
         {
           "round": 7,
           "operation": "ShiftRows67",
-          "state_hex": "eddec0bec62f02714566232c9b547849"
+          "state_hex": "1c5caef7ad105b392b4378441790460e"
         },
         {
           "round": 7,
           "operation": "MixColumns67",
-          "state_hex": "a2603db053bb1ff7e276660876e86e38"
+          "state_hex": "330b1ee96a949b1dcf3ce35c98ae56ef"
         },
         {
           "round": 7,
           "operation": "BitPlaneTranspose",
-          "state_hex": "ad770ee9a5193c9e0eb32b29f7650692"
+          "state_hex": "05d5e3a7bf1c68ea13eef4f4edce0217"
         },
         {
           "round": 7,
           "operation": "ModularAddition",
-          "state_hex": "25ac57bbcda36adfda49920ba9cb312d"
+          "state_hex": "d16281bb33d4d5cd02b3fb95a494cd18"
         },
         {
           "round": 7,
           "operation": "AddRoundKey67",
-          "state_hex": "68d332a9a856218c732abebab2ce3607"
+          "state_hex": "bb3bcdba2d35f42ff397ddd6e276205a"
         },
         {
           "round": 8,
           "operation": "SubBytes67",
-          "state_hex": "de207ca1e1b2d539fdbb0e3383b73777"
+          "state_hex": "96259986ae3e931992457cc0ebcade53"
         },
         {
           "round": 8,
           "operation": "ShiftRows67",
-          "state_hex": "fdb27c7783bbd5a1deb70e39e1203733"
+          "state_hex": "923e7c19eb45dec096ca9953ae259386"
         },
         {
           "round": 8,
           "operation": "MixColumns67",
-          "state_hex": "d24ce4b4afd13d72f7ad8433a3472ae4"
+          "state_hex": "50421925483ef7f2bdd02db78e52d2e3"
         },
         {
           "round": 8,
           "operation": "BitPlaneTranspose",
-          "state_hex": "eaff81d7ac8cd6815da8211d22f87fd8"
+          "state_hex": "6086ee917cb5f5286f3d03e628c364c7"
         },
         {
           "round": 8,
           "operation": "FeistelCrossMix",
-          "state_hex": "af634f148cf7ba981153d16fe1f819f1"
+          "state_hex": "c89da20274baf1c029228046489000de"
         },
         {
           "round": 8,
           "operation": "ModularAddition",
-          "state_hex": "7e59de63753741f714b3b91c3c1ec5b5"
+          "state_hex": "17fd4082867cede1c9c71967ed9437fe"
         },
         {
           "round": 8,
           "operation": "AddRoundKey67",
-          "state_hex": "1968d3d6fb46cb1d99a2db5bea290b36"
+          "state_hex": "c7084367444b1225ab557f822a02663b"
         },
         {
           "round": 9,
           "operation": "SubBytes67",
-          "state_hex": "bfde2071f43c27f5adea1ab914885737"
+          "state_hex": "57893d6010eafdb5a421f06de7fc6f25"
         },
         {
           "round": 9,
           "operation": "ShiftRows67",
-          "state_hex": "ad3c203714ea2771bf881af5f4de57b9"
+          "state_hex": "a4eaf0b5e7216f6d57fc3d251089fd60"
         },
         {
           "round": 9,
           "operation": "MixColumns67",
-          "state_hex": "6ca31df7c17fca79361612024379e383"
+          "state_hex": "aa1d3df99574cf5fdb14a9458e20e6b1"
         },
         {
           "round": 9,
           "operation": "BitPlaneTranspose",
-          "state_hex": "11f8224114f7a1dbee253f6995418fe5"
+          "state_hex": "a57c7aeb8cb424c5bee076eaaec3520f"
         },
         {
           "round": 9,
           "operation": "ModularAddition",
-          "state_hex": "12c83c18e0d97459f0d531e32c050e9f"
+          "state_hex": "92c7ee16f8f3ec710bce63f477fe519b"
         },
         {
           "round": 9,
           "operation": "AddRoundKey67",
-          "state_hex": "4a7356ec7480cdd3663c7a132d283ad5"
+          "state_hex": "c28c5c34c48796ff7a54f470cf5f3993"
         },
         {
           "round": 10,
           "operation": "SubBytes67",
-          "state_hex": "75fdb20c1c6668205c0d6ae7f662508e"
+          "state_hex": "9e8528e2be8044430ad5936ac8493214"
         },
         {
           "round": 10,
           "operation": "ShiftRows67",
-          "state_hex": "5c66b28ef60d680c75626a201cfd50e7"
+          "state_hex": "0a809343c8d5326a9e492814be8544e2"
         },
         {
           "round": 10,
           "operation": "MixColumns67",
-          "state_hex": "e40f9e853593826f14cde71347a0318f"
+          "state_hex": "d9c2379c9fc0a44bb63bb7e6e5aa0963"
         },
         {
           "round": 10,
           "operation": "BitPlaneTranspose",
-          "state_hex": "87f32a1f1385e4225e161c59841ede6e"
+          "state_hex": "f9cfeaca5b9a9493c54cce1c07322afe"
         },
         {
           "round": 10,
           "operation": "FeistelCrossMix",
-          "state_hex": "4288d537700f0f3fad361450f115e137"
+          "state_hex": "4271ec61bd52468d118129431084ef7a"
         },
         {
           "round": 10,
           "operation": "ModularAddition",
-          "state_hex": "5e9162723b228631cbef93914dece97f"
+          "state_hex": "3e700729401a6892c2921f055a77cc03"
         },
         {
           "round": 10,
           "operation": "AddRoundKey67",
-          "state_hex": "1ab2aaf1b41239405a6653a180b22107"
+          "state_hex": "b2b0824b4f12cff57c8b4ea0ae9d402f"
         }
       ]
     }

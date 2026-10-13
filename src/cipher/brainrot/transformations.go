@@ -48,7 +48,7 @@ func inverseSubBytes67(s *state) {
 func shiftRows67(s *state) {
 	for row := range s {
 		original := s[row]
-		offset := (6 + row) % 4
+		offset := (6 + (row % 2)) % 4
 		for column := range original {
 			s[row][(column+offset)%4] = original[column]
 		}
@@ -58,7 +58,7 @@ func shiftRows67(s *state) {
 func inverseShiftRows67(s *state) {
 	for row := range s {
 		original := s[row]
-		offset := (6 + row) % 4
+		offset := (6 + (row % 2)) % 4
 		for column := range original {
 			s[row][column] = original[(column+offset)%4]
 		}

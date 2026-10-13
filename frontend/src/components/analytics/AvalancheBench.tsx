@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { cipherApi } from '../../api/cipherApi';
 import { AvalancheResponse } from '../../types/cipher';
-import { Zap, Play, RefreshCw, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
+import { Zap, Play, RefreshCw, AlertCircle, Sparkles } from 'lucide-react';
 
 interface AvalancheBenchProps {
   initialKey?: string;
@@ -9,8 +9,8 @@ interface AvalancheBenchProps {
 }
 
 export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
-  initialKey = '00112233445566778899aabbccddeeff',
-  initialBlockHex = '0123456789abcdef0123456789abcdef',
+  initialKey = '',
+  initialBlockHex = '',
 }) => {
   const [target, setTarget] = useState<'plaintext' | 'key'>('plaintext');
   const [flipBitIndex, setFlipBitIndex] = useState<number>(0);
@@ -22,11 +22,19 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (initialKey && initialKey.length !== 32) {
-      const hex = Array.from(new TextEncoder().encode(initialKey))
-        .map((b) => b.toString(16).padStart(2, '0'))
-        .join('');
-      setKeyHex(hex.slice(0, 32).padEnd(32, '0'));
+    setBlockHex(initialBlockHex);
+  }, [initialBlockHex]);
+
+  useEffect(() => {
+    if (initialKey) {
+      if (initialKey.length === 32) {
+        setKeyHex(initialKey);
+      } else {
+        const hex = Array.from(new TextEncoder().encode(initialKey))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('');
+        setKeyHex(hex.slice(0, 32).padEnd(32, '0'));
+      }
     }
   }, [initialKey]);
 
@@ -39,10 +47,10 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
       const cleanKey = keyHex.trim();
 
       if (cleanBlock.length !== 32) {
-        throw new Error('Block must be exactly 32 hexadecimal characters (16 bytes)');
+        throw new Error('Block must be exactly 32 hex characters (16 bytes)');
       }
       if (cleanKey.length !== 32) {
-        throw new Error('Key must be exactly 32 hexadecimal characters (16 bytes)');
+        throw new Error('Key must be exactly 32 hex characters (16 bytes)');
       }
 
       const res = await cipherApi.testAvalanche({
@@ -55,7 +63,7 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
       setResult(res);
     } catch (err: unknown) {
       console.error('Avalanche test failed:', err);
-      const msg = err instanceof Error ? err.message : 'Avalanche test failed. Check backend connection.';
+      const msg = err instanceof Error ? err.message : 'Avalanche test failed.';
       setError(msg);
     } finally {
       setLoading(false);
@@ -63,8 +71,10 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
   };
 
   useEffect(() => {
-    handleRunAvalanche();
-  }, []);
+    if (initialBlockHex && initialBlockHex.length === 32) {
+      handleRunAvalanche();
+    }
+  }, [initialBlockHex]);
 
   const handleRandomize = () => {
     const randomHex = Array.from({ length: 16 }, () =>
@@ -77,73 +87,77 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
     }
   };
 
+  if (!initialBlockHex || initialBlockHex.length !== 32) {
+    return (
+      <div className="bg-white border-[2.5px] border-black p-8 sm:p-12 text-center shadow-[4px_4px_0px_#000000]">
+        <Zap className="w-8 h-8 sm:w-10 sm:h-10 mx-auto text-gray-400 mb-3 stroke-[2]" />
+        <p className="font-mono text-sm font-bold text-gray-700 uppercase">No Avalanche Data</p>
+      </div>
+    );
+  }
+
   const byteIndex = Math.floor(flipBitIndex / 8);
   const bitOffset = 7 - (flipBitIndex % 8);
 
   return (
-    <div className="bg-white border-[2.5px] border-black shadow-[6px_6px_0px_#000000] p-6 md:p-8 space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b-2 border-black">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-sm bg-[#BE4BCE] border-2 border-black flex items-center justify-center text-white shadow-[2px_2px_0px_#000000]">
-            <Zap className="w-5 h-5 stroke-[2.5]" />
+    <div className="bg-white border-[2.5px] border-black shadow-[6px_6px_0px_#000000] p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 sm:pb-4 border-b-2 border-black">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-sm bg-[#BE4BCE] border-2 border-black flex items-center justify-center text-white shadow-[2px_2px_0px_#000000]">
+            <Zap className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
           </div>
-          <div>
-            <h3 className="text-lg font-black uppercase tracking-wider text-black">
-              Avalanche Effect Benchmark (Strict Avalanche Criterion)
-            </h3>
-            <p className="text-xs text-gray-600 font-mono">
-              Measures how a single bit inversion diffuses through 10 rounds of the Brainrot SPN cipher
-            </p>
-          </div>
+          <h3 className="text-base sm:text-lg font-black uppercase tracking-wider text-black">
+            Avalanche Effect
+          </h3>
         </div>
 
         <button
           type="button"
           onClick={handleRandomize}
-          className="px-3 py-1.5 bg-[#DEC3A1] hover:bg-[#d4b58e] text-black border-2 border-black font-bold text-xs shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 transition-all cursor-pointer"
+          className="px-2.5 sm:px-3 py-1.5 bg-[#DEC3A1] hover:bg-[#d4b58e] text-black border-2 border-black font-bold text-xs shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 transition-all cursor-pointer"
         >
           <Sparkles className="w-3.5 h-3.5" />
-          Randomize {target === 'plaintext' ? 'Block' : 'Key'}
+          Randomize
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 border-2 border-black p-5 shadow-[3px_3px_0px_#000000]">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 bg-gray-50 border-2 border-black p-3.5 sm:p-5 shadow-[3px_3px_0px_#000000]">
         <div className="space-y-4">
           <div>
             <label className="text-xs font-mono font-bold uppercase tracking-wider text-black block mb-2">
-              1. Inversion Target
+              Target
             </label>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setTarget('plaintext')}
-                className={`flex-1 py-2 text-xs font-mono font-bold uppercase border-2 border-black transition-all cursor-pointer ${
+                className={`flex-1 py-1.5 sm:py-2 text-xs font-mono font-bold uppercase border-2 border-black transition-all cursor-pointer ${
                   target === 'plaintext'
                     ? 'bg-[#4542E0] text-white shadow-[2px_2px_0px_#000000]'
                     : 'bg-white text-black hover:bg-gray-100'
                 }`}
               >
-                Plaintext Block
+                Plaintext
               </button>
               <button
                 type="button"
                 onClick={() => setTarget('key')}
-                className={`flex-1 py-2 text-xs font-mono font-bold uppercase border-2 border-black transition-all cursor-pointer ${
+                className={`flex-1 py-1.5 sm:py-2 text-xs font-mono font-bold uppercase border-2 border-black transition-all cursor-pointer ${
                   target === 'key'
                     ? 'bg-[#E75FA8] text-white shadow-[2px_2px_0px_#000000]'
                     : 'bg-white text-black hover:bg-gray-100'
                 }`}
               >
-                Master Key
+                Key
               </button>
             </div>
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-1 text-xs font-mono font-bold">
-              <span>Bit Index to Flip (0 - 127):</span>
-              <span className="bg-[#DEC3A1] border border-black px-2 py-0.5">
-                Bit #{flipBitIndex} (Byte {byteIndex}, Bit {bitOffset})
+              <span>Flip Bit (0 - 127):</span>
+              <span className="bg-[#DEC3A1] border border-black px-1.5 py-0.5 text-[11px]">
+                Bit #{flipBitIndex} (B{byteIndex}.{bitOffset})
               </span>
             </div>
             <input
@@ -160,27 +174,27 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
         <div className="space-y-3 font-mono text-xs">
           <div>
             <label className="font-bold text-gray-700 block mb-1">
-              Plaintext Block (16 Bytes Hex):
+              Plaintext Block (Hex):
             </label>
             <input
               type="text"
               value={blockHex}
               onChange={(e) => setBlockHex(e.target.value)}
-              className="w-full bg-white border-2 border-black px-3 py-1.5 font-mono text-xs text-black shadow-[1px_1px_0px_#000000] focus:outline-none"
-              placeholder="32 hex characters"
+              className="w-full bg-white border-2 border-black px-2.5 sm:px-3 py-1.5 font-mono text-xs text-black shadow-[1px_1px_0px_#000000] focus:outline-none break-all"
+              placeholder="32 hex chars"
             />
           </div>
 
           <div>
             <label className="font-bold text-gray-700 block mb-1">
-              Master Key (16 Bytes Hex):
+              Master Key (Hex):
             </label>
             <input
               type="text"
               value={keyHex}
               onChange={(e) => setKeyHex(e.target.value)}
-              className="w-full bg-white border-2 border-black px-3 py-1.5 font-mono text-xs text-black shadow-[1px_1px_0px_#000000] focus:outline-none"
-              placeholder="32 hex characters"
+              className="w-full bg-white border-2 border-black px-2.5 sm:px-3 py-1.5 font-mono text-xs text-black shadow-[1px_1px_0px_#000000] focus:outline-none break-all"
+              placeholder="32 hex chars"
             />
           </div>
 
@@ -196,7 +210,7 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
               </>
             ) : (
               <>
-                <Play className="w-4 h-4 fill-white" /> Run Avalanche Test
+                <Play className="w-4 h-4 fill-white" /> Test Avalanche
               </>
             )}
           </button>
@@ -211,53 +225,50 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
       )}
 
       {result && (
-        <div className="space-y-6 pt-2">
-          <div className="border-[2.5px] border-black p-5 bg-[#DEC3A1]/30 shadow-[4px_4px_0px_#000000] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="space-y-4 sm:space-y-6 pt-2">
+          <div className="border-[2.5px] border-black p-4 sm:p-5 bg-[#DEC3A1]/30 shadow-[4px_4px_0px_#000000] flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
             <div className="space-y-1 text-center md:text-left">
               <span className="text-xs font-mono font-bold uppercase text-gray-600 block">
-                Total Avalanche Effect (Final Round 10)
+                Total Avalanche (Round 10)
               </span>
               <div className="flex items-baseline justify-center md:justify-start gap-2">
-                <span className="text-5xl font-black font-mono text-black">
+                <span className="text-4xl sm:text-5xl font-black font-mono text-black">
                   {result.total_avalanche_percentage.toFixed(2)}%
                 </span>
-                <span className="text-sm font-mono font-bold text-gray-600">
-                  (~{Math.round((result.total_avalanche_percentage / 100) * 128)} / 128 bits flipped)
+                <span className="text-xs sm:text-sm font-mono font-bold text-gray-600">
+                  ({Math.round((result.total_avalanche_percentage / 100) * 128)} / 128 b)
                 </span>
               </div>
-              <p className="text-xs font-mono text-gray-700">
-                Ideal Strict Avalanche Criterion (SAC) target is <strong>50.00%</strong> (each ciphertext bit changes with probability 1/2).
-              </p>
             </div>
 
-            <div className="border-2 border-black p-3 bg-white shadow-[2px_2px_0px_#000000] font-mono text-xs space-y-1">
-              <div>
-                <span className="text-gray-500 font-bold">Orig Ciphertext: </span>
+            <div className="border-2 border-black p-2.5 sm:p-3 bg-white shadow-[2px_2px_0px_#000000] font-mono text-[11px] sm:text-xs space-y-1 w-full md:w-auto">
+              <div className="break-all">
+                <span className="text-gray-500 font-bold">Orig: </span>
                 <code className="text-black font-black">{result.original_ciphertext_hex}</code>
               </div>
-              <div>
-                <span className="text-gray-500 font-bold">Mod Ciphertext:  </span>
+              <div className="break-all">
+                <span className="text-gray-500 font-bold">Mod:  </span>
                 <code className="text-[#E75FA8] font-black">{result.modified_ciphertext_hex}</code>
               </div>
             </div>
           </div>
 
           <div className="border-2 border-black bg-white shadow-[4px_4px_0px_#000000] overflow-hidden">
-            <div className="bg-black text-white px-4 py-2 font-mono font-black text-xs uppercase flex justify-between items-center">
-              <span>SPN 10-Round Avalanche Diffusion Progression</span>
-              <span className="text-emerald-400">Target: ~50% SAC</span>
+            <div className="bg-black text-white px-3 sm:px-4 py-2 font-mono font-black text-xs uppercase flex justify-between items-center">
+              <span>Round Progression</span>
+              <span className="text-emerald-400">Target: ~50%</span>
             </div>
 
-            <div className="p-4 space-y-3">
+            <div className="p-3 sm:p-4 space-y-2.5 sm:space-y-3">
               {result.round_progression.map((r) => {
                 const isNearIdeal = Math.abs(r.percentage - 50) < 10;
                 return (
-                  <div key={r.round} className="flex items-center gap-3 font-mono text-xs">
-                    <span className="w-20 font-black text-black shrink-0">
+                  <div key={r.round} className="flex items-center gap-2 sm:gap-3 font-mono text-xs">
+                    <span className="w-14 sm:w-20 font-black text-black shrink-0 text-[11px] sm:text-xs">
                       Round {r.round}:
                     </span>
 
-                    <div className="flex-1 h-5 bg-gray-100 border-2 border-black overflow-hidden relative shadow-[1px_1px_0px_#000000]">
+                    <div className="flex-1 h-4 sm:h-5 bg-gray-100 border-2 border-black overflow-hidden relative shadow-[1px_1px_0px_#000000]">
                       <div
                         className={`h-full border-r-2 border-black transition-all duration-300 ${
                           isNearIdeal
@@ -270,11 +281,11 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
                       />
                     </div>
 
-                    <span className="w-24 text-right font-black text-black shrink-0">
-                      {r.percentage.toFixed(2)}%
+                    <span className="w-16 sm:w-24 text-right font-black text-black shrink-0 text-[11px] sm:text-xs">
+                      {r.percentage.toFixed(1)}%
                     </span>
-                    <span className="w-24 text-right text-gray-500 text-[11px] shrink-0 hidden sm:inline">
-                      ({r.bits_flipped} / 128 bits)
+                    <span className="w-20 text-right text-gray-500 text-[10px] shrink-0 hidden md:inline">
+                      ({r.bits_flipped} / 128 b)
                     </span>
                   </div>
                 );

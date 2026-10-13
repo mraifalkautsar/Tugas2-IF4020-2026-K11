@@ -7,8 +7,10 @@ identify measurements of the earlier implementation used for comparison.
 
 `manifest.json` records the base commit, Brainrot Go source hashes, Go/OS versions,
 fixture hashes/sizes, public experimental keys, seeds, and benchmark medians.
-The current source hashes identify the working-tree implementation; initial
-measurement hashes are preserved separately. The base commit alone does not
+The current source hashes identify the merged matrix-S-box implementation
+used for the refreshed vectors, statistical reports, and HTTP demonstration.
+Initial and pre-merge source hashes are preserved separately for the historical
+benchmarks. The base commit alone does not
 identify uncommitted changes. Baseline JSON and
 benchmarks were captured before replacing the original implementation.
 
@@ -37,10 +39,14 @@ go -C src run ./cmd/analyze -seed 1337 -key-hex ffffffffffffffffffffffffffffffff
 ```
 
 Block plaintext/key avalanche means across these four Brainrot runs are approximately
-49.64–50.05% / 50.15–50.49%. OFB/CTR plaintext changes affect exactly one
+49.81–49.98% / 49.56–49.72%. OFB/CTR plaintext changes affect exactly one
 ciphertext bit, as their XOR-based mode construction predicts. The denominator
 for mode avalanche is the entire ciphertext body, so those percentages cannot
 be compared directly to single-block avalanche. IV bytes are excluded.
+
+The benchmark files below were captured before the matrix S-box and
+alternating row-shift merge. They describe those earlier implementations;
+they have not been remeasured for the current cipher.
 
 `baseline-bench.txt` and `brainrot-bench.txt` contain three runs of:
 

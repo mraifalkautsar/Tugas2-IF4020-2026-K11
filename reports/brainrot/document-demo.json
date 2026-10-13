@@ -1,11 +1,11 @@
 {
   "cbc_example": {
-    "ciphertext_hex": "2279a13f90be5ee72e370ff313f37519",
+    "ciphertext_hex": "fe03c8783a0b5dbf06957dfa382c5347",
     "plaintext": "Halo Brainrot",
     "recovered": "Halo Brainrot"
   },
   "cipher": "Brainrot Cipher",
-  "generated_utc": "2026-10-13T15:23:08Z",
+  "generated_utc": "2026-10-13T15:59:19Z",
   "go_version": "go1.26.0",
   "iv_hex": "000102030405060708090a0b0c0d0e0f",
   "key_hex": "00112233445566778899aabbccddeeff",

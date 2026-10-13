@@ -48,14 +48,20 @@ Seluruh identitas anggota memakai placeholder sesuai permintaan.
 | Ketentuan / bukti | Kondisi kode saat template disiapkan |
 | --- | --- |
 | Cipher dan kunci minimal 64 bit | Brainrot memakai blok/kunci 128 bit, 10 putaran, dan 21 subkunci |
-| Substitusi, permutasi, operasi tambahan | S-box turunan AES, rotasi baris, MixColumns, BPT revisi sesudah MixColumns, FCM putaran genap, penjumlahan modulo, dan XOR |
+| Substitusi, permutasi, operasi tambahan | S-box dari permutasi matriks 16×16 selama 67 iterasi, pergeseran baris, MixColumns, BPT revisi, FCM putaran genap, penjumlahan modulo, dan XOR |
 | Rancangan baru dan penjelasan komponen | Struktur dan key schedule menyerupai AES-128; jelaskan asal ide dan perubahan yang dibuat terhadap pembanding |
 | Lima mode operasi | ECB, CBC, CFB-128, OFB, CTR tersedia di `src/modes` |
 | Padding | PKCS#7 untuk ECB/CBC; CFB/OFB/CTR memproses sisa byte tanpa padding |
 | Masukan/keluaran teks dan berkas biner | API mode menerima byte; `crypt` hanya menerima argumen teks/hex. CLI analisis membaca berkas uji, tetapi belum menjadi antarmuka enkripsi/dekripsi berkas |
 | Verifikasi hasil dekripsi | Analisis memeriksa `bytes.Equal`; belum ada autentikasi/tag integritas pada cipherteks |
 | Avalanche, entropi, histogram semua mode | Tabel, grafik, dan pembahasan dari JSON Brainrot tersedia di Bab V |
-| Bukti pengujian | Vektor independen, subkunci, 66 snapshot, invers, batas difusi, serta pengujian mode/statistik khusus Brainrot tersedia; XOR uji dipertahankan untuk chaining |
+| Bukti pengujian | Vektor independen, subkunci, 66 snapshot, invers, batas difusi, pengujian 256 nilai S-box, serta pengujian lima mode/statistik tersedia; XOR uji dipertahankan untuk chaining |
+
+Pembentukan S-box menggunakan indeks 0–15 dan tidak memakai tabel AES.
+Inversnya dibentuk dengan `inverse[sbox[x]] = x`. Pergeseran memindahkan
+posisi byte, bukan memutar bit di dalam byte. Penjelasan lengkap ada pada
+subbagian SubBytes67 di Bab III. Cipherteks dari S-box lama tidak kompatibel;
+vektor referensi dan pengukuran laporan diperbarui untuk kode hasil merge.
 
 Analisis bawaan dapat dijalankan dari root repositori:
 
@@ -98,7 +104,7 @@ make
 
 Perintah ini memerlukan `make`, `latexmk`, XeLaTeX, dan paket TeX pada
 `main.tex` (termasuk `babel` Indonesian, `fontspec`, `titlesec`, `titletoc`,
-`listings`, `xurl`, dan TikZ). Berkas sementara masuk `.build/`; PDF pratinjau
+`listings`, `url`, dan TikZ). Berkas sementara masuk `.build/`; PDF pratinjau
 disalin ke `draf-laporan.pdf`. Keduanya diabaikan Git. `make clean` menghapus
 hasil build dan PDF pratinjau.
 

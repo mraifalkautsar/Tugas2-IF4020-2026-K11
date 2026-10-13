@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Independent flat-byte reference for frozen Brainrot test vectors.
 
-Uses polynomial long division and derives the AES S-box algebraically rather
-than importing Go tables or transformations. Python is only a development tool.
+Uses polynomial long division and simulates the matrix S-box with separate
+row/column shifts rather than importing Go tables or transformations.
+Python is only a development tool.
 Without --write-vectors, verifies that the frozen fixture matches this reference.
 """
 
@@ -32,20 +33,19 @@ def rotate(value, amount, width):
     return ((value << amount) | (value >> (width - amount))) & ((1 << width) - 1)
 
 
-def aes_substitute(value):
-    # x^254 is the multiplicative inverse for nonzero x, and maps zero to zero.
-    inverse, power = 1, value
-    exponent = 254
-    while exponent:
-        if exponent & 1:
-            inverse = multiply(inverse, power)
-        power = multiply(power, power)
-        exponent >>= 1
-    return inverse ^ rotate(inverse, 1, 8) ^ rotate(inverse, 2, 8) ^ \
-        rotate(inverse, 3, 8) ^ rotate(inverse, 4, 8) ^ 0x63
+def matrix_sbox():
+    matrix = [list(range(16 * row, 16 * (row + 1))) for row in range(16)]
+    for _ in range(67):
+        for axis in (6, 7):
+            for index in range(16):
+                matrix[axis][index], matrix[index][axis] = \
+                    matrix[index][axis], matrix[axis][index]
+        matrix = [row[-6:] + row[:-6] for row in matrix]
+        matrix = matrix[-7:] + matrix[:-7]
+    return [value for row in matrix for value in row]
 
 
-SBOX = [rotate(aes_substitute(x ^ 0x67), 6, 8) ^ 0x43 for x in range(256)]
+SBOX = matrix_sbox()
 
 
 def expand(key):
@@ -62,7 +62,7 @@ def expand(key):
 
 
 def shift(data):
-    return [data[4 * ((column - (6 + row) % 4) % 4) + row]
+    return [data[4 * ((column - (6 + row % 2) % 4) % 4) + row]
             for column in range(4) for row in range(4)]
 
 
@@ -175,7 +175,7 @@ def main():
     args = parser.parse_args()
     fixture = {
         "cipher": "Brainrot Cipher",
-        "provenance": "scripts/brainrot_reference.py; algebraic S-box, polynomial GF multiplication",
+        "provenance": "scripts/brainrot_reference.py; independent matrix S-box, polynomial GF multiplication",
         "vectors": [
             vector("zero", bytes(16), bytes(16)),
             vector("ones", bytes([255]) * 16, bytes([255]) * 16),

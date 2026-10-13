@@ -17,13 +17,11 @@ import {
 } from '../utils/cryptoHelpers';
 import { 
   ArrowLeft, 
-  RefreshCw, 
   BarChart2, 
   Zap, 
   Activity, 
   ChevronDown, 
-  ChevronUp, 
-  Cpu 
+  ChevronUp 
 } from 'lucide-react';
 
 export type AnalysisTabType = 'avalanche' | 'histogram' | 'entropy';
@@ -41,8 +39,8 @@ export const MainPage: React.FC<MainPageProps> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(initialFile);
   const [filePreview, setFilePreview] = useState<string>('');
 
-  const [key, setKey] = useState('BrainrotKey676767');
-  const [iv, setIv] = useState('0011223344556677');
+  const [key, setKey] = useState('');
+  const [iv, setIv] = useState('');
   const [mode, setMode] = useState<CipherMode>('CBC');
   const [padding, setPadding] = useState<PaddingScheme>('PKCS7');
 
@@ -63,17 +61,17 @@ export const MainPage: React.FC<MainPageProps> = ({
           const content = reader.result as string;
           setFilePreview(
             content.length > 300
-              ? `${content.substring(0, 300)}...\n[Preview truncated: total ${content.length} characters]`
+              ? `${content.substring(0, 300)}...\n[Truncated: ${content.length} chars]`
               : content
           );
         };
         reader.readAsText(selectedFile);
       } else {
         setFilePreview(
-          `[Binary Payload: ${selectedFile.name} | ${selectedFile.size} Bytes | ~${calculateBlocks(
+          `[${selectedFile.name} | ${selectedFile.size} B | ~${calculateBlocks(
             selectedFile.size,
             16
-          )} Blocks 128-bit]`
+          )} Blocks]`
         );
       }
     } else {
@@ -118,7 +116,7 @@ export const MainPage: React.FC<MainPageProps> = ({
             try {
               plainDecoded = new TextDecoder().decode(outBytes);
             } catch {
-              plainDecoded = '[Binary Payload Decrypted Successfully]';
+              plainDecoded = '[Decrypted Payload]';
             }
           }
 
@@ -259,52 +257,38 @@ export const MainPage: React.FC<MainPageProps> = ({
     scrollToSection('section-1');
   };
 
-  const handleResetAll = () => {
-    setInputText('');
-    setSelectedFile(null);
-    setResult(null);
-    scrollToSection('section-1');
-  };
-
   const effectivePlainBytes = useMemo(() => {
     if (result?.plainBytes && result.plainBytes.length > 0) {
       return result.plainBytes;
     }
-    if (inputText.trim().length > 0) {
-      return new TextEncoder().encode(inputText);
-    }
-    return new TextEncoder().encode('BrainrotCipherSPN128TestPayload67');
-  }, [result, inputText]);
+    return new Uint8Array(0);
+  }, [result]);
 
   const effectiveCipherBytes = useMemo(() => {
     if (result?.cipherBytes && result.cipherBytes.length > 0) {
       return result.cipherBytes;
     }
-    const sample = new Uint8Array(effectivePlainBytes.length);
-    for (let i = 0; i < sample.length; i++) {
-      sample[i] = (effectivePlainBytes[i] * 7 + i * 13 + 0x67) & 0xff;
-    }
-    return sample;
-  }, [result, effectivePlainBytes]);
+    return new Uint8Array(0);
+  }, [result]);
 
   const previewBlockHex = useMemo(() => {
     if (result?.outputHex && result.outputHex.length >= 32) {
       return result.outputHex.slice(0, 32);
     }
-    return '427261696E726F744369706865723132';
+    return '';
   }, [result]);
 
   return (
-    <div className="h-screen overflow-y-auto snap-y snap-proximity md:snap-mandatory scroll-smooth relative bg-white text-black selection:bg-[#EC8DD1] selection:text-black">
+    <div className="min-h-[100dvh] h-screen overflow-y-auto md:snap-y md:snap-proximity scroll-smooth relative bg-white text-black selection:bg-[#EC8DD1] selection:text-black">
       <FloatingBubbles />
 
       <section
         id="section-1"
-        className="min-h-screen snap-start flex flex-col justify-between py-6 px-4 md:px-8 max-w-6xl mx-auto w-full relative z-10"
+        className="min-h-[100dvh] md:min-h-screen md:snap-start flex flex-col justify-between py-4 sm:py-6 px-3 sm:px-4 md:px-8 max-w-6xl mx-auto w-full relative z-10"
       >
-        <header className="w-full border-b-[2.5px] border-black bg-white pb-4 mb-4">
+        <header className="w-full border-b-[2.5px] border-black bg-white pb-3 sm:pb-4 mb-3 sm:mb-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 type="button"
                 onClick={onBackToLanding}
@@ -314,31 +298,26 @@ export const MainPage: React.FC<MainPageProps> = ({
                 <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
               </button>
 
-              <div className="w-9 h-9 rounded-md bg-[#4542E0] border-[2.5px] border-black flex items-center justify-center text-white font-mono font-black text-sm shadow-[2px_2px_0px_#000000]">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-md bg-[#4542E0] border-[2.5px] border-black flex items-center justify-center text-white font-mono font-black text-xs sm:text-sm shadow-[2px_2px_0px_#000000]">
                 67
               </div>
 
               <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-lg md:text-xl font-black uppercase tracking-tight text-black">
-                    BRAINROT CIPHER
-                  </h1>
-                </div>
+                <h1 className="text-base sm:text-lg md:text-xl font-black uppercase tracking-tight text-black">
+                  BRAINROT CIPHER
+                </h1>
               </div>
-            </div>
-
-            <div className="flex items-center gap-2">
             </div>
           </div>
         </header>
 
-        <div className="space-y-5 flex-1 flex flex-col justify-center">
+        <div className="space-y-4 sm:space-y-5 flex-1 flex flex-col justify-center">
           <div className="flex items-center gap-2 font-mono text-xs font-black uppercase text-black">
             <span className="w-2.5 h-2.5 bg-[#4542E0] inline-block border border-black" />
-            <span>Section 01: Payload Input & Parameters</span>
+            <span>Section 01: Input</span>
           </div>
 
-          <div className="flex flex-col md:flex-row items-stretch gap-4 md:gap-6 relative">
+          <div className="flex flex-col md:flex-row items-stretch gap-3 sm:gap-4 md:gap-6 relative">
             {!hasFile && (
               <RichTextField
                 value={inputText}
@@ -353,8 +332,8 @@ export const MainPage: React.FC<MainPageProps> = ({
             )}
 
             {!hasText && !hasFile && (
-              <div className="flex items-center justify-center my-[-8px] md:my-0 md:self-center shrink-0 z-20">
-                <div className="w-[44px] h-[44px] rounded-full bg-[#DEC3A1] border-[2.5px] border-black flex items-center justify-center font-black uppercase text-xs text-black shadow-[3px_3px_0px_#000000]">
+              <div className="flex items-center justify-center my-[-4px] md:my-0 md:self-center shrink-0 z-20">
+                <div className="w-[36px] h-[36px] sm:w-[44px] sm:h-[44px] rounded-full bg-[#DEC3A1] border-[2.5px] border-black flex items-center justify-center font-black uppercase text-xs text-black shadow-[3px_3px_0px_#000000]">
                   or
                 </div>
               </div>
@@ -388,98 +367,67 @@ export const MainPage: React.FC<MainPageProps> = ({
           />
         </div>
 
-        <div className="pt-4 pb-2 flex justify-center">
+        <div className="pt-3 sm:pt-4 pb-2 flex justify-center">
           <button
             type="button"
-            onClick={() => scrollToSection('section-2')}
-            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 border-2 border-black font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 transition-all cursor-pointer"
+            onClick={() => scrollToSection(result ? 'section-2' : 'section-3')}
+            className="w-full sm:w-auto px-4 py-2 bg-gray-100 hover:bg-gray-200 border-2 border-black font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_#000000] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
           >
-            <span>Scroll Down to Result (Section 2)</span>
+            <span>{result ? 'Scroll Down to Result (Section 2)' : 'Scroll Down to Analysis (Section 3)'}</span>
             <ChevronDown className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
       </section>
 
-      <section
-        id="section-2"
-        className="min-h-screen snap-start flex flex-col justify-between py-8 px-4 md:px-8 max-w-6xl mx-auto w-full relative z-10"
-      >
-        <div className="space-y-4">
-          <div className="flex items-center justify-between border-b-2 border-black pb-3">
-            <div className="flex items-center gap-2 font-mono text-xs font-black uppercase text-black">
-              <span className="w-2.5 h-2.5 bg-[#E75FA8] inline-block border border-black" />
-              <span>Section 02: Cipher Execution Result</span>
+      {result && (
+        <section
+          id="section-2"
+          className="min-h-[100dvh] md:min-h-screen md:snap-start flex flex-col justify-between py-6 sm:py-8 px-3 sm:px-4 md:px-8 max-w-6xl mx-auto w-full relative z-10"
+        >
+          <div className="space-y-4">
+            <div className="flex items-center justify-between border-b-2 border-black pb-3">
+              <div className="flex items-center gap-2 font-mono text-xs font-black uppercase text-black">
+                <span className="w-2.5 h-2.5 bg-[#E75FA8] inline-block border border-black" />
+                <span>Section 02: Result</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => scrollToSection('section-1')}
+                className="text-xs font-mono font-bold text-gray-600 hover:text-black hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <ChevronUp className="w-3.5 h-3.5" />
+                Back to Input
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => scrollToSection('section-1')}
-              className="text-xs font-mono font-bold text-gray-600 hover:text-black hover:underline flex items-center gap-1 cursor-pointer"
-            >
-              <ChevronUp className="w-3.5 h-3.5" />
-              Back to Input
-            </button>
-          </div>
 
-          {result ? (
             <CipherResultCard
               result={result}
               onUseAsInput={handleUseResultAsInput}
               onOpenAnalyze={() => scrollToSection('section-3')}
-              onClose={() => setResult(null)}
             />
-          ) : (
-            <div className="bg-white border-[2.5px] border-black p-8 md:p-12 shadow-[6px_6px_0px_#000000] text-center space-y-4 my-auto">
-              <div className="w-14 h-14 rounded-full bg-[#DEC3A1] border-2 border-black mx-auto flex items-center justify-center shadow-[2px_2px_0px_#000000]">
-                <Cpu className="w-7 h-7 text-black stroke-[2.5]" />
-              </div>
-              <div>
-                <h3 className="text-base md:text-lg font-black uppercase tracking-wider text-black">
-                  No Cipher Result Generated Yet
-                </h3>
-                <p className="text-xs font-mono text-gray-600 max-w-md mx-auto mt-1">
-                  Configure your text or file payload and execute Encrypt or Decrypt in Section 1 to view formatted ciphertext, raw hex streams, and direct file downloads here.
-                </p>
-              </div>
-              <div className="pt-2 flex justify-center gap-3 font-mono text-xs">
-                <button
-                  type="button"
-                  onClick={() => scrollToSection('section-1')}
-                  className="px-4 py-2 bg-[#4542E0] hover:bg-[#3936cb] text-white font-bold uppercase border-2 border-black shadow-[2px_2px_0px_#000000] cursor-pointer"
-                >
-                  ↑ Go to Input & Config
-                </button>
-                <button
-                  type="button"
-                  onClick={() => scrollToSection('section-3')}
-                  className="px-4 py-2 bg-white hover:bg-gray-100 text-black font-bold uppercase border-2 border-black shadow-[2px_2px_0px_#000000] cursor-pointer"
-                >
-                  Explore Analysis (Section 3) ↓
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
 
-        <div className="pt-4 pb-2 flex justify-center">
-          <button
-            type="button"
-            onClick={() => scrollToSection('section-3')}
-            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 border-2 border-black font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 transition-all cursor-pointer"
-          >
-            <span>Scroll Down to Analysis (Section 3)</span>
-            <ChevronDown className="w-4 h-4 stroke-[2.5]" />
-          </button>
-        </div>
-      </section>
+          <div className="pt-4 pb-2 flex justify-center">
+            <button
+              type="button"
+              onClick={() => scrollToSection('section-3')}
+              className="w-full sm:w-auto px-4 py-2 bg-gray-100 hover:bg-gray-200 border-2 border-black font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_#000000] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span>Scroll Down to Analysis (Section 3)</span>
+              <ChevronDown className="w-4 h-4 stroke-[2.5]" />
+            </button>
+          </div>
+        </section>
+      )}
 
       <section
         id="section-3"
-        className="min-h-screen snap-start flex flex-col justify-start py-8 px-4 md:px-8 max-w-6xl mx-auto w-full space-y-6 relative z-10"
+        className="min-h-[100dvh] md:min-h-screen md:snap-start flex flex-col justify-start py-6 sm:py-8 px-3 sm:px-4 md:px-8 max-w-6xl mx-auto w-full space-y-4 sm:space-y-6 relative z-10"
       >
         <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-black pb-3">
           <div className="flex items-center gap-2 font-mono text-xs font-black uppercase text-black">
             <span className="w-2.5 h-2.5 bg-[#BE4BCE] inline-block border border-black" />
-            <span>Section 03: Cryptographic Metrics & Analysis</span>
+            <span>Section 03: Analysis</span>
           </div>
 
           <button
@@ -488,48 +436,48 @@ export const MainPage: React.FC<MainPageProps> = ({
             className="text-xs font-mono font-bold text-gray-600 hover:text-black hover:underline flex items-center gap-1 cursor-pointer"
           >
             <ChevronUp className="w-3.5 h-3.5" />
-            Back to Top (Section 1)
+            Back to Top
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 bg-gray-100 border-2 border-black p-2 shadow-[3px_3px_0px_#000000]">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 bg-gray-100 border-2 border-black p-1.5 sm:p-2 shadow-[3px_3px_0px_#000000]">
           <button
             type="button"
             onClick={() => setActiveAnalysisTab('avalanche')}
-            className={`flex-1 min-w-[140px] py-2.5 px-3 font-mono font-black text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+            className={`py-2 sm:py-2.5 px-1.5 sm:px-3 font-mono font-black text-[11px] sm:text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 ${
               activeAnalysisTab === 'avalanche'
-                ? 'bg-[#BE4BCE] text-white shadow-[3px_3px_0px_#000000] -translate-y-0.5'
+                ? 'bg-[#BE4BCE] text-white shadow-[2px_2px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] -translate-y-0.5'
                 : 'bg-white text-black hover:bg-gray-50'
             }`}
           >
-            <Zap className="w-4 h-4 stroke-[2.5]" />
-            Avalanche
+            <Zap className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="truncate">Avalanche</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveAnalysisTab('histogram')}
-            className={`flex-1 min-w-[140px] py-2.5 px-3 font-mono font-black text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+            className={`py-2 sm:py-2.5 px-1.5 sm:px-3 font-mono font-black text-[11px] sm:text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 ${
               activeAnalysisTab === 'histogram'
-                ? 'bg-[#E75FA8] text-white shadow-[3px_3px_0px_#000000] -translate-y-0.5'
+                ? 'bg-[#E75FA8] text-white shadow-[2px_2px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] -translate-y-0.5'
                 : 'bg-white text-black hover:bg-gray-50'
             }`}
           >
-            <BarChart2 className="w-4 h-4 stroke-[2.5]" />
-            Histogram
+            <BarChart2 className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="truncate">Histogram</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveAnalysisTab('entropy')}
-            className={`flex-1 min-w-[140px] py-2.5 px-3 font-mono font-black text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+            className={`py-2 sm:py-2.5 px-1.5 sm:px-3 font-mono font-black text-[11px] sm:text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 ${
               activeAnalysisTab === 'entropy'
-                ? 'bg-[#4542E0] text-white shadow-[3px_3px_0px_#000000] -translate-y-0.5'
+                ? 'bg-[#4542E0] text-white shadow-[2px_2px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] -translate-y-0.5'
                 : 'bg-white text-black hover:bg-gray-50'
             }`}
           >
-            <Activity className="w-4 h-4 stroke-[2.5]" />
-            Entropy
+            <Activity className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="truncate">Entropy</span>
           </button>
         </div>
 

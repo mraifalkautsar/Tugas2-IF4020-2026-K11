@@ -53,13 +53,13 @@ serta rata-rata dan jumlah percobaan per posisi bit.
   \end{tabularx}
 \end{table}
 
-Rata-rata perubahan adalah 49,643\% untuk bit plainteks dan 50,177\%
+Rata-rata perubahan adalah 49,976\% untuk bit plainteks dan 49,557\%
 untuk bit kunci, mendekati separuh keluaran. Setiap posisi bit hanya diuji
-dua kali; rata-rata per posisi berkisar 51--75,5 bit untuk plainteks dan
-52--76 bit untuk kunci. Variasi ini belum cukup untuk menyimpulkan bahwa
+dua kali; rata-rata per posisi berkisar 53,5--72 bit untuk plainteks dan
+54,5--77 bit untuk kunci. Variasi ini belum cukup untuk menyimpulkan bahwa
 setiap bit keluaran berubah dengan peluang yang sama.
-Dengan seed 1337, kunci nol menghasilkan rata-rata 49,875\%/50,146\%,
-sedangkan kunci semua satu menghasilkan 50,055\%/50,488\%
+Dengan seed 1337, kunci nol menghasilkan rata-rata 49,890\%/49,719\%,
+sedangkan kunci semua satu menghasilkan 49,814\%/49,667\%
 (plainteks/kunci).
 
 \section{Avalanche Effect pada Seluruh Mode}
@@ -86,12 +86,12 @@ pada CBC dan CFB pengaruhnya bergantung pada posisi perubahan dan umpan
 balik. Interpretasi hasil harus membedakan sifat mode dari difusi cipher
 satu blok.
 
-Pada teks, perubahan plainteks ECB hanya 1,931\% karena pengaruhnya
+Pada teks, perubahan plainteks ECB hanya 1,933\% karena pengaruhnya
 terbatas pada satu blok dari badan 416 byte. CBC dan CFB mencapai
-25,969\% dan 24,204\% karena perubahan dapat merambat ke blok berikutnya;
+26,001\% dan 24,164\% karena perubahan dapat merambat ke blok berikutnya;
 posisi bit yang dipilih menentukan banyaknya blok yang terkena pengaruh.
 OFB dan CTR sama-sama 0,031\%, yaitu satu bit dari 3232 bit badan.
-Pada biner yang lebih panjang, persentase ECB turun menjadi 0,768\% dan
+Pada biner yang lebih panjang, persentase ECB turun menjadi 0,762\% dan
 OFB/CTR menjadi 0,012\%; CBC/CFB tetap sekitar 25\%.
 Sebaliknya, perubahan kunci menghasilkan sekitar 50\% pada kelima mode
 karena kunci memengaruhi semua pemanggilan cipher. Persentase perubahan
@@ -119,10 +119,10 @@ avalanche cipher satu blok.
     \bottomrule
   \end{tabularx}
 \end{table}
-Entropi teks meningkat dari 4,860 menjadi 7,217 bit/byte pada ECB dan
-7,456--7,513 pada mode lain. Pada biner, plainteks sudah mendekati
-8 bit/byte, tetapi ECB hanya mencapai 7,197 karena blok berulang tetap
-menghasilkan cipherteks berulang. Mode lain mencapai 7,777--7,807.
+Entropi teks meningkat dari 4,860 menjadi 7,188 bit/byte pada ECB dan
+7,433--7,571 pada mode lain. Pada biner, plainteks sudah mendekati
+8 bit/byte, tetapi ECB hanya mencapai 7,220 karena blok berulang tetap
+menghasilkan cipherteks berulang. Mode lain mencapai 7,804--7,817.
 Entropi tidak harus meningkat: nilainya bergantung pada distribusi awal,
 ukuran sampel, pengulangan blok, dan tambahan padding ECB/CBC.
 
@@ -142,10 +142,10 @@ ukuran sampel, pengulangan blok, dan tambahan padding ECB/CBC.
 \end{figure}
 Grafik memakai proporsi byte agar panjang badan yang berbeda dapat
 dibandingkan. Skala y berbeda antar panel dan tercantum pada setiap sumbu.
-Pada teks, ECB memiliki 76 nilai byte yang tidak muncul dan puncak
-frekuensi 10 kemunculan, sedangkan mode lain memiliki 48--54 nilai yang
-tidak muncul. Perbedaannya lebih jelas pada biner: ECB memiliki 93 nilai
-yang tidak muncul dan puncak 28 kemunculan; mode lain hanya 3--8 nilai
+Pada teks, ECB memiliki 78 nilai byte yang tidak muncul dan puncak
+frekuensi 8 kemunculan, sedangkan mode lain memiliki 41--55 nilai yang
+tidak muncul. Perbedaannya lebih jelas pada biner: ECB memiliki 86 nilai
+yang tidak muncul dan puncak 20 kemunculan; mode lain hanya 3--6 nilai
 yang tidak muncul. Hal ini selaras dengan blok masukan yang berulang dan
 pemetaan ECB yang independen per blok. Sebaran CBC, CFB, OFB, dan CTR
 lebih mendekati seragam pada sampel biner ini, tetapi batang tidak harus

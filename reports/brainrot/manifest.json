@@ -10,8 +10,9 @@
     "src/cipher/brainrot/brainrot_test.go": "c6450f39a1b7db3d21d08e58ac4a8f6c84ca2a65e42e6fa7a1173f5ccc08a047",
     "src/cipher/brainrot/diffusion_test.go": "0c2bf982e8436e30186998ea188dd6eb4f590a268312b53bcb5c831817e326ae",
     "src/cipher/brainrot/extensions.go": "6362521025b3b991ca95e69d801d695efec5a2a240d792a5b81032b469371d48",
-    "src/cipher/brainrot/tables.go": "54deef2c9413750b63a646ef881fce673560f52e862b9a9870fef96d223fa683",
-    "src/cipher/brainrot/transformations.go": "19809927d35799359def4be0bc982a2ba7961cea3ee71e2d4a50a61ee48a735f"
+    "src/cipher/brainrot/tables.go": "3cc2917e12aebd02a63c150dd2cae87c4c634d067963562c746282746d2969b3",
+    "src/cipher/brainrot/tables_test.go": "f42e23b9eda789741b32e7ee1161939f1e534e62c69d9d23fc5edc5e1f1ae551",
+    "src/cipher/brainrot/transformations.go": "bf1dae6fc4707dfad21c365316b9d591d6388f1e9c400f5f19108483ffbfc9d4"
   },
   "fixtures": {
     "src/testdata/fixtures/byte-pattern.bin": {
@@ -118,8 +119,8 @@
     }
   },
   "limitations": "Samples and local branch bounds do not establish full-cipher security or authentication.",
-  "reference_sha256": "acd5e2f5e2e7e485cab3dd63ab6466ff9b878b079d9bc52c67b4c7fcf3101fd2",
-  "vectors_sha256": "5e6cfb7e3faec9ce7f077c78f7f6d2ddb61501e198493a37fdee397118b01db3",
+  "reference_sha256": "86db1e5a7f48608b9f873343f7b7f610a24086da6ae5540595852bcde8a65957",
+  "vectors_sha256": "61c077c3a05f24b71e7ee6986c0d8d35b9ce61950365e6ccec677f7535b7cf3d",
   "render_script_sha256": "fc20dbce50c47c15c9e5683a688c4df3a0afca59bec47730ea208306f49dc25c",
   "python_version": "Python 3.14.4",
   "plotting_tool": "matplotlib 3.11.2",
@@ -134,6 +135,21 @@
   },
   "demonstration_script_sha256": "877bb8ae8d1ef0a52131c50d937100cedc4d018c6a23070509897e0082fc50ba",
   "demonstration_report": "document-demo.json",
-  "refreshed_utc": "2026-10-13T15:34:41.309803+00:00",
-  "source_note": "Current source hashes identify the renamed algorithm; initial hashes and benchmark timings preserve the original measurement provenance."
+  "refreshed_utc": "2026-10-13T16:00:19.145029+00:00",
+  "source_note": "Statistical reports, HTTP demonstration, and frozen vectors regenerated for the merged matrix S-box and alternating row shifts. Benchmark timings remain historical pre-merge measurements identified by the preserved source hashes.",
+  "pre_merge_source_sha256": {
+    "src/cipher/brainrot/benchmark_test.go": "ad9351849ad699f1ac41a5a1ab5e25068a65c09b732f995affaf779a6f1bd20f",
+    "src/cipher/brainrot/brainrot.go": "e1d3802f82d2df1738a29d10eb197ceb755b1d7ffb132a8d61aec8b22f3624aa",
+    "src/cipher/brainrot/brainrot_test.go": "c6450f39a1b7db3d21d08e58ac4a8f6c84ca2a65e42e6fa7a1173f5ccc08a047",
+    "src/cipher/brainrot/diffusion_test.go": "0c2bf982e8436e30186998ea188dd6eb4f590a268312b53bcb5c831817e326ae",
+    "src/cipher/brainrot/extensions.go": "6362521025b3b991ca95e69d801d695efec5a2a240d792a5b81032b469371d48",
+    "src/cipher/brainrot/tables.go": "54deef2c9413750b63a646ef881fce673560f52e862b9a9870fef96d223fa683",
+    "src/cipher/brainrot/transformations.go": "19809927d35799359def4be0bc982a2ba7961cea3ee71e2d4a50a61ee48a735f"
+  },
+  "pre_merge_reference_sha256": "acd5e2f5e2e7e485cab3dd63ab6466ff9b878b079d9bc52c67b4c7fcf3101fd2",
+  "pre_merge_vectors_sha256": "5e6cfb7e3faec9ce7f077c78f7f6d2ddb61501e198493a37fdee397118b01db3",
+  "merge_heads": {
+    "HEAD": "b217c3913f5701ed489d6d7bf7f940b99b993d8c",
+    "MERGE_HEAD": "ac9eb36340fd9eac0ac4b61c227d95779e2bf747"
+  }
 }

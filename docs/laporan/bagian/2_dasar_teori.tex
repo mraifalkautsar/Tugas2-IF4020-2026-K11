@@ -22,10 +22,10 @@ bahwa suatu cipher telah aman.
 \section{S-box, Permutasi, dan Operasi Tambahan}
 S-box memetakan nilai byte menggunakan tabel. Pemetaan bijektif memiliki
 tabel invers untuk dekripsi. Permutasi mengubah posisi byte tanpa mengubah
-nilainya. Operasi XOR, rotasi bit, serta pencampuran pada $\mathrm{GF}(2^8)$
-serta penjumlahan modulo dan pencampuran Feistel digunakan oleh implementasi
-Brainrot. Langkah Feistel dapat dibalik tanpa mensyaratkan fungsi internal
-bijektif. Perkalian medan dalam kode memakai
+nilainya. Brainrot memakai XOR, pergeseran melingkar posisi byte, rotasi
+bit, pencampuran pada $\mathrm{GF}(2^8)$, penjumlahan modulo, dan
+pencampuran Feistel. Langkah Feistel dapat dibalik tanpa mensyaratkan
+fungsi internal bijektif. Perkalian medan dalam kode memakai
 polinomial reduksi $x^8+x^4+x^3+x+1$, yang juga digunakan
 AES~\cite{aes}.
 
@@ -34,7 +34,7 @@ berderajat paling tinggi tujuh. Penjumlahan dilakukan dengan XOR,
 sedangkan perkalian diikuti reduksi polinomial, bukan perkalian bilangan
 bulat biasa. Matriks pencampuran harus memiliki invers agar kolom state
 dapat dipulihkan. XOR dengan nilai yang sama membalik operasi sebelumnya,
-$(x\oplus k)\oplus k=x$, sedangkan rotasi bit dibalik dengan rotasi
+$(x\oplus k)\oplus k=x$, sedangkan pergeseran melingkar dibalik dengan pergeseran
 berlawanan arah.
 
 \section{Pembentukan Kunci Putaran}
@@ -110,5 +110,4 @@ Pengukuran satu blok harus dibedakan dari pengukuran seluruh pesan.
 Sebagai contoh, pada OFB dan CTR dengan kunci serta IV tetap, perubahan
 satu bit plainteks hanya mengubah satu bit cipherteks karena keystream
 yang digunakan tetap sama. Oleh karena itu, ukuran statistik perlu
-ditafsirkan bersama ukuran sampel dan sifat mode operasi, bukan dijadikan
-bukti tunggal keamanan algoritma.
+ditafsirkan bersama ukuran sampel dan sifat mode operasi.
