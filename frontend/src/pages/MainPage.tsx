@@ -297,11 +297,6 @@ export const MainPage: React.FC<MainPageProps> = ({
               >
                 <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
               </button>
-
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-md bg-[#4542E0] border-[2.5px] border-black flex items-center justify-center text-white font-mono font-black text-xs sm:text-sm shadow-[2px_2px_0px_#000000]">
-                67
-              </div>
-
               <div>
                 <h1 className="text-base sm:text-lg md:text-xl font-black uppercase tracking-tight text-black">
                   BRAINROT CIPHER
@@ -367,16 +362,18 @@ export const MainPage: React.FC<MainPageProps> = ({
           />
         </div>
 
-        <div className="pt-3 sm:pt-4 pb-2 flex justify-center">
-          <button
-            type="button"
-            onClick={() => scrollToSection(result ? 'section-2' : 'section-3')}
-            className="w-full sm:w-auto px-4 py-2 bg-gray-100 hover:bg-gray-200 border-2 border-black font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_#000000] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-          >
-            <span>{result ? 'Scroll Down to Result (Section 2)' : 'Scroll Down to Analysis (Section 3)'}</span>
-            <ChevronDown className="w-4 h-4 stroke-[2.5]" />
-          </button>
-        </div>
+        {result && (
+          <div className="pt-3 sm:pt-4 pb-2 flex justify-center">
+            <button
+              type="button"
+              onClick={() => scrollToSection('section-2')}
+              className="w-full sm:w-auto px-4 py-2 bg-gray-100 hover:bg-gray-200 border-2 border-black font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_#000000] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span>Scroll Down to Result (Section 2)</span>
+              <ChevronDown className="w-4 h-4 stroke-[2.5]" />
+            </button>
+          </div>
+        )}
       </section>
 
       {result && (
@@ -420,25 +417,36 @@ export const MainPage: React.FC<MainPageProps> = ({
         </section>
       )}
 
-      <section
-        id="section-3"
-        className="min-h-[100dvh] md:min-h-screen md:snap-start flex flex-col justify-start py-6 sm:py-8 px-3 sm:px-4 md:px-8 max-w-6xl mx-auto w-full space-y-4 sm:space-y-6 relative z-10"
-      >
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-black pb-3">
-          <div className="flex items-center gap-2 font-mono text-xs font-black uppercase text-black">
-            <span className="w-2.5 h-2.5 bg-[#BE4BCE] inline-block border border-black" />
-            <span>Section 03: Analysis</span>
-          </div>
+      {result && (
+        <section
+          id="section-3"
+          className="min-h-[100dvh] md:min-h-screen md:snap-start flex flex-col justify-start py-6 sm:py-8 px-3 sm:px-4 md:px-8 max-w-6xl mx-auto w-full space-y-4 sm:space-y-6 relative z-10"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-black pb-3">
+            <div className="flex items-center gap-2 font-mono text-xs font-black uppercase text-black">
+              <span className="w-2.5 h-2.5 bg-[#BE4BCE] inline-block border border-black" />
+              <span>Section 03: Analysis</span>
+            </div>
 
-          <button
-            type="button"
-            onClick={() => scrollToSection('section-1')}
-            className="text-xs font-mono font-bold text-gray-600 hover:text-black hover:underline flex items-center gap-1 cursor-pointer"
-          >
-            <ChevronUp className="w-3.5 h-3.5" />
-            Back to Top
-          </button>
-        </div>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => scrollToSection('section-2')}
+                className="text-xs font-mono font-bold text-gray-600 hover:text-black hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <ChevronUp className="w-3.5 h-3.5" />
+                Back to Result
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToSection('section-1')}
+                className="text-xs font-mono font-bold text-gray-600 hover:text-black hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <ChevronUp className="w-3.5 h-3.5" />
+                Back to Top
+              </button>
+            </div>
+          </div>
 
         <div className="grid grid-cols-3 gap-1.5 sm:gap-2 bg-gray-100 border-2 border-black p-1.5 sm:p-2 shadow-[3px_3px_0px_#000000]">
           <button
@@ -510,6 +518,7 @@ export const MainPage: React.FC<MainPageProps> = ({
           )}
         </div>
       </section>
+      )}
     </div>
   );
 };

@@ -10,6 +10,9 @@ Program mendukung mode ECB, CBC, CFB, OFB, dan CTR.
 
 - **Go:** bahasa pemrograman untuk algoritma cipher, mode operasi, dan analisis.
 - **Go Modules:** pengelolaan modul project melalui `src/go.mod`.
+- **React**
+- **Vite.js**
+- 
 
 
 ## 3. Dependensi

@@ -56,9 +56,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
       <header className="relative z-10 w-full max-w-4xl flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-md bg-[#4542E0] border-[2.5px] border-black flex items-center justify-center text-white font-mono font-black text-sm shadow-[2px_2px_0px_#000000]">
-            67
-          </div>
           <span className="font-mono text-xs font-black tracking-wider uppercase bg-[#DEC3A1] border-2 border-black px-2 py-1 shadow-[2px_2px_0px_#000000]">
             Brainrot Cipher
           </span>
