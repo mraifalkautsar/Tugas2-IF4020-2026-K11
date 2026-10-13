@@ -39,32 +39,6 @@ export const EntropyGauge: React.FC<EntropyGaugeProps> = ({
             </h3>
           </div>
         </div>
-
-        <div className="flex items-center gap-2">
-          <span
-            className={`text-xs font-mono font-black uppercase px-2.5 sm:px-3 py-1 border-2 border-black shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 ${
-              isStrong
-                ? 'bg-emerald-300 text-black'
-                : isModerate
-                ? 'bg-amber-300 text-black'
-                : 'bg-rose-300 text-black'
-            }`}
-          >
-            {isStrong ? (
-              <>
-                <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> High Entropy
-              </>
-            ) : isModerate ? (
-              <>
-                <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Moderate Entropy
-              </>
-            ) : (
-              <>
-                <AlertTriangle className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Low Entropy
-              </>
-            )}
-          </span>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">

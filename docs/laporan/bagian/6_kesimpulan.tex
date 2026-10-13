@@ -1,15 +1,39 @@
 \chapter{KESIMPULAN DAN SARAN PENGEMBANGAN}
 
 \section{Kesimpulan}
-\Isi{Rangkum rancangan Brainrot, pemenuhan ketentuan cipher dan lima mode,
-hasil simulasi teks/biner, penanganan padding, serta verifikasi integritas
-berdasarkan implementasi akhir.}
+Berdasarkan perancangan, implementasi, serta analisis yang telah dilakukan terhadap Brainrot Cipher, ditarik beberapa kesimpulan sebagai berikut:
+\begin{enumerate}
+  \item \textbf{Pemenuhan Spesifikasi Perancangan Cipher:} Algoritma Brainrot berhasil dirancang dan diimplementasikan sebagai \textit{block cipher} simetris 128 bit dengan panjang kunci 128 bit, 10 putaran, serta 21 subkunci terikat melalui prosedur \textit{key schedule}. Struktur berbasis \textit{Substitution--Permutation Network} (SPN) memadukan substitusi nonlinier Kotak-S $S_{67}$ (permutasi matriks $16\times16$ sepanjang 67 iterasi), pergeseran baris ShiftRows67, difusi kolom linear MixColumns67 menggunakan matriks MDS pada $\mathrm{GF}(2^8)$ dengan \textit{branch number} 5, Bit-Plane Transpose (BPT), langkah nonlinier Feistel Cross-Mixing (FCM) pada putaran genap, serta kombinasi subkunci penjumlahan modulo byte dan XOR AddRoundKey67. Seluruh komponen transformasi terbukti dapat dibalik (\textit{invertible}) dan kesesuaian alurnya telah divalidasi menggunakan vektor uji independen serta pencocokan 66 \textit{state} perantara.
 
-\Isi{Rangkum hasil avalanche, entropi, dan histogram dengan angka utama
-beserta keterbatasannya.}
+  \item \textbf{Implementasi Mode Operasi dan Penanganan Padding:} Kelima mode operasi (ECB, CBC, CFB, OFB, dan CTR) berhasil diimplementasikan untuk memproses data teks (404 byte) dan berkas biner (1027 byte). Skema padding PKCS\#7 pada mode ECB dan CBC berhasil menangani sisa byte maupun pesan yang sudah tepat kelipatan blok, serta menolak padding tidak valid dengan respons HTTP 400. Mode CFB, OFB, dan CTR memproses sisa byte melalui operasi XOR dengan potongan \textit{keystream} tanpa memerlukan padding. Seluruh sepuluh kombinasi pengujian \textit{round-trip} menunjukkan pemulihan data yang identik dengan masukan aslinya melalui kesamaan byte langsung dan nilai \textit{digest} SHA-256.
+
+  \item \textbf{Batas Verifikasi dan Autentikasi Integritas:} Keberhasilan pemulihan data pada pengujian \textit{round-trip} membuktikan invertibilitas algoritma dan kesesuaian implementasi, tetapi tidak menjamin autentikasi integritas cipherteks. Percobaan manipulasi satu bit pada cipherteks menghasilkan respons dekripsi berstatus HTTP 200 tanpa deteksi kegagalan integritas, membuktikan bahwa penolakan galat saat ini hanya bertumpu pada pemeriksaan batas blok dan struktur padding. Implementasi belum menyertakan mekanisme autentikasi seperti \textit{Message Authentication Code} (MAC) atau skema \textit{Authenticated Encryption}.
+
+  \item \textbf{Karakteristik Statistik dan Keterbatasannya:}
+  \begin{itemize}
+    \item \textit{Avalanche effect} satu blok menghasilkan rata-rata perubahan bit sebesar 49,976\% untuk pembalikan satu bit plainteks dan 49,557\% untuk pembalikan satu bit kunci (256 percobaan, seed 42), yang mendekati nilai ideal 50\% pada kriteria difusi empiris.
+    \item Pada pesan utuh, perambatan perubahan bit plainteks mencerminkan sifat masing-masing mode operasi: ECB hanya mencapai 1,933\% karena pengaruh perubahan terbatas pada satu blok; CBC dan CFB mencapai 26,001\% dan 24,164\% akibat mekanisme \textit{chaining} dan umpan balik; sedangkan OFB dan CTR menghasilkan tepat satu bit perubahan (0,031\%) karena sifat \textit{keystream} independen. Sebaliknya, pembalikan bit kunci menghasilkan perubahan sekitar 50\% pada kelima mode (49,908\%--50,054\%) karena kunci memengaruhi seluruh pemanggilan cipher.
+    \item Entropi empiris teks meningkat dari 4,860 bit/byte menjadi 7,188 bit/byte pada ECB dan 7,433--7,571 bit/byte pada mode lainnya. Pada berkas biner, mode non-ECB mencapai entropi 7,804--7,817 bit/byte dengan sebaran histogram yang mendekati seragam. Sebaliknya, ECB pada biner hanya mencapai 7,220 bit/byte dengan 86 nilai byte yang tidak muncul akibat blok masukan yang berulang.
+    \item Kemerataan histogram dan tingginya entropi empiris merupakan indikator sebaran frekuensi byte pada sampel uji, tetapi bukan merupakan jaminan ketiadaan pola atau bukti ketahanan terhadap kriptanalisis formal.
+  \end{itemize}
+\end{enumerate}
 
 \section{Saran Pengembangan}
-\Isi{Uraikan pengembangan berdasarkan temuan, misalnya kajian kriptanalisis,
-pengujian lebih luas, format berkas dan integritas, perbaikan antarmuka,
-atau optimasi implementasi. Bedakan fitur wajib yang belum selesai dari
-pengembangan opsional.}
+Berdasarkan hasil evaluasi, keterbatasan pengujian, dan temuan implementasi saat ini, beberapa saran pengembangan yang diajukan adalah sebagai berikut:
+\begin{enumerate}
+  \item \textbf{Kajian Kriptanalisis Formal:} Melakukan analisis matematis mendalam terhadap ketahanan Brainrot Cipher terhadap kriptanalisis diferensial dan linier. Kajian lanjutan perlu menghitung probabilitas karakteristik diferensial maksimum (\textit{maximum differential characteristic probability}), menyusun tabel profil perbedaan (DDT) dan aproksimasi linier (LAT) Kotak-S $S_{67}$, serta membuktikan batas bawah jumlah putaran aktif (\textit{active S-boxes}) di bawah pengaruh kombinasi ShiftRows67, MixColumns67, Bit-Plane Transpose (BPT), dan langkah Feistel FCM.
+
+  \item \textbf{Integrasi Autentikasi Integritas dan Format Berkas:}
+  \begin{itemize}
+    \item Mengembangkan mode operasi terotentikasi, seperti GCM (\textit{Galois/Counter Mode}) atau skema \textit{Encrypt-then-MAC} menggunakan HMAC atau KMAC, agar sistem dapat memverifikasi integritas dan keaslian cipherteks serta menolak manipulasi data secara kriptografis.
+    \item Merancang format wadah berkas terstandardisasi yang menyertakan \textit{header} metadata (pengenal format, identitas mode, skema padding, serta nilai IV acak) sehingga proses dekripsi berkas tidak lagi memerlukan masukan parameter manual pengguna.
+  \end{itemize}
+
+  \item \textbf{Penyempurnaan Antarmuka dan Manajemen Kunci/IV:}
+  \begin{itemize}
+    \item Memperbaiki penanganan IV otomatis pada antarmuka web dan API agar nilai IV acak yang dibangkitkan oleh backend selalu dikembalikan kepada klien atau disematkan di awal berkas keluaran secara konsisten.
+    \item Menghapus mekanisme \textit{fallback} simulasi XOR pada antarmuka peramban dan menggantinya dengan penanganan galat jaringan yang eksplisit guna mencegah kebingungan pengguna terhadap hasil enkripsi.
+  \end{itemize}
+
+  \item \textbf{Optimasi Kinerja dan Evaluasi Saluran Samping:} Menerapkan tabel pra-komputasi (\textit{T-tables}) yang menggabungkan operasi SubBytes67, ShiftRows67, dan MixColumns67 untuk meningkatkan \textit{throughput} pemrosesan perangkat lunak, serta mengevaluasi implementasi terhadap kerentanan saluran samping (\textit{side-channel attacks}), terutama serangan waktu (\textit{timing attack}) pada operasi perkalian medan berhingga $\mathrm{GF}(2^8)$ dan operasi percabangan bit.
+\end{enumerate}
