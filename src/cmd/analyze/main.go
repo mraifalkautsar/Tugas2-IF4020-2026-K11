@@ -7,10 +7,12 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/analysis"
 	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/cipher"
+	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/cipher/brainrot"
 	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/internal/testonly"
 	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/modes"
 )
@@ -18,14 +20,14 @@ import (
 const maxFixture = 1 << 20 // The experiment repeats whole-file encryption many times.
 
 func main() {
-	cipherName := flag.String("cipher", "toy", "registered cipher (currently: toy)")
+	cipherName := flag.String("cipher", "brainrot", "registered cipher: brainrot or toy (test-only)")
 	blockPath := flag.String("block-input", "testdata/fixtures/one-block.txt", "one-block fixture")
 	inputPath := flag.String("input", "testdata/fixtures/repeated-text.txt", "file fixture")
 	keyHex := flag.String("key-hex", "00112233445566778899aabbccddeeff", "fixed-length master key, hexadecimal")
 	selected := flag.String("modes", "all", "all or comma-separated ECB,CBC,CFB,OFB,CTR")
 	trials := flag.Int("trials", 256, "number of bit-flip pairs per experiment")
 	seed := flag.Int64("seed", 42, "repeatable experiment seed (not for production IVs)")
-	output := flag.String("output", "../reports/toy.json", "JSON report destination")
+	output := flag.String("output", "../reports/brainrot.json", "JSON report destination (empty disables file output)")
 	flag.Parse()
 	if err := execute(*cipherName, *blockPath, *inputPath, *keyHex, *selected, *trials, *seed, *output); err != nil {
 		fmt.Fprintln(os.Stderr, "analyze:", err)
@@ -39,7 +41,10 @@ func execute(cipherName, blockPath, inputPath, keyHex, selected string, trials i
 		return err
 	}
 	key, err := hex.DecodeString(keyHex)
-	if err != nil || len(key) != factory.KeySize() {
+	if err != nil {
+		return fmt.Errorf("key-hex must contain valid hexadecimal: %w", err)
+	}
+	if len(key) != factory.KeySize() {
 		return fmt.Errorf("key-hex must be exactly %d hex characters", factory.KeySize()*2)
 	}
 	chosen, err := parseModes(selected)
@@ -66,6 +71,9 @@ func execute(cipherName, blockPath, inputPath, keyHex, selected string, trials i
 		return err
 	}
 	if output != "" {
+		if err := os.MkdirAll(filepath.Dir(output), 0755); err != nil {
+			return fmt.Errorf("create report directory: %w", err)
+		}
 		if err := os.WriteFile(output, append(data, '\n'), 0600); err != nil {
 			return fmt.Errorf("write report: %w", err)
 		}
@@ -84,13 +92,14 @@ func execute(cipherName, blockPath, inputPath, keyHex, selected string, trials i
 	return nil
 }
 
-// Register the team's SPN factory here once its specification is finalized.
 func lookupCipher(name string) (cipher.Factory, error) {
 	switch name {
+	case "brainrot":
+		return brainrot.Factory{}, nil
 	case "toy":
 		return testonly.Factory{}, nil
 	default:
-		return nil, fmt.Errorf("unknown cipher %q (currently available: toy)", name)
+		return nil, fmt.Errorf("unknown cipher %q (available: brainrot, toy)", name)
 	}
 }
 
