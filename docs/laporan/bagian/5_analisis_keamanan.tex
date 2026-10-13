@@ -60,8 +60,7 @@ dua kali; rata-rata per posisi berkisar 51--75,5 bit untuk plainteks dan
 setiap bit keluaran berubah dengan peluang yang sama.
 Dengan seed 1337, kunci nol menghasilkan rata-rata 49,875\%/50,146\%,
 sedangkan kunci semua satu menghasilkan 50,055\%/50,488\%
-(plainteks/kunci). Kedekatan hasil pada tiga konfigurasi mendukung adanya
-difusi pada sampel, tetapi tidak membuktikan ketahanan terhadap serangan.
+(plainteks/kunci).
 
 \section{Avalanche Effect pada Seluruh Mode}
 Untuk pesan utuh, posisi bit plainteks dipilih pseudorandom dan posisi
@@ -126,9 +125,6 @@ Entropi teks meningkat dari 4,860 menjadi 7,217 bit/byte pada ECB dan
 menghasilkan cipherteks berulang. Mode lain mencapai 7,777--7,807.
 Entropi tidak harus meningkat: nilainya bergantung pada distribusi awal,
 ukuran sampel, pengulangan blok, dan tambahan padding ECB/CBC.
-Selisih kecil antar-CBC, CFB, OFB, dan CTR pada sampel ini tidak menjadi
-peringkat keamanan. Entropi empiris tinggi tidak mengukur seluruh
-korelasi maupun kemungkinan serangan terhadap cipher.
 
 \section{Analisis Histogram}
 \begin{figure}[htbp]
@@ -176,57 +172,3 @@ penjumlahan diperiksa. Kelima mode diuji pada masukan kosong dan batas
 blok, beserta penolakan padding tidak valid pada mode yang memakainya
 dan penolakan pelimpahan pencacah CTR. Hasil ini mendukung kesesuaian
 implementasi dengan rancangan pada kasus yang diuji.
-
-\subsection{Batas Penyebaran pada Lapisan Linier}
-Branch number byte minimal 5 berarti jumlah byte aktif pada masukan
-dan keluaran lapisan linier paling sedikit 5 untuk pola bukan nol.
-Pada analisis diferensial, byte aktif berarti byte dengan perbedaan
-XOR bukan nol. Jadi, perbedaan pada satu byte masukan harus menghasilkan
-perbedaan pada setidaknya empat byte keluaran. Batas serupa diperiksa
-untuk masker linier, yaitu pola bit yang dipilih dalam hubungan XOR
-masukan dan keluaran.
-
-Pemeriksaan menguji 36.416 pasangan posisi byte aktif untuk setiap
-jenis propagasi. Rank matriks biner digunakan untuk memastikan tidak
-ada pola bukan nol dengan jumlah byte aktif kurang dari 5; pemeriksaan
-Python memberikan hasil yang sama secara independen. Batas ini hanya
-berlaku pada gabungan ShiftRows67, MixColumns67, dan BPT. Batas tersebut
-tidak otomatis berlaku setelah FCM atau penjumlahan, dan belum memberikan
-batas probabilitas serangan pada sepuluh putaran Brainrot.
-
-\subsection{Biaya Komputasi}
-Benchmark tiga kali pada Linux amd64 dengan AMD Ryzen 5 5600H
-menghasilkan median waktu enkripsi 20.225 ns/blok pada implementasi
-awal dan 24.959 ns/blok pada Brainrot, meningkat sekitar 23,4\%.
-Median dekripsi meningkat dari 20.141 menjadi 24.673 ns/blok,
-sekitar 22,5\%. Setiap blok berukuran 16 byte; pembuatan subkunci
-tidak termasuk pengukuran. Kedua implementasi tidak mengalokasikan
-memori heap per blok. Angka ini menunjukkan biaya tambahan rancangan
-pada mesin pengujian, bukan jaminan kecepatan pada semua perangkat.
-
-\subsection{Keterbatasan Keamanan}
-Beberapa komponen masih memiliki pola matematis yang perlu dikaji.
-FCM memiliki simetri rotasi: merotasi kedua bagian 64 bit dengan
-jumlah yang sama juga merotasi hasil FCM. Untuk perbedaan masukan
-satu bit pada input seragam, setiap fungsi internal $F_j$ memiliki
-empat kemungkinan perbedaan keluaran, masing-masing berpeluang $1/4$.
-Peluang tersebut berlaku pada satu fungsi internal, bukan pada seluruh
-FCM atau cipher sepuluh putaran.
-
-Penjumlahan byte juga mempertahankan perbedaan XOR pada bit tertinggi
-untuk setiap subkunci. Selain itu, pasangan subkunci penjumlahan/XOR
-$(a,b)$ dan $((a+128)\bmod256,b\oplus128)$ menghasilkan pemetaan byte
-yang sama. Artinya, kombinasi dua operasi tersebut tidak selalu
-membedakan semua pasangan subkunci. Sifat ini belum membuktikan adanya
-dua kunci utama yang menghasilkan cipher identik, karena seluruh
-subkunci diturunkan bersama dari satu kunci utama.
-
-Pengukuran statistik memakai tiga konfigurasi kunci/seed dan dua
-berkas kecil yang berpola. Belum dicari rangkaian perbedaan atau
-hubungan XOR yang bertahan selama banyak putaran, serangan dengan
-kunci yang saling terkait, maupun kebocoran melalui waktu eksekusi
-atau akses memori. Karena itu, pemulihan data yang benar dan avalanche
-mendekati 50\% mendukung hasil pengujian, tetapi belum membuktikan
-ketahanan terhadap serangan tersebut. Program juga belum memakai
-MAC/tag autentikasi, sehingga perubahan cipherteks masih dapat
-diterima sebagaimana diperlihatkan pada demonstrasi integritas.

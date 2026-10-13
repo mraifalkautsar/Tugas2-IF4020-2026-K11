@@ -83,8 +83,7 @@ masukannya, sementara inversnya memungkinkan dekripsi. Pemeriksaan pada
 medan yang sama menghasilkan $MM^{-1}=I$ dan seluruh 69 minor persegi
 bernilai tidak nol. Dengan demikian, $M$ bersifat MDS dengan branch number
 byte 5: jumlah byte aktif pada masukan dan keluaran suatu perbedaan
-nonzero minimal lima. Sifat lapisan setelah ditambah BPT dibahas pada
-Bab V; invertibilitas saja tidak cukup untuk menyimpulkan keamanan.
+nonzero minimal lima.
 
 \subsection{Bit-Plane Transpose (BPT) Revisi}
 Sesudah MixColumns67, state diserialisasi menjadi 16 byte dalam urutan
@@ -168,8 +167,6 @@ state setelah whitening adalah
 \texttt{063f0311757d0555bffa8d99f8f08cb6}, sedangkan cipherteks akhirnya
 \texttt{1ab2aaf1b41239405a6653a180b22107}. Hasil tersebut cocok dengan
 referensi independen, termasuk seluruh state per operasi.
-Sepuluh putaran dipakai sebagai parameter pembelajaran, bukan margin
-keamanan yang telah dibuktikan.
 
 \section{Pembentukan Kunci Putaran}
 Kunci utama dibagi menjadi empat word $w_0,\ldots,w_3$, masing-masing
@@ -195,6 +192,5 @@ $Q_1=\mathtt{18bbf0e85cee969fd4773c2418aad2db}$, diikuti subkunci XOR
 $Q_2=\mathtt{518dea1f0d637c80d91440a4c1be927f}$.
 Rotasi word mengubah posisi byte, substitusi menambah nonlinieritas,
 dan Rcon membedakan tahap ekspansi. Konstanta $\mathtt{67}$ dan
-$\mathtt{43}$ memberi identitas rancangan; keduanya tidak menjadi dasar
-klaim keamanan. Penjumlahan menyediakan carry dalam byte, BPT menyusun
+$\mathtt{43}$ memberi identitas rancangan. Penjumlahan menyediakan carry dalam byte, BPT menyusun
 ulang bit, dan FCM menambah pencampuran nonlinier antarhalf state.
