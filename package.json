@@ -3,7 +3,7 @@
     "docktui": "^0.1.1"
   },
   "scripts": {
-    "dev": "docker compose up -d --build && docktui",
+    "dev": "docker compose up -d --build",
     "down": "docker compose down",
     "build": "npm --prefix frontend run build",
     "start": "npm --prefix frontend run start"
