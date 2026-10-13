@@ -2,8 +2,8 @@ import React from 'react';
 
 interface BubbleConfig {
   id: number;
-  size: string; // e.g., 'w-20 h-20'
-  color: string; // bg color hex or tailwind class
+  size: string;
+  color: string;
   top?: string;
   bottom?: string;
   left?: string;
@@ -13,12 +13,11 @@ interface BubbleConfig {
 }
 
 export const FloatingBubbles: React.FC = () => {
-  // 6 decorative bubbles placed at peripheral spots so they don't occlude main content
   const bubbles: BubbleConfig[] = [
     {
       id: 1,
       size: 'w-24 h-24 md:w-32 md:h-32',
-      color: 'bg-[#DEC3A1]', // Cameo
+      color: 'bg-[#DEC3A1]',
       top: '6%',
       left: '4%',
       animationClass: 'animate-float-1',
@@ -27,7 +26,7 @@ export const FloatingBubbles: React.FC = () => {
     {
       id: 2,
       size: 'w-28 h-28 md:w-36 md:h-36',
-      color: 'bg-[#4542E0]', // Royal Blue
+      color: 'bg-[#4542E0]',
       top: '12%',
       right: '5%',
       animationClass: 'animate-float-2',
@@ -36,7 +35,7 @@ export const FloatingBubbles: React.FC = () => {
     {
       id: 3,
       size: 'w-16 h-16 md:w-20 md:h-20',
-      color: 'bg-[#EC8DD1]', // Lavender Magenta
+      color: 'bg-[#EC8DD1]',
       top: '48%',
       left: '2%',
       animationClass: 'animate-float-3',
@@ -45,7 +44,7 @@ export const FloatingBubbles: React.FC = () => {
     {
       id: 4,
       size: 'w-24 h-24 md:w-28 md:h-28',
-      color: 'bg-[#E75FA8]', // Deep Blush
+      color: 'bg-[#E75FA8]',
       bottom: '10%',
       left: '6%',
       animationClass: 'animate-float-4',
@@ -54,7 +53,7 @@ export const FloatingBubbles: React.FC = () => {
     {
       id: 5,
       size: 'w-28 h-28 md:w-36 md:h-36',
-      color: 'bg-[#BE4BCE]', // Amethyst
+      color: 'bg-[#BE4BCE]',
       bottom: '12%',
       right: '6%',
       animationClass: 'animate-float-5',
@@ -63,7 +62,7 @@ export const FloatingBubbles: React.FC = () => {
     {
       id: 6,
       size: 'w-14 h-14 md:w-16 md:h-16',
-      color: 'bg-[#DEC3A1]', // Cameo
+      color: 'bg-[#DEC3A1]',
       top: '52%',
       right: '3%',
       animationClass: 'animate-float-1',
@@ -88,7 +87,6 @@ export const FloatingBubbles: React.FC = () => {
             animationDelay: b.delay,
           }}
         >
-          {/* Neo-brutalist inner shine/offset accent dot */}
           <div className="absolute top-2 left-2 w-3 h-3 md:w-4 md:h-4 rounded-full bg-white/70 border border-black/40" />
         </div>
       ))}

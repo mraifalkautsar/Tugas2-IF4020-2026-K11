@@ -224,7 +224,7 @@ export const CipherResultCard: React.FC<CipherResultCardProps> = ({
           className="px-5 py-3 bg-[#BE4BCE] hover:bg-[#a63cb5] text-white font-black text-xs uppercase tracking-wider border-[2.5px] border-black shadow-[4px_4px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
         >
           <BarChart2 className="w-4 h-4 stroke-[2.5]" />
-          🔬 Open Analyze Page (Entropy, Histogram, Avalanche)
+          🔬 Scroll to Analysis & Visualizer (Section 3) ↓
         </button>
 
         <button
