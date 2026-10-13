@@ -63,12 +63,12 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
             <SlidersHorizontal className="w-4 h-4 stroke-[2.5]" />
           </div>
           <h3 className="text-base font-black uppercase tracking-wider text-black">
-            Cipher Configuration & 128-Bit Parameters
+            Cipher Configuration 
           </h3>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-[11px] font-mono font-bold bg-[#DEC3A1] border-2 border-black px-2 py-0.5 shadow-[1px_1px_0px_#000000]">
-            BLOCK SIZE: 128-BIT (16B)
+            BLOCK SIZE: 128-BIT 
           </span>
         </div>
       </div>
@@ -89,11 +89,11 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
             >
               {isKeyValid ? (
                 <>
-                  <Check className="w-3 h-3 stroke-[3]" /> 16 / 16 Bytes (VALID)
+                  <Check className="w-3 h-3 stroke-[3]" /> 16 / 16 Bytes
                 </>
               ) : (
                 <>
-                  <AlertCircle className="w-3 h-3 stroke-[3]" /> {keyBytes} / 16 Bytes (INVALID)
+                  <AlertCircle className="w-3 h-3 stroke-[3]" /> {keyBytes} / 16 Bytes 
                 </>
               )}
             </span>
@@ -118,9 +118,6 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
               Generate Random Key
             </button>
           </div>
-          <p className="text-[11px] text-gray-500 font-mono">
-            Requires exactly 16 bytes. ASCII characters or 128-bit secret key.
-          </p>
         </div>
 
         <div className="space-y-2">
@@ -143,11 +140,11 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
               >
                 {isIvValid ? (
                   <>
-                    <Check className="w-3 h-3 stroke-[3]" /> 16 / 16 Bytes (VALID)
+                    <Check className="w-3 h-3 stroke-[3]" /> 16 / 16 Bytes
                   </>
                 ) : (
                   <>
-                    <AlertCircle className="w-3 h-3 stroke-[3]" /> {ivBytes} / 16 Bytes (INVALID)
+                    <AlertCircle className="w-3 h-3 stroke-[3]" /> {ivBytes} / 16 Bytes
                   </>
                 )}
               </span>
@@ -180,10 +177,10 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
           <p className="text-[11px] font-mono text-gray-500">
             {isEcbMode ? (
               <span className="text-amber-700 font-bold">
-                ⚠️ ECB mode does not use IV (Disabled). Electronic Codebook is deterministic.
+                ECB mode does not use IV
               </span>
             ) : (
-              '16 bytes initialization vector required for CBC, CFB, OFB, and CTR.'
+              'required for CBC, CFB, OFB, and CTR.'
             )}
           </p>
         </div>
@@ -214,11 +211,11 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
             })}
           </div>
           <p className="text-[11px] text-gray-500 font-mono">
-            {mode === 'ECB' && 'ECB: Electronic Codebook (Independent 16B block transformation)'}
-            {mode === 'CBC' && 'CBC: Cipher Block Chaining (Requires IV, chained XOR propagation)'}
-            {mode === 'CFB' && 'CFB: Cipher Feedback (Stream cipher mode via block keystream)'}
-            {mode === 'OFB' && 'OFB: Output Feedback (Synchronous keystream generation)'}
-            {mode === 'CTR' && 'CTR: Counter Mode (Parallelizable keystream via incrementing nonce)'}
+            {mode === 'ECB' && 'ECB: Electronic Codebook'}
+            {mode === 'CBC' && 'CBC: Cipher Block Chaining'}
+            {mode === 'CFB' && 'CFB: Cipher Feedback'}
+            {mode === 'OFB' && 'OFB: Output Feedback'}
+            {mode === 'CTR' && 'CTR: Counter Mode'}
           </p>
         </div>
 
@@ -245,9 +242,6 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
               );
             })}
           </div>
-          <p className="text-[11px] text-gray-500 font-mono">
-            Aligns arbitrary-length data blocks to the 16-byte SPN boundary.
-          </p>
         </div>
       </div>
 
