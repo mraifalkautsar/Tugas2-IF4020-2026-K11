@@ -298,33 +298,6 @@ export const MainPage: React.FC<MainPageProps> = ({
     <div className="h-screen overflow-y-auto snap-y snap-proximity md:snap-mandatory scroll-smooth relative bg-white text-black selection:bg-[#EC8DD1] selection:text-black">
       <FloatingBubbles />
 
-      <nav className="fixed top-3 right-4 md:right-8 z-40 bg-white/95 backdrop-blur-sm border-2 border-black p-1.5 shadow-[3px_3px_0px_#000000] flex items-center gap-1 text-[11px] font-mono font-bold">
-        <button
-          type="button"
-          onClick={() => scrollToSection('section-1')}
-          className="px-2 py-1 hover:bg-[#DEC3A1]/40 border border-transparent hover:border-black transition-all cursor-pointer"
-        >
-          1. Input & Config
-        </button>
-        <span className="text-gray-400">|</span>
-        <button
-          type="button"
-          onClick={() => scrollToSection('section-2')}
-          className="px-2 py-1 hover:bg-[#E75FA8]/30 border border-transparent hover:border-black transition-all cursor-pointer flex items-center gap-1"
-        >
-          2. Result
-          {result && <span className="w-2 h-2 rounded-full bg-emerald-500" />}
-        </button>
-        <span className="text-gray-400">|</span>
-        <button
-          type="button"
-          onClick={() => scrollToSection('section-3')}
-          className="px-2 py-1 hover:bg-[#BE4BCE]/30 border border-transparent hover:border-black transition-all cursor-pointer"
-        >
-          3. Analysis
-        </button>
-      </nav>
-
       <section
         id="section-1"
         className="min-h-screen snap-start flex flex-col justify-between py-6 px-4 md:px-8 max-w-6xl mx-auto w-full relative z-10"
@@ -350,34 +323,11 @@ export const MainPage: React.FC<MainPageProps> = ({
                   <h1 className="text-lg md:text-xl font-black uppercase tracking-tight text-black">
                     BRAINROT CIPHER
                   </h1>
-                  <span className="text-[11px] font-mono font-bold bg-[#DEC3A1] border-2 border-black px-2 py-0.5 shadow-[1px_1px_0px_#000000]">
-                    [128-BIT SPN]
-                  </span>
                 </div>
-                <p className="text-[11px] font-mono text-gray-600 font-medium hidden sm:block">
-                  Interactive Substitution-Permutation Network Studio
-                </p>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => scrollToSection('section-3')}
-                className="px-3 py-1.5 bg-[#BE4BCE] hover:bg-[#a63cb5] text-white border-2 border-black font-mono font-bold text-xs uppercase tracking-wider shadow-[2px_2px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#000000] flex items-center gap-1.5 transition-all cursor-pointer"
-              >
-                <BarChart2 className="w-3.5 h-3.5" />
-                Analyze
-              </button>
-
-              <button
-                type="button"
-                onClick={handleResetAll}
-                className="px-3 py-1.5 bg-white hover:bg-gray-100 text-black border-2 border-black font-mono font-bold text-xs uppercase tracking-wider shadow-[2px_2px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#000000] flex items-center gap-1.5 transition-all cursor-pointer"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                Reset All
-              </button>
             </div>
           </div>
         </header>
