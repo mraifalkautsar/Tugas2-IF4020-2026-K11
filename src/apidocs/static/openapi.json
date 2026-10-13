@@ -1,0 +1,772 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Brainrot Cipher API",
+    "version": "1.0.0",
+    "description": "API for the IF4020 educational Brainrot block cipher (128-bit blocks and keys, ten rounds). No API authentication is required. These endpoints expose an experimental cipher and do not provide authenticated ciphertext integrity.\n\nUse Try it out with the included public example key and explicit IV. Retain the IV, mode, and padding when decrypting; output_hex/output_base64 contain no metadata. The automatically generated IV is currently not returned, so omit it only for ECB.\n\nWhen these docs are served by the backend, select the same-origin server. For standalone hosting, select the alternate server and enter the backend origin. HTTPS documentation requires an HTTPS backend for cross-origin requests."
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Same-origin backend (when docs are served at /docs/)"
+    },
+    {
+      "url": "{apiOrigin}",
+      "description": "Alternate backend / standalone documentation",
+      "variables": {
+        "apiOrigin": {
+          "default": "http://localhost:8000",
+          "description": "Backend origin, including http(s) scheme and optional port, without /api or trailing slash."
+        }
+      }
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "Health",
+      "description": "Backend availability."
+    },
+    {
+      "name": "Cipher",
+      "description": "Text and file encryption/decryption."
+    },
+    {
+      "name": "Analysis",
+      "description": "Block tracing and bit-flip experiments."
+    }
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "operationId": "healthz",
+        "summary": "Check that the backend is running",
+        "responses": {
+          "200": {
+            "description": "Backend is running.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                },
+                "examples": {
+                  "healthy": {
+                    "summary": "Healthy backend",
+                    "value": {
+                      "status": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "operationId": "apiHealth",
+        "summary": "Check that the backend is running",
+        "responses": {
+          "200": {
+            "description": "Backend is running.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                },
+                "examples": {
+                  "healthy": {
+                    "summary": "Healthy backend",
+                    "value": {
+                      "status": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cipher/process": {
+      "post": {
+        "tags": [
+          "Cipher"
+        ],
+        "operationId": "processCipher",
+        "summary": "Encrypt or decrypt text or an uploaded file",
+        "description": "Accepts JSON for text and multipart/form-data for raw files. CBC is the default mode. Successful output is always JSON containing the same output bytes in hex and base64, not a direct file download. Ciphertext is the body only; provide and retain IV, mode, and padding separately. ECB/CBC pad even a block-aligned plaintext; CFB/OFB/CTR do not add padding. Request bodies are limited to 32 MiB including multipart overhead. The API does not authenticate ciphertext.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcessRequest"
+              },
+              "examples": {
+                "cbcEncrypt": {
+                  "summary": "Encrypt Halo Brainrot with explicit CBC IV",
+                  "value": {
+                    "action": "encrypt",
+                    "mode": "CBC",
+                    "key": "00112233445566778899aabbccddeeff",
+                    "iv": "000102030405060708090a0b0c0d0e0f",
+                    "padding": "PKCS7",
+                    "data_format": "text",
+                    "payload": "Halo Brainrot"
+                  }
+                },
+                "cbcDecrypt": {
+                  "summary": "Decrypt the ciphertext from the encryption example",
+                  "value": {
+                    "action": "decrypt",
+                    "mode": "CBC",
+                    "key": "00112233445566778899aabbccddeeff",
+                    "iv": "000102030405060708090a0b0c0d0e0f",
+                    "padding": "PKCS7",
+                    "data_format": "text",
+                    "payload": "5bfb0e4535dad1b36014799ee71488eb"
+                  }
+                },
+                "emptyECB": {
+                  "summary": "Encrypt empty plaintext with ECB and PKCS7",
+                  "value": {
+                    "action": "encrypt",
+                    "mode": "ECB",
+                    "key": "00112233445566778899aabbccddeeff",
+                    "padding": "PKCS7",
+                    "payload": ""
+                  }
+                }
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/FileProcessRequest"
+              },
+              "encoding": {
+                "file": {
+                  "contentType": "application/octet-stream"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Processed bytes and output statistics.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessResponse"
+                },
+                "examples": {
+                  "cbcEncrypted": {
+                    "summary": "CBC encryption result (timing is illustrative)",
+                    "value": {
+                      "status": "success",
+                      "output_base64": "W/sORTXa0bNgFHme5xSI6w==",
+                      "output_hex": "5bfb0e4535dad1b36014799ee71488eb",
+                      "entropy": 3.875,
+                      "elapsed_ms": 0.1
+                    }
+                  },
+                  "cbcDecrypted": {
+                    "summary": "Decryption recovers Halo Brainrot",
+                    "value": {
+                      "status": "success",
+                      "output_base64": "SGFsbyBCcmFpbnJvdA==",
+                      "output_hex": "48616c6f20427261696e726f74",
+                      "entropy": 3.238901256602631,
+                      "elapsed_ms": 0.1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "description": "Random IV generation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "randomIVFailure": {
+                    "summary": "IV generation failure",
+                    "value": {
+                      "status": "error",
+                      "message": "failed to generate random IV"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cipher/trace": {
+      "post": {
+        "tags": [
+          "Analysis"
+        ],
+        "operationId": "traceCipher",
+        "summary": "Inspect encryption of one 16-byte block",
+        "description": "Returns the fixed S-box, 21 subkeys, and selected state matrices for ten rounds. Does not apply a cipher mode, IV, or padding. action is ignored; decryption tracing is not supported. Matrix integers are byte values (0..255).",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TraceRequest"
+              },
+              "examples": {
+                "oneBlock": {
+                  "summary": "Trace Embark at dawn! followed by newline",
+                  "value": {
+                    "key_hex": "00112233445566778899aabbccddeeff",
+                    "block_hex": "456d6261726b206174206461776e210a",
+                    "action": "encrypt"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "S-box, expanded keys, and encryption-round states.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TraceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/api/cipher/avalanche": {
+      "post": {
+        "tags": [
+          "Analysis"
+        ],
+        "operationId": "analyzeAvalanche",
+        "summary": "Measure one plaintext/key bit flip across ten rounds",
+        "description": "Encrypts the original and modified 16-byte blocks without padding or mode processing. Compares their states after AddRoundKey67 in rounds 1..10. This is one experiment, not the CLI statistical benchmark.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AvalancheRequest"
+              },
+              "examples": {
+                "plaintext": {
+                  "summary": "Flip bit 0 of plaintext",
+                  "value": {
+                    "target": "plaintext",
+                    "key_hex": "00112233445566778899aabbccddeeff",
+                    "block_hex": "456d6261726b206174206461776e210a",
+                    "flip_bit_index": 0
+                  }
+                },
+                "key": {
+                  "summary": "Flip bit 0 of key",
+                  "value": {
+                    "target": "key",
+                    "key_hex": "00112233445566778899aabbccddeeff",
+                    "block_hex": "456d6261726b206174206461776e210a",
+                    "flip_bit_index": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Original/modified ciphertexts and per-round Hamming distances.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvalancheResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProcessRequest": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Use encrypt or decrypt (case-insensitive). Empty/omitted means encrypt. Other nonempty values currently select decryption.",
+            "enum": [
+              "encrypt",
+              "decrypt"
+            ],
+            "default": "encrypt"
+          },
+          "mode": {
+            "type": "string",
+            "description": "Cipher mode, case-insensitive. Empty/omitted means CBC. Unsupported modes return 400.",
+            "enum": [
+              "ECB",
+              "CBC",
+              "CFB",
+              "OFB",
+              "CTR"
+            ],
+            "default": "CBC"
+          },
+          "key": {
+            "type": "string",
+            "description": "Exactly 16 UTF-8 bytes or 32 hexadecimal characters, with no 0x prefix. The same key is required to decrypt.",
+            "example": "00112233445566778899aabbccddeeff"
+          },
+          "iv": {
+            "type": "string",
+            "description": "Exactly 16 UTF-8 bytes or 32 hexadecimal characters for CBC/CFB/OFB/CTR; ignored for ECB. Always supply an explicit IV for reproducible decryption. If omitted, the backend generates a random IV but does not return it or prepend it to the output, including on decryption. Use a fresh unpredictable IV for CBC/CFB and unique IV/counter blocks for OFB/CTR when encrypting distinct messages under the same key. CTR increments the entire 16-byte counter in big-endian order.",
+            "example": "000102030405060708090a0b0c0d0e0f"
+          },
+          "padding": {
+            "type": "string",
+            "description": "Used only by ECB/CBC; ignored by CFB/OFB/CTR. PKCS7 preserves the original length and is recommended. Zero padding removes trailing zero bytes from decrypted data. Values are case-insensitive; empty/unknown values currently fall back to PKCS7.",
+            "enum": [
+              "PKCS7",
+              "ANSI_X923",
+              "Zero"
+            ],
+            "default": "PKCS7"
+          },
+          "data_format": {
+            "type": "string",
+            "description": "Compatibility field; currently ignored. JSON requests always use payload and file uploads always use multipart/form-data.",
+            "example": "text"
+          },
+          "payload": {
+            "type": "string",
+            "description": "For encryption: a UTF-8 string (empty/omitted means empty input). For decryption: tried as nonempty hex first, then nonempty standard base64, otherwise used as raw UTF-8 bytes. Supply output_hex from encryption to avoid ambiguity. For arbitrary binary plaintext use multipart upload.",
+            "example": "Halo Brainrot"
+          }
+        },
+        "required": [
+          "key"
+        ]
+      },
+      "FileProcessRequest": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Use encrypt or decrypt (case-insensitive). Empty/omitted means encrypt. Other nonempty values currently select decryption.",
+            "enum": [
+              "encrypt",
+              "decrypt"
+            ],
+            "default": "encrypt"
+          },
+          "mode": {
+            "type": "string",
+            "description": "Cipher mode, case-insensitive. Empty/omitted means CBC. Unsupported modes return 400.",
+            "enum": [
+              "ECB",
+              "CBC",
+              "CFB",
+              "OFB",
+              "CTR"
+            ],
+            "default": "CBC"
+          },
+          "key": {
+            "type": "string",
+            "description": "Exactly 16 UTF-8 bytes or 32 hexadecimal characters, with no 0x prefix. The same key is required to decrypt.",
+            "example": "00112233445566778899aabbccddeeff"
+          },
+          "iv": {
+            "type": "string",
+            "description": "Exactly 16 UTF-8 bytes or 32 hexadecimal characters for CBC/CFB/OFB/CTR; ignored for ECB. Always supply an explicit IV for reproducible decryption. If omitted, the backend generates a random IV but does not return it or prepend it to the output, including on decryption. Use a fresh unpredictable IV for CBC/CFB and unique IV/counter blocks for OFB/CTR when encrypting distinct messages under the same key. CTR increments the entire 16-byte counter in big-endian order.",
+            "example": "000102030405060708090a0b0c0d0e0f"
+          },
+          "padding": {
+            "type": "string",
+            "description": "Used only by ECB/CBC; ignored by CFB/OFB/CTR. PKCS7 preserves the original length and is recommended. Zero padding removes trailing zero bytes from decrypted data. Values are case-insensitive; empty/unknown values currently fall back to PKCS7.",
+            "enum": [
+              "PKCS7",
+              "ANSI_X923",
+              "Zero"
+            ],
+            "default": "PKCS7"
+          },
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "description": "Raw bytes to encrypt or decrypt. For decryption upload the decoded ciphertext body, not the response JSON or ASCII hex. Outputs are returned in JSON as hex/base64; no IV, mode, or padding metadata is embedded."
+          }
+        },
+        "required": [
+          "key",
+          "file"
+        ]
+      },
+      "ProcessResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "success"
+            ]
+          },
+          "output_base64": {
+            "type": "string",
+            "description": "Output bytes encoded as standard base64; decode this field when saving a binary file.",
+            "format": "byte"
+          },
+          "output_hex": {
+            "type": "string",
+            "description": "The same output bytes encoded as lowercase hex; empty input in a stream mode can produce an empty string.",
+            "pattern": "^(?:[0-9a-f]{2})*$"
+          },
+          "entropy": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 8,
+            "description": "Empirical Shannon entropy of the output bytes, in bits per byte; zero for empty output."
+          },
+          "elapsed_ms": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Elapsed processing time in milliseconds; varies between requests."
+          },
+          "message": {
+            "type": "string",
+            "description": "Optional message, normally omitted on successful processing."
+          }
+        },
+        "required": [
+          "status",
+          "output_base64",
+          "output_hex",
+          "entropy",
+          "elapsed_ms"
+        ]
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "error"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable reason the request failed."
+          }
+        },
+        "required": [
+          "status",
+          "message"
+        ]
+      },
+      "Matrix4x4": {
+        "type": "array",
+        "minItems": 4,
+        "maxItems": 4,
+        "items": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          }
+        },
+        "description": "A 4\u00d74 byte matrix represented as rows of decimal integers. Byte i of a serialized block is at matrix[i % 4][i / 4] (integer division)."
+      },
+      "Sbox16x16": {
+        "type": "array",
+        "minItems": 16,
+        "maxItems": 16,
+        "items": {
+          "type": "array",
+          "minItems": 16,
+          "maxItems": 16,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          }
+        },
+        "description": "The 256-entry fixed S-box as 16 rows of decimal byte values; input x maps to sbox[x / 16][x % 16]."
+      },
+      "TraceRequest": {
+        "type": "object",
+        "properties": {
+          "key_hex": {
+            "type": "string",
+            "description": "Exactly 32 hex characters or 16 raw UTF-8 bytes. Hex is recommended.",
+            "example": "00112233445566778899aabbccddeeff"
+          },
+          "block_hex": {
+            "type": "string",
+            "description": "One unpadded 16-byte plaintext block, as 32 hex characters (or 16 raw UTF-8 bytes).",
+            "example": "456d6261726b206174206461776e210a"
+          },
+          "action": {
+            "type": "string",
+            "description": "Compatibility field, ignored. This endpoint always traces encryption.",
+            "default": "encrypt"
+          }
+        },
+        "required": [
+          "key_hex",
+          "block_hex"
+        ]
+      },
+      "RoundTrace": {
+        "type": "object",
+        "properties": {
+          "round": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "start_state": {
+            "$ref": "#/components/schemas/Matrix4x4"
+          },
+          "after_sub_bytes": {
+            "$ref": "#/components/schemas/Matrix4x4"
+          },
+          "after_shift_rows": {
+            "$ref": "#/components/schemas/Matrix4x4"
+          },
+          "after_mix_columns": {
+            "$ref": "#/components/schemas/Matrix4x4"
+          },
+          "after_add_round_key": {
+            "$ref": "#/components/schemas/Matrix4x4"
+          }
+        },
+        "required": [
+          "round",
+          "start_state",
+          "after_sub_bytes",
+          "after_shift_rows",
+          "after_mix_columns",
+          "after_add_round_key"
+        ]
+      },
+      "TraceResponse": {
+        "type": "object",
+        "properties": {
+          "sbox": {
+            "$ref": "#/components/schemas/Sbox16x16"
+          },
+          "round_keys": {
+            "type": "array",
+            "minItems": 21,
+            "maxItems": 21,
+            "items": {
+              "$ref": "#/components/schemas/Matrix4x4"
+            },
+            "description": "Q0 whitening, followed by alternating addition and XOR subkeys Q1..Q20."
+          },
+          "rounds": {
+            "type": "array",
+            "minItems": 10,
+            "maxItems": 10,
+            "items": {
+              "$ref": "#/components/schemas/RoundTrace"
+            },
+            "description": "Ten encryption rounds. The response exposes only the named stages; BPT, FCM, and modular-addition snapshots are not separate fields. after_add_round_key includes their effects."
+          }
+        },
+        "required": [
+          "sbox",
+          "round_keys",
+          "rounds"
+        ]
+      },
+      "AvalancheRequest": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "key flips one key bit; plaintext flips one block bit. Case-insensitive. Empty/other values currently also select plaintext.",
+            "enum": [
+              "plaintext",
+              "key"
+            ],
+            "default": "plaintext"
+          },
+          "key_hex": {
+            "type": "string",
+            "description": "Exactly 32 hex characters or 16 raw UTF-8 bytes. Hex is recommended.",
+            "example": "00112233445566778899aabbccddeeff"
+          },
+          "block_hex": {
+            "type": "string",
+            "description": "One unpadded 16-byte plaintext block, as 32 hex characters (or 16 raw UTF-8 bytes).",
+            "example": "456d6261726b206174206461776e210a"
+          },
+          "flip_bit_index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 127,
+            "default": 0,
+            "description": "Bit 0 is the most significant bit of byte 0; bit 127 is the least significant bit of byte 15. Omitted means 0."
+          }
+        },
+        "required": [
+          "key_hex",
+          "block_hex"
+        ]
+      },
+      "AvalancheRound": {
+        "type": "object",
+        "properties": {
+          "round": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "bits_flipped": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 128
+          },
+          "percentage": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "100 \u00d7 bits_flipped / 128, rounded to two decimal places."
+          }
+        },
+        "required": [
+          "round",
+          "bits_flipped",
+          "percentage"
+        ]
+      },
+      "AvalancheResponse": {
+        "type": "object",
+        "properties": {
+          "flipped_bit": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 127
+          },
+          "original_ciphertext_hex": {
+            "type": "string",
+            "description": "Ciphertext of the original unpadded block.",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "modified_ciphertext_hex": {
+            "type": "string",
+            "description": "Ciphertext after the selected input/key bit is flipped.",
+            "pattern": "^[0-9a-f]{32}$"
+          },
+          "total_avalanche_percentage": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Final-round percentage, not an average over rounds or a proof of cryptographic security."
+          },
+          "round_progression": {
+            "type": "array",
+            "minItems": 10,
+            "maxItems": 10,
+            "items": {
+              "$ref": "#/components/schemas/AvalancheRound"
+            }
+          }
+        },
+        "required": [
+          "flipped_bit",
+          "original_ciphertext_hex",
+          "modified_ciphertext_hex",
+          "total_avalanche_percentage",
+          "round_progression"
+        ]
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Invalid JSON, key/IV/block size, mode, ciphertext length, padding, flip index, upload, or an oversized request.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "examples": {
+              "invalidKey": {
+                "summary": "Key has the wrong length",
+                "value": {
+                  "status": "error",
+                  "message": "invalid key: must be 16 bytes or 32 hex characters"
+                }
+              },
+              "invalidPadding": {
+                "summary": "CBC/ECB padding check failed",
+                "value": {
+                  "status": "error",
+                  "message": "decrypt error: invalid PKCS#7 padding length"
+                }
+              },
+              "invalidFlipIndex": {
+                "summary": "Bit index outside the block",
+                "value": {
+                  "status": "error",
+                  "message": "flip_bit_index must be between 0 and 127"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
