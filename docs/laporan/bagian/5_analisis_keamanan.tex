@@ -1,0 +1,125 @@
+\chapter{ANALISIS KEAMANAN}
+
+\section{Konfigurasi dan Reproduksibilitas}
+CLI \texttt{analyze} menggunakan Brainrot secara default. Masukan bawaan
+adalah \path{src/testdata/fixtures/one-block.txt} sepanjang 16 byte dan
+\path{src/testdata/fixtures/repeated-text.txt} sepanjang 404 byte.
+Parameter bawaan adalah 256 percobaan, seed 42, serta kunci
+\texttt{00112233445566778899aabbccddeeff}. Seed hanya digunakan untuk
+eksperimen; IV pada CLI enkripsi dibangkitkan secara terpisah.
+
+\begin{lstlisting}[language={},numbers=none,caption={Menjalankan analisis dari root repositori.}]
+go -C src run ./cmd/analyze -cipher brainrot -modes all \
+  -trials 256 -seed 42 -output ../reports/brainrot.json
+go -C src test ./...
+\end{lstlisting}
+
+Laporan JSON menyimpan ukuran blok dan kunci, seed, jumlah percobaan,
+avalanche satu blok, hasil round-trip per mode, entropi, histogram 256 bin,
+dan avalanche pesan utuh. Pengukuran mode hanya memakai badan cipherteks;
+IV tidak masuk histogram atau penyebut persentase perubahan bit.
+
+\Isi{Catat commit kode, sistem operasi, versi Go, identitas berkas uji,
+ukuran data, parameter, dan lokasi hasil yang dipakai. Tambahkan sampel
+teks dan biner dengan ukuran serta pola berbeda.}
+
+\section{Avalanche Effect Satu Blok}
+Pada setiap percobaan, satu bit plainteks diubah dengan kunci tetap;
+secara terpisah, satu bit kunci diubah dengan plainteks tetap. Percobaan
+pertama memakai fixture satu blok, sedangkan berikutnya memakai blok
+pseudorandom dari seed yang tercatat. Posisi bit digilir melalui seluruh
+128 bit masukan; setidaknya 128 percobaan diperlukan untuk mencakup
+setiap posisi. Keluaran mencatat rata-rata, minimum, maksimum,
+serta rata-rata dan jumlah percobaan per posisi bit.
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Isian hasil avalanche Brainrot untuk satu blok.}
+  \begin{tabularx}{\linewidth}{@{}lYYYY@{}}
+    \toprule Perubahan & Percobaan & Rata-rata (\%) & Minimum (bit) & Maksimum (bit)\\
+    \midrule
+    1 bit plainteks & --- & --- & --- & ---\\
+    1 bit kunci & --- & --- & --- & ---\\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\Isi{Masukkan angka dari JSON Brainrot, grafik per posisi bit bila relevan,
+dan interpretasi terhadap perubahan sekitar separuh bit keluaran.
+Nyatakan cakupan sampel serta variasi hasil.}
+
+\section{Avalanche Effect pada Seluruh Mode}
+Untuk pesan utuh, posisi bit plainteks dipilih pseudorandom dan posisi
+bit kunci digilir. Pasangan enkripsi sebelum dan sesudah perubahan
+menggunakan IV yang sama agar perbedaan berasal dari bit yang diubah.
+Penyebutnya adalah jumlah bit seluruh badan cipherteks, termasuk padding
+ECB/CBC, sehingga berbeda dari pengujian satu blok.
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Isian avalanche pesan utuh untuk semua mode.}
+  \begin{tabularx}{\linewidth}{@{}lYYY@{}}
+    \toprule Mode & Panjang badan (byte) & Perubahan plainteks (\%) & Perubahan kunci (\%)\\
+    \midrule
+    ECB & --- & --- & ---\\
+    CBC & --- & --- & ---\\
+    CFB & --- & --- & ---\\
+    OFB & --- & --- & ---\\
+    CTR & --- & --- & ---\\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+Pada OFB dan CTR dengan kunci serta IV tetap, satu bit plainteks yang
+diubah menghasilkan satu bit cipherteks yang berubah karena operasi XOR
+dengan keystream yang sama. Pada ECB perubahan terbatas pada blok terkait;
+pada CBC dan CFB pengaruhnya bergantung pada posisi perubahan dan umpan
+balik. Interpretasi hasil harus membedakan sifat mode dari difusi cipher
+satu blok.
+
+\Isi{Bahas hasil kelima mode, posisi bit yang dipilih, pengaruh panjang
+pesan, dan perbedaan perubahan plainteks terhadap perubahan kunci.}
+
+\section{Analisis Entropi}
+\begin{table}[htbp]
+  \centering\small
+  \caption{Isian entropi empiris byte untuk seluruh mode.}
+  \begin{tabularx}{\linewidth}{@{}lYYY@{}}
+    \toprule Mode & Ukuran sampel (byte) & Plainteks (bit/byte) & Cipherteks (bit/byte)\\
+    \midrule
+    ECB & --- & --- & ---\\
+    CBC & --- & --- & ---\\
+    CFB & --- & --- & ---\\
+    OFB & --- & --- & ---\\
+    CTR & --- & --- & ---\\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+\Isi{Isi dari field entropy\_bits\_per\_byte dan bytes dalam JSON.
+Jelaskan pengaruh ukuran sampel, pola plainteks, dan padding. Nilai
+mendekati 8 bit/byte saja tidak membuktikan keamanan kriptografis.}
+
+\section{Analisis Histogram}
+\begin{figure}[htbp]
+  \centering
+  \GambarAtauPlaceholder{histogram-semua-mode.png}{\linewidth}{6cm}
+  \caption{Tempat grafik histogram plainteks dan cipherteks pada lima mode.}
+  \label{fig:histogram}
+\end{figure}
+\Isi{Gambarkan 256 bin dari field histogram untuk plainteks dan setiap
+mode, dengan sumbu nilai byte 0--255 dan frekuensi atau proporsi.
+Gunakan skala yang memungkinkan perbandingan dan cantumkan ukuran sampel.
+Bahas pola berulang, khususnya ECB, serta kedekatan distribusi empiris
+terhadap distribusi seragam.}
+
+\section{Pengujian Tambahan dan Keterbatasan}
+\Isi{Jika dilakukan, tambahkan pengujian ukuran kecil/sedang/besar,
+waktu proses, penggunaan memori, perubahan per putaran melalui Tracer,
+atau kajian struktur S-box dan matriks. Sertakan metode serta hasil aktual.}
+
+Pengujian otomatis yang tersedia memakai \texttt{TEST-ONLY-XOR} untuk
+memeriksa statistik, chaining, padding, batas blok, dan overflow CTR.
+Pengujian tersebut perlu dilengkapi dengan bukti khusus Brainrot;
+hasil cipher XOR uji tidak dipakai sebagai hasil keamanan Brainrot.
+
+\Isi{Nyatakan cakupan pengujian akhir, keterbatasan sampel, dan analisis
+yang belum dilakukan. Kaitkan kesimpulan hanya dengan bukti yang tersedia.}

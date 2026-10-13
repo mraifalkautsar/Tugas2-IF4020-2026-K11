@@ -1,0 +1,34 @@
+\chapter{PENDAHULUAN}
+
+\section{Latar Belakang}
+Tugas 2 IF4020 Kriptografi meminta perancangan \textit{block cipher} baru,
+implementasi enkripsi dan dekripsi dalam lima mode operasi, serta pengujian
+\textit{avalanche effect}, entropi, dan histogram. Rancangan harus memiliki
+substitusi berbasis tabel, permutasi, kunci putaran, dan operasi tambahan
+di luar substitusi serta transposisi~\cite{spesifikasi}.
+
+\Isi{Kembangkan motivasi rancangan, masalah yang ingin dijawab, dan alasan
+memilih pendekatan Brainrot Cipher.}
+
+\section{Tinjauan Cipher Pembanding}
+AES menjadi pembanding yang relevan karena menggunakan blok 128 bit serta
+transformasi substitusi dan permutasi~\cite{aes}. Implementasi Brainrot
+menggunakan \textit{state} berukuran $4\times4$ byte, sepuluh putaran,
+S-box hasil transformasi S-box AES, dan ekspansi kunci dengan pola serupa
+AES-128. Parameter permutasi, matriks pencampuran, konstanta penambahan
+kunci, dan substitusi dimodifikasi sebagaimana dijelaskan pada Bab III.
+
+\Isi{Uraikan secara singkat persamaan, perbedaan, dan alasan pemilihan
+komponen terhadap cipher pembanding. Jelaskan asal ide serta komponen
+yang dirancang sendiri sesuai ketentuan tugas; jangan menyimpulkan
+keamanan setara AES hanya dari kesamaan struktur.}
+
+\section{Gagasan dan Ruang Lingkup}
+\NamaAlgoritma{} menggunakan \textit{Substitution-Permutation Network}
+(SPN), blok dan kunci utama sepanjang 128 bit, serta sepuluh putaran.
+Program ditulis dalam Go dan menyediakan mode ECB, CBC, CFB, OFB, serta CTR.
+Analisis memisahkan pengujian satu blok dari perilaku enkripsi pesan
+utuh pada setiap mode.
+
+\Isi{Lengkapi tujuan rancangan, alasan pemilihan parameter, dan batas
+ruang lingkup laporan berdasarkan implementasi akhir.}

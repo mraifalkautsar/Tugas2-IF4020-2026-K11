@@ -1,0 +1,137 @@
+\chapter{PERANCANGAN BLOCK CIPHER}
+\label{bab:perancangan}
+
+% Rincian berikut berasal dari src/cipher/brainrot/, bukan hasil eksperimen.
+\section{Parameter dan Representasi State}
+\begin{table}[htbp]
+  \centering
+  \caption{Parameter implementasi Brainrot Cipher.}
+  \label{tab:parameter}
+  \begin{tabularx}{\linewidth}{@{}lY@{}}
+    \toprule Parameter & Nilai\\ \midrule
+    Struktur & Substitution-Permutation Network (SPN)\\
+    Ukuran blok & 128 bit (16 byte)\\
+    Kunci utama & 128 bit (16 byte)\\
+    Jumlah putaran & 10\\
+    Kunci hasil ekspansi & 11 kunci, $K_0$ sampai $K_{10}$\\
+    State & Matriks $4\times4$ byte, diisi per kolom\\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+Byte masukan $P_i$ dipetakan ke $s_{r,c}=P_{4c+r}$, untuk $0\leq r,c<4$.
+Serialisasi keluaran menggunakan urutan yang sama.
+
+\section{Komponen Transformasi}
+\subsection{SubBytes67}
+Tabel substitusi berisi 256 nilai dan dibangkitkan melalui
+\begin{equation}
+  S_{67}(x)=\operatorname{ROTL}_8(S_{\mathrm{AES}}(x\oplus\mathtt{67}),6)
+             \oplus\mathtt{43}.
+\end{equation}
+Konstanta $\mathtt{67}$ dan $\mathtt{43}$ ditulis dalam heksadesimal;
+$\mathtt{43}$ sama dengan 67 desimal. S-box AES disimpan di
+\path{src/cipher/brainrot/tables.go}. Tabel invers dibentuk dengan
+$S_{67}^{-1}[S_{67}[x]]=x$.
+
+\Isi{Jelaskan alasan transformasi S-box dan sifat yang sudah diuji.
+Tambahkan tabel S-box lengkap pada lampiran jika diperlukan.}
+
+\subsection{ShiftRows67}
+Setiap baris $r$ diputar ke kanan sejauh $o_r=(6+r)\bmod4$ posisi:
+\begin{equation}
+  s'_{r,(c+o_r)\bmod4}=s_{r,c}.
+\end{equation}
+\begin{table}[htbp]
+  \centering
+  \caption{Offset permutasi baris dalam implementasi.}
+  \begin{tabular}{@{}lrrrr@{}}
+    \toprule Baris $r$ & 0 & 1 & 2 & 3\\
+    \midrule Offset kanan $o_r$ & 2 & 3 & 0 & 1\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+Inversnya memutar baris ke kiri sejauh offset yang sama.
+
+\subsection{MixColumns67}
+Setiap kolom dikalikan dengan matriks $M$ pada $\mathrm{GF}(2^8)$.
+Seluruh elemen berikut ditulis dalam heksadesimal:
+\begin{equation}
+  M=\begin{bmatrix}
+    \mathtt{0c}&\mathtt{0a}&\mathtt{06}&\mathtt{06}\\
+    \mathtt{07}&\mathtt{0e}&\mathtt{09}&\mathtt{07}\\
+    \mathtt{06}&\mathtt{06}&\mathtt{0c}&\mathtt{0a}\\
+    \mathtt{09}&\mathtt{07}&\mathtt{07}&\mathtt{0e}
+  \end{bmatrix},\quad
+  M^{-1}=\begin{bmatrix}
+    \mathtt{f4}&\mathtt{ba}&\mathtt{79}&\mathtt{03}\\
+    \mathtt{8e}&\mathtt{02}&\mathtt{78}&\mathtt{6a}\\
+    \mathtt{79}&\mathtt{03}&\mathtt{f4}&\mathtt{ba}\\
+    \mathtt{78}&\mathtt{6a}&\mathtt{8e}&\mathtt{02}
+  \end{bmatrix}.
+\end{equation}
+Penjumlahan medan menggunakan XOR. Perkalian menggunakan pergeseran bit
+dan reduksi dengan konstanta $\mathtt{1b}$ setelah bit tertinggi melimpah.
+
+\Isi{Jelaskan pemilihan matriks dan bukti invers atau sifat difusi yang
+telah diperiksa.}
+
+\subsection{AddRoundKey67}
+Untuk kunci putaran $K_j$, setiap elemen diperbarui sebagai
+\begin{equation}
+  s'_{r,c}=s_{r,c}\oplus (K_j)_{4c+r}\oplus\mathtt{43}.
+\end{equation}
+Transformasi ini merupakan invers dirinya sendiri.
+
+\section{Alur Enkripsi dan Dekripsi}
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+    node distance=5mm,
+    box/.style={draw,rounded corners,align=center,text width=9cm,
+      minimum height=8mm,font=\small},
+    flow/.style={-{Latex},thick}]
+    \node[box] (in) {Plainteks 16 byte $\rightarrow$ state $4\times4$};
+    \node[box,below=of in] (initial) {AddRoundKey67 dengan $K_0$};
+    \node[box,below=of initial] (rounds) {Putaran $j=1,\ldots,9$\\
+      SubBytes67 $\rightarrow$ ShiftRows67 $\rightarrow$ MixColumns67\\
+      $\rightarrow$ AddRoundKey67 dengan $K_j$};
+    \node[box,below=of rounds] (final) {Putaran 10\\
+      SubBytes67 $\rightarrow$ ShiftRows67 $\rightarrow$ AddRoundKey67
+      dengan $K_{10}$};
+    \node[box,below=of final] (out) {Serialisasi state $\rightarrow$ cipherteks 16 byte};
+    \draw[flow] (in) -- (initial);
+    \draw[flow] (initial) -- (rounds);
+    \draw[flow] (rounds) -- (final);
+    \draw[flow] (final) -- (out);
+  \end{tikzpicture}
+  \caption{Alur enkripsi satu blok sesuai implementasi saat ini.}
+  \label{fig:alur-enkripsi}
+\end{figure}
+Enkripsi dimulai dengan AddRoundKey67 menggunakan $K_0$.
+Putaran 1--9 menjalankan keempat transformasi; putaran terakhir melewati
+MixColumns67, seperti pada Gambar~\ref{fig:alur-enkripsi}.
+
+Dekripsi menjalankan AddRoundKey67 dengan $K_{10}$, lalu
+InverseShiftRows67 dan InverseSubBytes67. Untuk $j=9,\ldots,1$, urutannya
+adalah AddRoundKey67 dengan $K_j$, InverseMixColumns67,
+InverseShiftRows67, dan InverseSubBytes67. Proses ditutup dengan
+AddRoundKey67 menggunakan $K_0$.
+
+\Isi{Tambahkan contoh state dan kunci untuk satu blok, serta justifikasi
+jumlah putaran dan peniadaan pencampuran pada putaran terakhir.}
+
+\section{Pembentukan Kunci Putaran}
+Kunci utama dibagi menjadi empat word $w_0,\ldots,w_3$, masing-masing
+empat byte. Ekspansi menghasilkan 44 word. Untuk $i=4,\ldots,43$,
+mula-mula $t=w_{i-1}$. Jika $i\bmod4=0$, $t$ dirotasi satu byte ke kiri,
+setiap byte disubstitusi dengan $S_{67}$, lalu byte pertama di-XOR dengan
+$\mathrm{Rcon}_{i/4-1}\oplus\mathtt{67}$. Selanjutnya,
+\begin{equation}
+  w_i=w_{i-4}\oplus t,\qquad
+  K_j=w_{4j}\Vert w_{4j+1}\Vert w_{4j+2}\Vert w_{4j+3}.
+\end{equation}
+Urutan Rcon adalah $\mathtt{01,02,04,08,10,20,40,80,1b,36}$.
+Simbol $\Vert$ menyatakan konkatenasi byte; $K_0$ adalah kunci utama.
+
+\Isi{Tambahkan contoh pembentukan kunci dan alasan pemilihan konstanta.
+Jelaskan kontribusi operasi tambahan terhadap rancangan.}

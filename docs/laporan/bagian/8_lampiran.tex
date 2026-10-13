@@ -1,0 +1,61 @@
+\BabTanpaNomor{LAMPIRAN}
+\newcounter{bagianlampiran}
+\newcommand{\BagianLampiran}[1]{%
+  \refstepcounter{bagianlampiran}
+  \section*{\Alph{bagianlampiran}. #1}\phantomsection
+  \addcontentsline{toc}{section}{\Alph{bagianlampiran}. #1}%
+}
+
+\BagianLampiran{Pranala Repositori}
+\expandafter\url\expandafter{\Repositori}
+
+\Isi{Cantumkan tag release atau commit yang sesuai dengan hasil laporan.}
+
+\BagianLampiran{Video Demo dan Dokumentasi API (Opsional)}
+\Isi{Jika mengambil bonus video, cantumkan tautan YouTube publik dengan
+durasi maksimal 20 menit. Semua anggota memperkenalkan diri dan
+menjelaskan bagiannya secara on-camera sesuai spesifikasi. Hapus isian
+ini atau tulis tidak dibuat jika bonus tidak diambil.}
+
+\Isi{Jika mengambil bonus dokumentasi API, cantumkan tautan dokumentasi
+publik, penjelasan parameter dan keluaran, serta contoh penggunaan.
+Cantumkan juga tautannya pada README repositori.}
+
+\BagianLampiran{Pembagian Tugas Anggota}
+\begin{table}[H]
+  \centering\small
+  \caption{Isian pembagian tugas kelompok.}
+  \begin{tabularx}{\linewidth}{@{}p{0.32\linewidth}p{0.18\linewidth}Y@{}}
+    \toprule Nama & NIM & Kontribusi\\ \midrule
+    \NamaSatu & \NIMSatu & \Isi{Kontribusi anggota 1.}\\[4pt]
+    \NamaDua & \NIMDua & \Isi{Kontribusi anggota 2.}\\[4pt]
+    \NamaTiga & \NIMTiga & \Isi{Kontribusi anggota 3.}\\[4pt]
+    \ifEmpatAnggota
+      \NamaEmpat & \NIMEmpat & \Isi{Kontribusi anggota 4.}\\[4pt]
+    \fi
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\BagianLampiran{Berkas Uji dan Hasil Lengkap}
+\Isi{Cantumkan lokasi berkas teks dan biner, laporan JSON per berkas,
+histogram, hasil enkripsi/dekripsi, serta tabel tambahan yang mendukung
+Bab IV dan V. Jangan menyertakan reports/toy.json sebagai bukti keamanan
+Brainrot.}
+
+\BagianLampiran{Petunjuk Menjalankan}
+Jalankan dari root repositori dengan Go 1.23 atau lebih baru.
+\begin{lstlisting}[language={},numbers=none,caption={Perintah verifikasi dan analisis.}]
+go version
+go -C src test ./...
+go -C src run ./cmd/crypt -op encrypt -mode ECB \
+  -key-hex 00112233445566778899aabbccddeeff -input "Halo Brainrot"
+go -C src run ./cmd/analyze -cipher brainrot -modes all \
+  -trials 256 -seed 42 -output ../reports/brainrot.json
+\end{lstlisting}
+Di PowerShell, satukan setiap perintah menjadi satu baris atau gunakan
+backtick sebagai penyambung baris. README repositori memuat contoh
+enkripsi/dekripsi dengan variabel PowerShell.
+
+\Isi{Perbarui perintah sesuai antarmuka akhir, khususnya masukan dan
+keluaran berkas serta verifikasi integritas.}

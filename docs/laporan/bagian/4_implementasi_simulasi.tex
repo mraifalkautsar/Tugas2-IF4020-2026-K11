@@ -1,0 +1,116 @@
+\chapter{IMPLEMENTASI DAN SIMULASI}
+
+\section{Struktur Program dan Dependensi}
+Program menggunakan Go 1.23 atau lebih baru. Cipher dan mode operasi
+diimplementasikan dalam repositori tanpa pustaka kriptografi pihak ketiga.
+Pustaka standar \texttt{crypto/rand} dipakai oleh CLI untuk membangkitkan
+IV; \texttt{math/rand} hanya dipakai untuk eksperimen yang dapat diulang.
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Komponen kode sumber.}
+  \begin{tabularx}{\linewidth}{@{}p{0.48\linewidth}Y@{}}
+    \toprule Lokasi & Peran\\ \midrule
+    \path{src/cipher/cipher.go} & Kontrak Block, Factory, dan Tracer.\\
+    \path{src/cipher/brainrot/} & Cipher, transformasi, tabel, dan ekspansi kunci.\\
+    \path{src/modes/modes.go} & Lima mode, PKCS\#7, dan pencacah CTR.\\
+    \path{src/cmd/crypt/main.go} & CLI enkripsi teks dan dekripsi hex.\\
+    \path{src/cmd/analyze/main.go} & CLI analisis berkas uji dan keluaran JSON.\\
+    \path{src/analysis/} & Statistik distribusi dan eksperimen perubahan bit.\\
+    \path{src/tests/} & Pengujian infrastruktur dengan cipher XOR uji.\\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Antarmuka dan Format Data}
+CLI \texttt{crypt} menerima \texttt{-op}, \texttt{-mode},
+\texttt{-key-hex}, dan \texttt{-input}. Kunci harus berupa 32 karakter
+heksadesimal. Saat enkripsi, masukan berupa teks; saat dekripsi,
+masukan berupa hex hasil enkripsi. Mode selain ECB menyimpan IV 16 byte
+di depan badan cipherteks: $\mathrm{IV}\Vert C$. Mode ECB hanya menyimpan $C$.
+Mode dan kunci tidak disertakan dalam keluaran; pengguna memasukkan
+keduanya lagi saat dekripsi.
+
+\begin{lstlisting}[language={},numbers=none,caption={Contoh simulasi CBC dari root repositori pada Bash.}]
+key_hex=00112233445566778899aabbccddeeff
+ciphertext=$(go -C src run ./cmd/crypt -op encrypt \
+  -mode CBC -key-hex "$key_hex" -input "Halo Brainrot")
+go -C src run ./cmd/crypt -op decrypt \
+  -mode CBC -key-hex "$key_hex" -input "$ciphertext"
+\end{lstlisting}
+
+\Isi{Cantumkan keluaran aktual atau tangkapan terminal. Ulangi simulasi
+untuk ECB, CBC, CFB, OFB, dan CTR. Deskripsikan antarmuka akhir jika berubah.}
+
+\section{Mode Operasi, IV, dan Counter}
+\begin{table}[htbp]
+  \centering\small
+  \caption{Perilaku mode operasi dalam kode saat ini.}
+  \label{tab:mode}
+  \begin{tabularx}{\linewidth}{@{}lp{0.23\linewidth}Y@{}}
+    \toprule Mode & IV / counter & Blok akhir dan umpan balik\\ \midrule
+    ECB & Tidak digunakan & Blok independen; PKCS\#7.\\
+    CBC & IV 16 byte & XOR dengan blok cipherteks sebelumnya; PKCS\#7.\\
+    CFB & IV 16 byte & Umpan balik blok penuh (CFB-128); potongan akhir
+      memakai sebagian keystream tanpa padding.\\
+    OFB & IV 16 byte & Umpan balik keluaran cipher; tanpa padding.\\
+    CTR & Counter awal 16 byte & Pencacah big-endian 128 bit;
+      menolak overflow jika masih ada data; tanpa padding.\\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+Untuk CBC, CFB, dan OFB, IV dibuat oleh CLI menggunakan
+\texttt{crypto/rand}. Nilai yang sama menjadi counter awal CTR.
+Dekripsi CFB, OFB, dan CTR menggunakan fungsi enkripsi blok untuk
+membangkitkan keystream.
+
+\Isi{Jelaskan alasan pengelolaan IV/counter dan mekanisme penyimpanannya
+pada format berkas akhir. Catat cara mencegah penggunaan ulang keystream.}
+
+\section{Penanganan Padding}
+Untuk ECB dan CBC dengan $b=16$, panjang badan cipherteks adalah
+$16(\lfloor L/16\rfloor+1)$ byte. Untuk CFB, OFB, dan CTR, panjang badan
+cipherteks sama dengan panjang plainteks. Panjang IV tidak termasuk dalam
+kedua ukuran tersebut. Dekripsi ECB/CBC memeriksa panjang cipherteks,
+nilai byte padding terakhir, dan kesamaan seluruh byte padding.
+
+\Isi{Justifikasi PKCS\#7 dan lengkapi bukti untuk masukan 0, 1, 15, 16,
+17, dan 32 byte. Catat panjang plainteks, padding, badan cipherteks,
+dan hasil pemulihan; sertakan kasus padding tidak valid.}
+
+\section{Simulasi Berkas Teks dan Biner}
+Fungsi mode menerima slice byte, sedangkan CLI analisis membaca berkas.
+CLI \texttt{crypt} saat ini hanya menerima teks dari argumen dan belum
+menyediakan pembacaan serta penulisan berkas biner sembarang.
+
+\Isi{Lengkapi bagian ini setelah alur enkripsi/dekripsi berkas tersedia.
+Gunakan berkas teks dan biner pada seluruh mode; jangan menganggap
+simulasi argumen teks sebagai bukti dukungan berkas biner.}
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Isian bukti pemulihan data untuk seluruh mode.}
+  \label{tab:simulasi}
+  \begin{tabularx}{\linewidth}{@{}lYYYY@{}}
+    \toprule Mode & Teks: berkas / ukuran & Biner: berkas / ukuran &
+      Panjang keluaran & Byte hasil dekripsi sama\\ \midrule
+    ECB & --- & --- & --- & ---\\
+    CBC & --- & --- & --- & ---\\
+    CFB & --- & --- & --- & ---\\
+    OFB & --- & --- & --- & ---\\
+    CTR & --- & --- & --- & ---\\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Verifikasi Integritas dan Kasus Gagal}
+Analisis menggunakan \texttt{bytes.Equal} untuk memeriksa bahwa hasil
+dekripsi sama persis dengan masukan. Kode saat ini belum menyimpan
+tag autentikasi atau mekanisme verifikasi perubahan cipherteks. Pemeriksaan
+padding hanya memvalidasi bentuk padding, sehingga tidak mencakup
+seluruh perubahan pada isi pesan.
+
+\Isi{Jelaskan mekanisme integritas yang dipilih pada implementasi akhir
+sesuai spesifikasi. Bedakan bukti round-trip dengan deteksi modifikasi
+data. Sertakan hasil pengujian kunci salah, data berubah, IV berubah,
+data terpotong, dan masukan tidak valid.}
