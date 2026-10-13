@@ -4,6 +4,8 @@
   },
   "scripts": {
     "dev": "docker compose up -d --build && docktui",
-    "down": "docker compose down"
+    "down": "docker compose down",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix frontend run start"
   }
 }

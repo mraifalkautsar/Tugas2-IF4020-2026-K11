@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { 
   ProcessResponse, 
-  TraceResponse, 
   AvalancheResponse, 
   CipherAction, 
   CipherMode, 
@@ -40,15 +39,6 @@ export const cipherApi = {
     }
 
     const res = await api.post<ProcessResponse>('/cipher/process', payload);
-    return res.data;
-  },
-
-  async fetchTrace(params: {
-    block_hex: string;
-    key_hex: string;
-    action: CipherAction;
-  }): Promise<TraceResponse> {
-    const res = await api.post<TraceResponse>('/cipher/trace', params);
     return res.data;
   },
 

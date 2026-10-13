@@ -4,7 +4,6 @@ import RichTextField from '../components/main-page/RichTextField';
 import UploadField from '../components/main-page/UploadField';
 import CipherConfigPanel from '../components/main-page/CipherConfigPanel';
 import CipherResultCard, { CipherResult } from '../components/main-page/CipherResultCard';
-import CipherVisualizer from '../components/visualizer/CipherVisualizer';
 import AvalancheBench from '../components/analytics/AvalancheBench';
 import HistogramChart from '../components/analytics/HistogramChart';
 import EntropyGauge from '../components/analytics/EntropyGauge';
@@ -19,27 +18,19 @@ import {
 import { 
   ArrowLeft, 
   RefreshCw, 
-  AlertTriangle, 
   BarChart2, 
   Zap, 
   Activity, 
-  Eye, 
   ChevronDown, 
   ChevronUp, 
-  Cpu, 
-  SlidersHorizontal 
+  Cpu 
 } from 'lucide-react';
 
-export type AnalysisTabType = 'visualize' | 'avalanche' | 'histogram' | 'entropy';
+export type AnalysisTabType = 'avalanche' | 'histogram' | 'entropy';
 
 interface MainPageProps {
   initialFile?: File | null;
   onBackToLanding: () => void;
-  onNavigateToAnalyze?: (data: {
-    plainBytes: Uint8Array;
-    cipherBytes: Uint8Array;
-    keyStr: string;
-  }) => void;
 }
 
 export const MainPage: React.FC<MainPageProps> = ({
@@ -57,12 +48,8 @@ export const MainPage: React.FC<MainPageProps> = ({
 
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CipherResult | null>(null);
-  const [statusMessage, setStatusMessage] = useState<{
-    type: 'success' | 'error' | 'info';
-    text: string;
-  } | null>(null);
 
-  const [activeAnalysisTab, setActiveAnalysisTab] = useState<AnalysisTabType>('visualize');
+  const [activeAnalysisTab, setActiveAnalysisTab] = useState<AnalysisTabType>('avalanche');
 
   useEffect(() => {
     if (selectedFile) {
@@ -108,7 +95,6 @@ export const MainPage: React.FC<MainPageProps> = ({
   const handleProcessCipher = async (action: CipherAction) => {
     if (!canExecute) return;
     setLoading(true);
-    setStatusMessage(null);
 
     try {
       if (hasFile && selectedFile) {
@@ -154,10 +140,6 @@ export const MainPage: React.FC<MainPageProps> = ({
             cipherBytes: action === 'encrypt' ? outBytes : fileBytes,
           });
 
-          setStatusMessage({
-            type: 'success',
-            text: `File successfully ${action === 'encrypt' ? 'encrypted' : 'decrypted'} via backend API!`,
-          });
           setTimeout(() => scrollToSection('section-2'), 100);
         } catch (apiErr) {
           console.warn('Backend API offline, using fallback', apiErr);
@@ -183,10 +165,6 @@ export const MainPage: React.FC<MainPageProps> = ({
             cipherBytes: action === 'encrypt' ? simBytes : fileBytes,
           });
 
-          setStatusMessage({
-            type: 'info',
-            text: `Processed locally (Backend API offline). File ${action} completed!`,
-          });
           setTimeout(() => scrollToSection('section-2'), 100);
         }
       } else {
@@ -232,10 +210,6 @@ export const MainPage: React.FC<MainPageProps> = ({
             cipherBytes: action === 'encrypt' ? outBytes : textBytes,
           });
 
-          setStatusMessage({
-            type: 'success',
-            text: `Text successfully ${action === 'encrypt' ? 'encrypted' : 'decrypted'} via backend API!`,
-          });
           setTimeout(() => scrollToSection('section-2'), 100);
         } catch (apiErr) {
           console.warn('Backend API offline, using fallback', apiErr);
@@ -269,19 +243,11 @@ export const MainPage: React.FC<MainPageProps> = ({
             cipherBytes: action === 'encrypt' ? simBytes : textBytes,
           });
 
-          setStatusMessage({
-            type: 'info',
-            text: `Processed locally (Backend API offline). Text ${action} completed!`,
-          });
           setTimeout(() => scrollToSection('section-2'), 100);
         }
       }
     } catch (err) {
       console.error('Cipher operation error:', err);
-      setStatusMessage({
-        type: 'error',
-        text: 'Error occurred during cipher processing. Check inputs and parameters.',
-      });
     } finally {
       setLoading(false);
     }
@@ -297,7 +263,6 @@ export const MainPage: React.FC<MainPageProps> = ({
     setInputText('');
     setSelectedFile(null);
     setResult(null);
-    setStatusMessage(null);
     scrollToSection('section-1');
   };
 
@@ -418,30 +383,6 @@ export const MainPage: React.FC<MainPageProps> = ({
         </header>
 
         <div className="space-y-5 flex-1 flex flex-col justify-center">
-          {statusMessage && (
-            <div
-              className={`border-2 border-black p-3 flex items-center justify-between gap-3 shadow-[3px_3px_0px_#000000] text-xs font-mono font-bold ${
-                statusMessage.type === 'success'
-                  ? 'bg-emerald-100 text-emerald-950'
-                  : statusMessage.type === 'error'
-                  ? 'bg-rose-100 text-rose-950'
-                  : 'bg-[#DEC3A1]/50 text-black'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 shrink-0 stroke-[2.5]" />
-                <span>{statusMessage.text}</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setStatusMessage(null)}
-                className="text-black hover:underline cursor-pointer"
-              >
-                Dismiss
-              </button>
-            </div>
-          )}
-
           <div className="flex items-center gap-2 font-mono text-xs font-black uppercase text-black">
             <span className="w-2.5 h-2.5 bg-[#4542E0] inline-block border border-black" />
             <span>Section 01: Payload Input & Parameters</span>
@@ -575,7 +516,7 @@ export const MainPage: React.FC<MainPageProps> = ({
             onClick={() => scrollToSection('section-3')}
             className="px-4 py-2 bg-gray-100 hover:bg-gray-200 border-2 border-black font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 transition-all cursor-pointer"
           >
-            <span>Scroll Down to Analysis & Visualizer (Section 3)</span>
+            <span>Scroll Down to Analysis (Section 3)</span>
             <ChevronDown className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
@@ -588,7 +529,7 @@ export const MainPage: React.FC<MainPageProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-black pb-3">
           <div className="flex items-center gap-2 font-mono text-xs font-black uppercase text-black">
             <span className="w-2.5 h-2.5 bg-[#BE4BCE] inline-block border border-black" />
-            <span>Section 03: Cryptographic Metrics & State Visualizer</span>
+            <span>Section 03: Cryptographic Metrics & Analysis</span>
           </div>
 
           <button
@@ -602,19 +543,6 @@ export const MainPage: React.FC<MainPageProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-2 bg-gray-100 border-2 border-black p-2 shadow-[3px_3px_0px_#000000]">
-          <button
-            type="button"
-            onClick={() => setActiveAnalysisTab('visualize')}
-            className={`flex-1 min-w-[140px] py-2.5 px-3 font-mono font-black text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-              activeAnalysisTab === 'visualize'
-                ? 'bg-[#DEC3A1] text-black shadow-[3px_3px_0px_#000000] -translate-y-0.5'
-                : 'bg-white text-black hover:bg-gray-50'
-            }`}
-          >
-            <Eye className="w-4 h-4 stroke-[2.5]" />
-            Visualize
-          </button>
-
           <button
             type="button"
             onClick={() => setActiveAnalysisTab('avalanche')}
@@ -656,15 +584,6 @@ export const MainPage: React.FC<MainPageProps> = ({
         </div>
 
         <div className="flex-1 pb-12">
-          {activeAnalysisTab === 'visualize' && (
-            <div className="animate-in fade-in duration-200">
-              <CipherVisualizer
-                initialKey={key}
-                initialBlockHex={previewBlockHex}
-              />
-            </div>
-          )}
-
           {activeAnalysisTab === 'avalanche' && (
             <div className="animate-in fade-in duration-200">
               <AvalancheBench
