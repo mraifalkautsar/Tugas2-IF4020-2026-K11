@@ -1,6 +1,5 @@
 # Brainrot Cipher (BRC-128)
 
-> **Implementasi Algoritma Block Cipher SPN 128-bit dengan Mode Operasi Lengkap & Visualisasi Interaktif Neo-Brutalist**  
 > *Tugas 2 IF4020 Kriptografi • Semester II Tahun Ajaran 2025/2026 • Kelompok 11 (K11)*
 
 <br>
@@ -33,11 +32,6 @@
   - [3.1 Menjalankan via Docker (Rekomendasi)](#31-menjalankan-via-docker-rekomendasi)
   - [3.2 Menjalankan secara Lokal / Manual](#32-menjalankan-secara-lokal--manual)
 - [4. Tata Cara Menjalankan Program](#4-tata-cara-menjalankan-program)
-  - [4.1 Metode 1: Menggunakan Docker Compose (All-in-One)](#41-metode-1-menggunakan-docker-compose-all-in-one)
-  - [4.2 Metode 2: Menjalankan Manual (Local Development)](#42-metode-2-menjalankan-manual-local-development)
-  - [4.3 Metode 3: Command Line Interface (CLI Crypt)](#43-metode-3-command-line-interface-cli-crypt)
-  - [4.4 Metode 4: Pengujian Analisis Kriptografi CLI (`cmd/analyze`)](#44-metode-4-pengujian-analisis-kriptografi-cli-cmdanalyze)
-  - [4.5 Metode 5: Unit Testing & Benchmark](#45-metode-5-unit-testing--benchmark)
 - [5. Struktur Direktori](#5-struktur-direktori)
 - [Ucapan Terima Kasih](#ucapan-terima-kasih)
 
@@ -175,21 +169,15 @@ Antarmuka web menyediakan modul analitik terintegrasi untuk mengevaluasi kualita
 Jika menjalankan program menggunakan kontainer Docker, seluruh dependensi internal akan diinstalasi secara otomatis:
 - **Docker Engine:** Versi `24.0.0` atau lebih baru.
 - **Docker Compose:** Versi `v2.20.0` atau lebih baru.
-- **Web Browser Modern:** Google Chrome, Mozilla Firefox, Microsoft Edge, atau Safari.
 
 ### 3.2 Menjalankan secara Lokal / Manual
-Untuk menjalankan program langsung di lingkungan host pengembang:
-- **Go Compiler:** Versi `1.23` atau lebih baru (pastikan perintah `go` telah terdaftar di `PATH`).
+- **Go Compiler:** Versi `1.23` atau lebih baru.
 - **Node.js:** Versi `v20.x` atau `v22.x` (LTS direkomendasikan).
 - **npm:** Versi `10.x` atau lebih baru.
-- **Terminal Shell:** Bash/Zsh (Linux/macOS), Windows PowerShell, atau WSL2.
 
 ---
 
 ## 4. Tata Cara Menjalankan Program
-
-### 4.1 Metode 1: Menggunakan Docker Compose (All-in-One)
-Metode ini adalah cara tercepat untuk menjalankan seluruh ekosistem Brainrot Cipher (Frontend Web + Backend REST API) dalam satu langkah:
 
 1. **Clone repository:**
    ```bash
@@ -232,116 +220,6 @@ Gunakan metode ini jika Anda ingin mengembangkan atau men-debug kode secara lang
    go run ./cmd/server
    ```
    *Server backend akan aktif pada port `8000` (`http://localhost:8000`).*
-
-#### Langkah B: Jalankan Frontend Web
-1. Buka terminal baru dan masuk ke direktori `frontend/`:
-   ```bash
-   cd frontend
-   ```
-2. Pasang dependensi JavaScript:
-   ```bash
-   npm install
-   ```
-3. Jalankan server pengembang Vite:
-   ```bash
-   npm run dev
-   ```
-   *Buka URL lokal yang muncul pada terminal (biasanya `http://localhost:5173`).*
-
-4. *(Opsional)* Membangun dan menjalankan versi produksi frontend:
-   ```bash
-   npm run build
-   npm run start
-   ```
-   *Aplikasi versi produksi akan disajikan pada `http://localhost:3000`.*
-
----
-
-### 4.3 Metode 3: Command Line Interface (CLI Crypt)
-Program menyediakan antarmuka CLI mandiri melalui paket `cmd/crypt` untuk melakukan enkripsi dan dekripsi langsung dari terminal.
-
-> [!TIP]  
-> Kunci yang dimasukkan harus berupa string heksadesimal 32 karakter (16 byte).
-
-#### Penggunaan pada Linux / macOS / WSL (Bash/Zsh):
-```bash
-# Tentukan kunci heksadesimal 128-bit
-KEY="00112233445566778899aabbccddeeff"
-
-# 1. Enkripsi teks
-CIPHERTEXT=$(go -C src run -work ./cmd/crypt -op encrypt -mode CBC -key-hex $KEY -input "Halo Brainrot")
-echo "Hasil Ciphertext: $CIPHERTEXT"
-
-# 2. Dekripsi teks
-PLAINTEXT=$(go -C src run -work ./cmd/crypt -op decrypt -mode CBC -key-hex $KEY -input "$CIPHERTEXT")
-echo "Hasil Plaintext: $PLAINTEXT"
-```
-
-#### Penggunaan pada Windows (PowerShell):
-```powershell
-# Tentukan kunci
-$key = "00112233445566778899aabbccddeeff"
-
-# 1. Enkripsi
-$ciphertext = go -C src run -work ./cmd/crypt -op encrypt -mode CBC -key-hex $key -input "Halo Brainrot"
-$ciphertext
-
-# 2. Dekripsi
-go -C src run -work ./cmd/crypt -op decrypt -mode CBC -key-hex $key -input $ciphertext
-```
-
-#### Pilihan Mode Operasi:
-Ganti opsi `-mode CBC` dengan salah satu mode berikut:
-- `-mode ECB`
-- `-mode CBC`
-- `-mode CFB`
-- `-mode OFB`
-- `-mode CTR`
-
----
-
-### 4.4 Metode 4: Pengujian Analisis Kriptografi CLI (`cmd/analyze`)
-Program dilengkapi runner evaluasi empiris untuk menganalisis sifat statistik dari Brainrot Cipher:
-
-1. **Menjalankan analisis default (256 trials pada seluruh mode):**
-   ```bash
-   go -C src run -work ./cmd/analyze
-   ```
-   Program akan memproses berkas sampel dari `src/testdata/fixtures/`, menghitung metrik difusi, dan menghasilkan laporan terperinci dalam format JSON di `reports/brainrot.json`.
-
-2. **Menjalankan analisis dengan mode dan kunci khusus:**
-   ```bash
-   go -C src run -work ./cmd/analyze -cipher brainrot -modes CBC -key-hex 00112233445566778899aabbccddeeff
-   ```
-
-3. **Menjalankan analisis cepat tanpa menyimpan berkas laporan:**
-   ```bash
-   go -C src run -work ./cmd/analyze -output=
-   ```
-
----
-
-### 4.5 Metode 5: Unit Testing & Benchmark
-Untuk memvalidasi kebenaran matematis transformasi cipher, uji vektor, dan kecepatan pemrosesan:
-
-```bash
-# Berpindah ke direktori src
-cd src
-
-# 1. Jalankan unit test transformasi dan cipher
-go test -v ./cipher/brainrot/
-
-# 2. Jalankan unit test seluruh mode operasi
-go test -v ./modes/...
-
-# 3. Jalankan pengujian analisis statistik
-go test -v ./tests/...
-
-# 4. Jalankan benchmark performa eksekusi
-go test -bench=. ./cipher/brainrot/
-```
-
----
 
 ## 5. Struktur Direktori
 
