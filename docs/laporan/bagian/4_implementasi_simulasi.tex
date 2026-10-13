@@ -81,7 +81,7 @@ sehingga tidak memerlukan padding.
 \end{table}
 Masukan 32 byte juga dipulihkan identik setelah memperoleh padding
 16 byte dan badan cipherteks 48 byte. Padding tidak valid ditolak dengan
-HTTP 400. Opsi ANSI X9.23 dan zero padding tersedia pada web, tetapi
+HTTP 400. Opsi ANSI X9.23 dan zero padding tersedia pada web~\cite{cryptosys}, tetapi
 simulasi memakai PKCS\#7. Zero padding tidak dipilih karena data asli
 $\mathtt{01\,00}$ dipulihkan sebagai $\mathtt{01}$ oleh implementasi
 saat ini; byte nol akhir tidak dapat dibedakan dari padding.
