@@ -101,7 +101,7 @@ export const CipherResultCard: React.FC<CipherResultCardProps> = ({
           </div>
           <div>
             <h3 className="text-base font-black uppercase tracking-wider text-black flex items-center gap-2">
-              {isEncrypt ? '🔒 Ciphertext Result' : '🔓 Decrypted Plaintext Result'}
+              {isEncrypt ? 'Ciphertext Result' : 'Decrypted Plaintext Result'}
               <span
                 className={`text-[10px] font-mono px-2 py-0.5 border border-black shadow-[1px_1px_0px_#000000] ${
                   isEncrypt ? 'bg-[#DEC3A1] text-black' : 'bg-emerald-200 text-black'
@@ -218,15 +218,6 @@ export const CipherResultCard: React.FC<CipherResultCardProps> = ({
       </div>
 
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2 border-t-2 border-black">
-        <button
-          type="button"
-          onClick={onOpenAnalyze}
-          className="px-5 py-3 bg-[#BE4BCE] hover:bg-[#a63cb5] text-white font-black text-xs uppercase tracking-wider border-[2.5px] border-black shadow-[4px_4px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center justify-center gap-2 transition-all cursor-pointer"
-        >
-          <BarChart2 className="w-4 h-4 stroke-[2.5]" />
-          🔬 Scroll to Analysis & Visualizer (Section 3) ↓
-        </button>
-
         <button
           type="button"
           onClick={() => onUseAsInput(isEncrypt ? result.outputHex : decryptedText)}

@@ -253,7 +253,7 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
           className="w-full py-3.5 px-6 bg-[#4542E0] hover:bg-[#3936cb] text-white font-black text-sm uppercase tracking-wider border-[2.5px] border-black shadow-[4px_4px_0px_#000000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#000000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-[4px_4px_0px_#000000] flex items-center justify-center gap-2 transition-all cursor-pointer"
         >
           <Lock className="w-4 h-4 stroke-[2.5]" />
-          {isLoading ? 'Processing...' : '🔒 Encrypt Payload'}
+          {isLoading ? 'Processing...' : 'Encrypt Payload'}
         </button>
 
         <button
@@ -263,7 +263,7 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
           className="w-full py-3.5 px-6 bg-[#E75FA8] hover:bg-[#d84e98] text-white font-black text-sm uppercase tracking-wider border-[2.5px] border-black shadow-[4px_4px_0px_#000000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#000000] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-[4px_4px_0px_#000000] flex items-center justify-center gap-2 transition-all cursor-pointer"
         >
           <Unlock className="w-4 h-4 stroke-[2.5]" />
-          {isLoading ? 'Processing...' : '🔓 Decrypt Payload'}
+          {isLoading ? 'Processing...' : 'Decrypt Payload'}
         </button>
       </div>
     </div>
