@@ -13,6 +13,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/apidocs"
 	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/controller"
 )
 
@@ -26,21 +27,10 @@ func main() {
 		}
 	}
 
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("GET /healthz", controller.Health)
-	mux.HandleFunc("GET /api/health", controller.Health)
-
-	mux.HandleFunc("POST /api/cipher/process", controller.Process)
-	mux.HandleFunc("POST /api/cipher/trace", controller.Trace)
-	mux.HandleFunc("POST /api/cipher/avalanche", controller.Avalanche)
-
-	handler := controller.SecurityMiddleware(mux)
-
 	addr := fmt.Sprintf(":%d", *port)
 	server := &http.Server{
 		Addr:              addr,
-		Handler:           handler,
+		Handler:           newHandler(),
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       15 * time.Second,
 		WriteTimeout:      30 * time.Second,
@@ -71,4 +61,15 @@ func main() {
 
 	<-idleConnsClosed
 	log.Println("[INFO] Backend server stopped.")
+}
+
+func newHandler() http.Handler {
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /healthz", controller.Health)
+	mux.HandleFunc("GET /api/health", controller.Health)
+	mux.HandleFunc("POST /api/cipher/process", controller.Process)
+	mux.HandleFunc("POST /api/cipher/trace", controller.Trace)
+	mux.HandleFunc("POST /api/cipher/avalanche", controller.Avalanche)
+	apidocs.Register(mux)
+	return controller.SecurityMiddleware(mux)
 }
