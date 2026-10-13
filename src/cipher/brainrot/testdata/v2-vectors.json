@@ -1,0 +1,1450 @@
+{
+  "cipher": "Brainrot Cipher v2",
+  "provenance": "scripts/brainrot_reference.py; algebraic S-box, polynomial GF multiplication",
+  "vectors": [
+    {
+      "name": "zero",
+      "key_hex": "00000000000000000000000000000000",
+      "plaintext_hex": "00000000000000000000000000000000",
+      "ciphertext_hex": "4055521fadad97dc002e3ee658ff3dc7",
+      "subkeys_hex": [
+        "00000000000000000000000000000000",
+        "44222222442222224422222244222222",
+        "f9fafae8bdd8d8caf9fafae8bdd8d8ca",
+        "dbbbdc7e666304b49f99fe5c22412696",
+        "0a18f7a66c7bf312f3e20d4ed1a32bd8",
+        "3911b676556a4564a688482a772b63f2",
+        "77ee7f8722843ae3840c72c9f327113b",
+        "51a3ae4c732794aff72be666040cf75d",
+        "2af8cdf159df595eaef4bf38aaf84865",
+        "e3fe53ddba210a8314d5b5bbbe2dfdde",
+        "449385d3feb28f50ea673aeb544ac735",
+        "3ae8c660c45a49302e3d73db7a77b4ee",
+        "74326c0ab068253a9e5556e1e422e20f",
+        "60947e72d0fc5b484ea90da9aa8befa6",
+        "bae6235e6a1a781624b375bf8e389a19",
+        "f7b09c9a9daae48cb919913337210b2a",
+        "6ae7270df74dc3814e5452b279755998",
+        "6208e1d295452253db1170e1a2642979",
+        "24803e38b1c51c6b6ad46c8ac8b045f3",
+        "e027f52551e2e94e3b3685c4f386c037",
+        "3c7362ee6d918ba056a70e64a521ce53"
+      ],
+      "snapshots": [
+        {
+          "round": 0,
+          "operation": "AddRoundKey67",
+          "state_hex": "43434343434343434343434343434343"
+        },
+        {
+          "round": 1,
+          "operation": "SubBytes67",
+          "state_hex": "cececececececececececececececece"
+        },
+        {
+          "round": 1,
+          "operation": "ShiftRows67",
+          "state_hex": "cececececececececececececececece"
+        },
+        {
+          "round": 1,
+          "operation": "MixColumns67",
+          "state_hex": "925c925c925c925c925c925c925c925c"
+        },
+        {
+          "round": 1,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "8618f3cfaeba79e71c71451441041041"
+        },
+        {
+          "round": 1,
+          "operation": "ModularAddition",
+          "state_hex": "ca3a15f1f2dc9b096093673685263263"
+        },
+        {
+          "round": 1,
+          "operation": "AddRoundKey67",
+          "state_hex": "7083ac5a0c470080da2ade9d7bbda9ea"
+        },
+        {
+          "round": 2,
+          "operation": "SubBytes67",
+          "state_hex": "7f19848a9cae2266ddbbd6086496a114"
+        },
+        {
+          "round": 2,
+          "operation": "ShiftRows67",
+          "state_hex": "ddae841464bb228a7f96d6669c19a108"
+        },
+        {
+          "round": 2,
+          "operation": "MixColumns67",
+          "state_hex": "e64fd361998d44a654f60e23eb81ae65"
+        },
+        {
+          "round": 2,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "eebf063c9bb0965278b91a4f8860dd15"
+        },
+        {
+          "round": 2,
+          "operation": "FeistelCrossMix",
+          "state_hex": "dfc7694332cc22c42b655d0f397e4237"
+        },
+        {
+          "round": 2,
+          "operation": "ModularAddition",
+          "state_hex": "ba8245c1982f2678cafe5b6b5bbf68cd"
+        },
+        {
+          "round": 2,
+          "operation": "AddRoundKey67",
+          "state_hex": "f3d9f124b71796297a5f1566c95f0056"
+        },
+        {
+          "round": 3,
+          "operation": "SubBytes67",
+          "state_hex": "cbe867c55f172b886a82535c7a8222b2"
+        },
+        {
+          "round": 3,
+          "operation": "ShiftRows67",
+          "state_hex": "6a1767b27a822bc5cb8253885fe8225c"
+        },
+        {
+          "round": 3,
+          "operation": "MixColumns67",
+          "state_hex": "90861f3a3f252a2f8c7273f97c6772d4"
+        },
+        {
+          "round": 3,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "dda08bcc525e6c36037a6fad4c4b771b"
+        },
+        {
+          "round": 3,
+          "operation": "ModularAddition",
+          "state_hex": "16b14142a7c8b19aa902b7d7c376da0d"
+        },
+        {
+          "round": 3,
+          "operation": "AddRoundKey67",
+          "state_hex": "221c7d86c60fc83a6e4d865d73128875"
+        },
+        {
+          "round": 4,
+          "operation": "SubBytes67",
+          "state_hex": "d80beb7dcf121d50033a7d63fd24b431"
+        },
+        {
+          "round": 4,
+          "operation": "ShiftRows67",
+          "state_hex": "0312eb31fd3a1d7dd8247d50cf0bb463"
+        },
+        {
+          "round": 4,
+          "operation": "MixColumns67",
+          "state_hex": "4a900ff7940f07714ace029bb9686c99"
+        },
+        {
+          "round": 4,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "39781078ce45e8d6c69103f16d644e4d"
+        },
+        {
+          "round": 4,
+          "operation": "FeistelCrossMix",
+          "state_hex": "cc2ddbd0f687cfd9334299a3e00162aa"
+        },
+        {
+          "round": 4,
+          "operation": "ModularAddition",
+          "state_hex": "1dd0891c69ae63882a6d7f09e40d5907"
+        },
+        {
+          "round": 4,
+          "operation": "AddRoundKey67",
+          "state_hex": "746b07ae73327995c7da83720db65221"
+        },
+        {
+          "round": 5,
+          "operation": "SubBytes67",
+          "state_hex": "1cfc7734fd7cdf217bdd1915c3cce6d5"
+        },
+        {
+          "round": 5,
+          "operation": "ShiftRows67",
+          "state_hex": "7b7c77d5c3dddf341ccc1921fdfce615"
+        },
+        {
+          "round": 5,
+          "operation": "MixColumns67",
+          "state_hex": "d65b03853cc4648cb9c62b342ea640c4"
+        },
+        {
+          "round": 5,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "ed51dd9c9384d013391816e6088aa0cb"
+        },
+        {
+          "round": 5,
+          "operation": "ModularAddition",
+          "state_hex": "d04f30794da5da964dedcba1c6b79da9"
+        },
+        {
+          "round": 5,
+          "operation": "AddRoundKey67",
+          "state_hex": "d79ff6e9f0541685e4c9b209d1be19df"
+        },
+        {
+          "round": 6,
+          "operation": "SubBytes67",
+          "state_hex": "ba13230561b3ab65787a83a4d00ebf58"
+        },
+        {
+          "round": 6,
+          "operation": "ShiftRows67",
+          "state_hex": "78b32358d07aab05ba0e83656113bfa4"
+        },
+        {
+          "round": 6,
+          "operation": "MixColumns67",
+          "state_hex": "85a845757763463d778814d35eaf768f"
+        },
+        {
+          "round": 6,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "b5a2097c458f6ae979a4ce791dcdc7cc"
+        },
+        {
+          "round": 6,
+          "operation": "FeistelCrossMix",
+          "state_hex": "c5828f9fac06bc94d9920dbbb74169a0"
+        },
+        {
+          "round": 6,
+          "operation": "ModularAddition",
+          "state_hex": "ff6a55ff706005c407cf809631b81d8e"
+        },
+        {
+          "round": 6,
+          "operation": "AddRoundKey67",
+          "state_hex": "c81b7ab6834b63bddad9953496d9bcc2"
+        },
+        {
+          "round": 7,
+          "operation": "SubBytes67",
+          "state_hex": "1d476acc191fff96dde821382be82dc2"
+        },
+        {
+          "round": 7,
+          "operation": "ShiftRows67",
+          "state_hex": "dd1f6ac22be8ffcc1de8219619472d38"
+        },
+        {
+          "round": 7,
+          "operation": "MixColumns67",
+          "state_hex": "f0f0a1cf8f826da9c9e97439523eb397"
+        },
+        {
+          "round": 7,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "f36b9594006fd96429fe2ed8f790647e"
+        },
+        {
+          "round": 7,
+          "operation": "ModularAddition",
+          "state_hex": "53ff1306d06b34ac77a73b81a11b5324"
+        },
+        {
+          "round": 7,
+          "operation": "AddRoundKey67",
+          "state_hex": "aa5a731bf9320ff910570d7d6c608a7e"
+        },
+        {
+          "round": 8,
+          "operation": "SubBytes67",
+          "state_hex": "2c8afd47817c12813e42c3eb89321676"
+        },
+        {
+          "round": 8,
+          "operation": "ShiftRows67",
+          "state_hex": "3e7cfd76894212472c32c381818a16eb"
+        },
+        {
+          "round": 8,
+          "operation": "MixColumns67",
+          "state_hex": "316996cd716fd481b3c85af95d860649"
+        },
+        {
+          "round": 8,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "6240afb8638358cb3173d85fdc8d4ac5"
+        },
+        {
+          "round": 8,
+          "operation": "FeistelCrossMix",
+          "state_hex": "0771c8f04a8f1399b59769f361053320"
+        },
+        {
+          "round": 8,
+          "operation": "ModularAddition",
+          "state_hex": "fe21648ae739f7256eb0fa2698263e4a"
+        },
+        {
+          "round": 8,
+          "operation": "AddRoundKey67",
+          "state_hex": "d78500c4533777e763a7ebd7a2102491"
+        },
+        {
+          "round": 9,
+          "operation": "SubBytes67",
+          "state_hex": "ba6522c14597f130ffed5abaea3ec5d3"
+        },
+        {
+          "round": 9,
+          "operation": "ShiftRows67",
+          "state_hex": "ff9722d3eaedf1c1ba3e5a304565c5ba"
+        },
+        {
+          "round": 9,
+          "operation": "MixColumns67",
+          "state_hex": "9966977edc98f94d89485b01c73c4300"
+        },
+        {
+          "round": 9,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "8709abc93a42114aac7baeb235c27a68"
+        },
+        {
+          "round": 9,
+          "operation": "ModularAddition",
+          "state_hex": "e9118c9bcf87339d878c1e93d726a3e1"
+        },
+        {
+          "round": 9,
+          "operation": "AddRoundKey67",
+          "state_hex": "8ed2f1e03d016cb5ae1b315a5cd5a551"
+        },
+        {
+          "round": 10,
+          "operation": "SubBytes67",
+          "state_hex": "c4366786ec8f892e34472f8afb8e0a02"
+        },
+        {
+          "round": 10,
+          "operation": "ShiftRows67",
+          "state_hex": "348f6702fb478986c48e2f2eec360a8a"
+        },
+        {
+          "round": 10,
+          "operation": "MixColumns67",
+          "state_hex": "3feb313dfa42d85b5af94f7b566ca154"
+        },
+        {
+          "round": 10,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "512aab5cb4b95c8ffcdaffd6d75ac070"
+        },
+        {
+          "round": 10,
+          "operation": "FeistelCrossMix",
+          "state_hex": "5f3e7e8d329d76f1da94eefdcb17f0a0"
+        },
+        {
+          "round": 10,
+          "operation": "ModularAddition",
+          "state_hex": "3f6573b2837f5f3f15ca73c1be9db0d7"
+        },
+        {
+          "round": 10,
+          "operation": "AddRoundKey67",
+          "state_hex": "4055521fadad97dc002e3ee658ff3dc7"
+        }
+      ]
+    },
+    {
+      "name": "ones",
+      "key_hex": "ffffffffffffffffffffffffffffffff",
+      "plaintext_hex": "ffffffffffffffffffffffffffffffff",
+      "ciphertext_hex": "c8505f0d55d3888f88dae2bd01a59686",
+      "subkeys_hex": [
+        "ffffffffffffffffffffffffffffffff",
+        "4b2d2d2db4d2d2d24b2d2d2db4d2d2d2",
+        "181b1bf7acc9c925e7e4e408533636da",
+        "4c2cc6b2e0e50f970701eb9f5437dd45",
+        "b452610154b76e9653b685090781584c",
+        "234c5e7677fb30e0244db5e923cceda5",
+        "bf9054f3c86b6413ec26d1facfea3c5f",
+        "8c9dd60044f6b213a8d063e9673a5fb6",
+        "3b1f1a9b7fe9a888d739cb61b00394d7",
+        "d41fa05babf608d37ccfc3b2cccc5765",
+        "5e5d3e80f5ab36538964f5e145a8a284",
+        "b4b73927411c0f74c878fa958dd05811",
+        "22a9748563b57bf1abcd8164261dd975",
+        "1b41452678f43ed7d339bfb3f52466c6",
+        "f41d8ab68ce9b4615fd00bd2aaf46d14",
+        "7d872a9af16e9efbaebe9529044af83d",
+        "4032c627b15c58dc1fe2cdf51ba835c8",
+        "9871db60292d83bc36cf4e492d677b81",
+        "d8153b96f138b82ac7f7f663ea908de2",
+        "85b79d82748f25a8b378d3cb59e85e29",
+        "bb70156dcfff30c57c87e30e256fbd27"
+      ],
+      "snapshots": [
+        {
+          "round": 0,
+          "operation": "AddRoundKey67",
+          "state_hex": "43434343434343434343434343434343"
+        },
+        {
+          "round": 1,
+          "operation": "SubBytes67",
+          "state_hex": "cececececececececececececececece"
+        },
+        {
+          "round": 1,
+          "operation": "ShiftRows67",
+          "state_hex": "cececececececececececececececece"
+        },
+        {
+          "round": 1,
+          "operation": "MixColumns67",
+          "state_hex": "925c925c925c925c925c925c925c925c"
+        },
+        {
+          "round": 1,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "8618f3cfaeba79e71c71451441041041"
+        },
+        {
+          "round": 1,
+          "operation": "ModularAddition",
+          "state_hex": "d14520fc628c4bb9679e7241f5d6e213"
+        },
+        {
+          "round": 1,
+          "operation": "AddRoundKey67",
+          "state_hex": "8a1d78488d06c1dfc339d50ae5a3978a"
+        },
+        {
+          "round": 2,
+          "operation": "SubBytes67",
+          "state_hex": "16f57306a2b84a5811558e4c87446016"
+        },
+        {
+          "round": 2,
+          "operation": "ShiftRows67",
+          "state_hex": "11b8731687554a0616448e58a2f5604c"
+        },
+        {
+          "round": 2,
+          "operation": "MixColumns67",
+          "state_hex": "55d9251af9fdb3aab4f6a3db291091e6"
+        },
+        {
+          "round": 2,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "189db4df60f4f53b505dd60d6a0beeb3"
+        },
+        {
+          "round": 2,
+          "operation": "FeistelCrossMix",
+          "state_hex": "5f174b47dd6e68775a598f9d182b266c"
+        },
+        {
+          "round": 2,
+          "operation": "ModularAddition",
+          "state_hex": "ab4311f9bd53770e615a7a3c6c6203b1"
+        },
+        {
+          "round": 2,
+          "operation": "AddRoundKey67",
+          "state_hex": "5c5233bbaaa75adb71afbc7628a018be"
+        },
+        {
+          "round": 3,
+          "operation": "SubBytes67",
+          "state_hex": "fbe64be22ced8a1a92792de362f2f70e"
+        },
+        {
+          "round": 3,
+          "operation": "ShiftRows67",
+          "state_hex": "92ed4b0e62798ae2fbf22d1a2ce6f7e3"
+        },
+        {
+          "round": 3,
+          "operation": "MixColumns67",
+          "state_hex": "efad2c65d2f3f69bc40415c515460605"
+        },
+        {
+          "round": 3,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "b09b6dade40bac49b3a0d5419643fa44"
+        },
+        {
+          "round": 3,
+          "operation": "ModularAddition",
+          "state_hex": "d3e7cb235b06dc29d7ed8a2ab90fe7e9"
+        },
+        {
+          "round": 3,
+          "operation": "AddRoundKey67",
+          "state_hex": "2f34dc93d02efb797888189335a698f5"
+        },
+        {
+          "round": 4,
+          "operation": "SubBytes67",
+          "state_hex": "d738f9ac298df4df73b4f7ac435dc690"
+        },
+        {
+          "round": 4,
+          "operation": "ShiftRows67",
+          "state_hex": "738df99043b4f4acd75df7df2938c6ac"
+        },
+        {
+          "round": 4,
+          "operation": "MixColumns67",
+          "state_hex": "0ae8a53056ec4c64073d1e183b516d64"
+        },
+        {
+          "round": 4,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "3eb7006c801a598bbc0123365af10f39"
+        },
+        {
+          "round": 4,
+          "operation": "FeistelCrossMix",
+          "state_hex": "d459cccc72a02d49897d8cb96d7f88fc"
+        },
+        {
+          "round": 4,
+          "operation": "ModularAddition",
+          "state_hex": "60f6a2ccb696df5c314defa2d4b9e7b2"
+        },
+        {
+          "round": 4,
+          "operation": "AddRoundKey67",
+          "state_hex": "18aafb148a3c3497a537678027f93026"
+        },
+        {
+          "round": 5,
+          "operation": "SubBytes67",
+          "state_hex": "f72cf4a0160d38600a979b66018195a3"
+        },
+        {
+          "round": 5,
+          "operation": "ShiftRows67",
+          "state_hex": "0a0df4a3019738a0f7819b60162c9566"
+        },
+        {
+          "round": 5,
+          "operation": "MixColumns67",
+          "state_hex": "e3213c0b90224ef359a82c3ed789ebf6"
+        },
+        {
+          "round": 5,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "e02e4e1c8de5ec046ee4b8f6d7a10f32"
+        },
+        {
+          "round": 5,
+          "operation": "ModularAddition",
+          "state_hex": "b44dee7738dbf4d7eab37ba8a36d6697"
+        },
+        {
+          "round": 5,
+          "operation": "AddRoundKey67",
+          "state_hex": "a95393b48e3381c72094cd0aa5868750"
+        },
+        {
+          "round": 6,
+          "operation": "SubBytes67",
+          "state_hex": "a145acdac44be07b6b00684c0a7d3be5"
+        },
+        {
+          "round": 6,
+          "operation": "ShiftRows67",
+          "state_hex": "6b4bace50a00e0daa17d687bc4453b4c"
+        },
+        {
+          "round": 6,
+          "operation": "MixColumns67",
+          "state_hex": "97f3e99ce4a7f5ac98e52b41faf6ca3a"
+        },
+        {
+          "round": 6,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "bf5db5d0b9a11b0e2b74dfa33a3fe45b"
+        },
+        {
+          "round": 6,
+          "operation": "FeistelCrossMix",
+          "state_hex": "239e2f4767f2a2b9d2868d6b63bcaf84"
+        },
+        {
+          "round": 6,
+          "operation": "ModularAddition",
+          "state_hex": "d755686ea80eb12d9afe8700f08c0795"
+        },
+        {
+          "round": 6,
+          "operation": "AddRoundKey67",
+          "state_hex": "b6bf5fa888f8899f7270452795d29da3"
+        },
+        {
+          "round": 7,
+          "operation": "SubBytes67",
+          "state_hex": "cc1b82e1b4b54913157fa70121360844"
+        },
+        {
+          "round": 7,
+          "operation": "ShiftRows67",
+          "state_hex": "15b58244217f49e1cc36a713b41b0801"
+        },
+        {
+          "round": 7,
+          "operation": "MixColumns67",
+          "state_hex": "f01e31ad618d0e8975dc71dee9eca514"
+        },
+        {
+          "round": 7,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "a9f1d73459b2e00c50d36f59cfca18e3"
+        },
+        {
+          "round": 7,
+          "operation": "ModularAddition",
+          "state_hex": "c4321c5ad1a61ee3230c2e0cc4ee7ea9"
+        },
+        {
+          "round": 7,
+          "operation": "AddRoundKey67",
+          "state_hex": "736cd5af1e0ce9c13f9f669d2d5950fe"
+        },
+        {
+          "round": 8,
+          "operation": "SubBytes67",
+          "state_hex": "fd898e79ee9c054ad9135c08f6efe5f8"
+        },
+        {
+          "round": 8,
+          "operation": "ShiftRows67",
+          "state_hex": "d99c8ef8f6130579fdef5c4aee89e508"
+        },
+        {
+          "round": 8,
+          "operation": "MixColumns67",
+          "state_hex": "5b9cfd92a95f438df8cf23a1d137c9b0"
+        },
+        {
+          "round": 8,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "575c97d1c8e5ab17b3998eb9263a5ba3"
+        },
+        {
+          "round": 8,
+          "operation": "FeistelCrossMix",
+          "state_hex": "b0d099494a1a91e07b45fd28cc2f3dde"
+        },
+        {
+          "round": 8,
+          "operation": "ModularAddition",
+          "state_hex": "2d57c3e33b882fdb29039251d079351b"
+        },
+        {
+          "round": 8,
+          "operation": "AddRoundKey67",
+          "state_hex": "2e264687c997344475a21ce788924390"
+        },
+        {
+          "round": 9,
+          "operation": "SubBytes67",
+          "state_hex": "8da33c3b7a6038ca31ea0b30b4face59"
+        },
+        {
+          "round": 9,
+          "operation": "ShiftRows67",
+          "state_hex": "31603c59b4ea383b8dfa0bca7aa3ce30"
+        },
+        {
+          "round": 9,
+          "operation": "MixColumns67",
+          "state_hex": "ffb2ba1ee5385132c826d8e80e8124a4"
+        },
+        {
+          "round": 9,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "d23c9ae7f7468418aac3c08afa098558"
+        },
+        {
+          "round": 9,
+          "operation": "ModularAddition",
+          "state_hex": "6aad7547207307d4e0920ed3277000d9"
+        },
+        {
+          "round": 9,
+          "operation": "AddRoundKey67",
+          "state_hex": "f1fb0d929208fcbd6426bbf38ea3ce78"
+        },
+        {
+          "round": 10,
+          "operation": "SubBytes67",
+          "state_hex": "67f4c3fafa6946969da3e2cbc444b773"
+        },
+        {
+          "round": 10,
+          "operation": "ShiftRows67",
+          "state_hex": "9d69c373c4a346fa6744e296faf4b7cb"
+        },
+        {
+          "round": 10,
+          "operation": "MixColumns67",
+          "state_hex": "fc353ee6d07232882fc7d5a855008e37"
+        },
+        {
+          "round": 10,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "c0de9e3f6263a8dd82361c80d2f3bac4"
+        },
+        {
+          "round": 10,
+          "operation": "FeistelCrossMix",
+          "state_hex": "abac6ca165e0d66104a66f250ea10ab9"
+        },
+        {
+          "round": 10,
+          "operation": "ModularAddition",
+          "state_hex": "30630923d96ffb09b71e42f0678968e2"
+        },
+        {
+          "round": 10,
+          "operation": "AddRoundKey67",
+          "state_hex": "c8505f0d55d3888f88dae2bd01a59686"
+        }
+      ]
+    },
+    {
+      "name": "incrementing",
+      "key_hex": "000102030405060708090a0b0c0d0e0f",
+      "plaintext_hex": "000102030405060708090a0b0c0d0e0f",
+      "ciphertext_hex": "00e0bdba29341f59128a09203dbbbb6d",
+      "subkeys_hex": [
+        "000102030405060708090a0b0c0d0e0f",
+        "a53c109fa1391698a9301c93a53d129c",
+        "2c1890958d21860d24119a9e812c8802",
+        "e0ac80756d8d0678499c9ce6c8b014e4",
+        "4f0cf8682281fe106b1d62f6a3ad7612",
+        "66efdc2c446e223c2f7340ca8cde36d8",
+        "f7d89d15b3b6bf299cc5ffe3101bc93b",
+        "97a24c2b2414f302b8d10ce1a8cac5da",
+        "566f91ca727b62c8caaa6e296260abf3",
+        "18fe5a536a85389ba02f56b2c24ffd41",
+        "0793e4916d16dc0acd398ab80f7677f9",
+        "ef6265838274b9894f4d3331403b44c8",
+        "81a878f303dcc17a4c91f24b0caab683",
+        "6164616f62b8a0152e29525e2283e4dd",
+        "521c1fb730a4bfa21e8dedfc3c0e0921",
+        "92b8cabaa21c7518bc9198e4809f91c5",
+        "c96b07dc6b7772c4d7e6ea2057797be5",
+        "2f0f809e4478f25a939e187ac4e7639f",
+        "c4f0935f808861051316797fd7f11ae0",
+        "a74c15e527c474e034d20d9fe323177f",
+        "835b3d71a49f4991904d440e736e5371"
+      ],
+      "snapshots": [
+        {
+          "round": 0,
+          "operation": "AddRoundKey67",
+          "state_hex": "43434343434343434343434343434343"
+        },
+        {
+          "round": 1,
+          "operation": "SubBytes67",
+          "state_hex": "cececececececececececececececece"
+        },
+        {
+          "round": 1,
+          "operation": "ShiftRows67",
+          "state_hex": "cececececececececececececececece"
+        },
+        {
+          "round": 1,
+          "operation": "MixColumns67",
+          "state_hex": "925c925c925c925c925c925c925c925c"
+        },
+        {
+          "round": 1,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "8618f3cfaeba79e71c71451441041041"
+        },
+        {
+          "round": 1,
+          "operation": "ModularAddition",
+          "state_hex": "2b54036e4ff38f7fc5a161a7e64122dd"
+        },
+        {
+          "round": 1,
+          "operation": "AddRoundKey67",
+          "state_hex": "440fd0b881914a31a2f3b87a242ee99c"
+        },
+        {
+          "round": 2,
+          "operation": "SubBytes67",
+          "state_hex": "ca1229e4e0d3752feacbe46ac58d0580"
+        },
+        {
+          "round": 2,
+          "operation": "ShiftRows67",
+          "state_hex": "ead32980c5cb75e4ca8de42fe012056a"
+        },
+        {
+          "round": 2,
+          "operation": "MixColumns67",
+          "state_hex": "3069166a8f99dcaf860f6845214a8fde"
+        },
+        {
+          "round": 2,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "2c99e6a5226c14d4316f751f95744e2a"
+        },
+        {
+          "round": 2,
+          "operation": "FeistelCrossMix",
+          "state_hex": "fe37d43c391fa7a472fe3e5cc9c7d9a0"
+        },
+        {
+          "round": 2,
+          "operation": "ModularAddition",
+          "state_hex": "dee354b1a6acad1cbb9ada429177ed84"
+        },
+        {
+          "round": 2,
+          "operation": "AddRoundKey67",
+          "state_hex": "d2acef9ac76e104f93c4fbf77199d8d5"
+        },
+        {
+          "round": 3,
+          "operation": "SubBytes67",
+          "state_hex": "368472567b033e4eacc1f45b92ad418e"
+        },
+        {
+          "round": 3,
+          "operation": "ShiftRows67",
+          "state_hex": "ac03728e92c13e5636adf44e7b84415b"
+        },
+        {
+          "round": 3,
+          "operation": "MixColumns67",
+          "state_hex": "b133bae2225dc8cc9cbab1f001e64dcc"
+        },
+        {
+          "round": 3,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "c7c0b7b753de40512701f5b5926e0833"
+        },
+        {
+          "round": 3,
+          "operation": "ModularAddition",
+          "state_hex": "2daf93e3974c628d5674357f1e4c3e0b"
+        },
+        {
+          "round": 3,
+          "operation": "AddRoundKey67",
+          "state_hex": "99344db567b99ee789f289df4d14b473"
+        },
+        {
+          "round": 4,
+          "operation": "SubBytes67",
+          "state_hex": "ad383a2e9b04253049c949583aa0dafd"
+        },
+        {
+          "round": 4,
+          "operation": "ShiftRows67",
+          "state_hex": "49043afd3ac9252eada049309b38da58"
+        },
+        {
+          "round": 4,
+          "operation": "MixColumns67",
+          "state_hex": "cde8de1c82e88cccbc53942064646e8a"
+        },
+        {
+          "round": 4,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "ffab2fe2029e92119675ada0103582c0"
+        },
+        {
+          "round": 4,
+          "operation": "FeistelCrossMix",
+          "state_hex": "89e92a0ce96c0b22f65047195658fe02"
+        },
+        {
+          "round": 4,
+          "operation": "ModularAddition",
+          "state_hex": "208b76370d80fe24ae2153fafe22c3dc"
+        },
+        {
+          "round": 4,
+          "operation": "AddRoundKey67",
+          "state_hex": "35a7a4be3cb8dfaf27c87e90df012b6c"
+        },
+        {
+          "round": 5,
+          "operation": "SubBytes67",
+          "state_hex": "43edc80e0de45879011d7659588f0989"
+        },
+        {
+          "round": 5,
+          "operation": "ShiftRows67",
+          "state_hex": "01e4c889581d580e438f76790ded0959"
+        },
+        {
+          "round": 5,
+          "operation": "MixColumns67",
+          "state_hex": "234852f2b0b1643a0a56d75c4f8756dc"
+        },
+        {
+          "round": 5,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "205b4b6f875656f63932cca5c84f2d00"
+        },
+        {
+          "round": 5,
+          "operation": "ModularAddition",
+          "state_hex": "3859a5c2f1db8e91d96122578a9e2a41"
+        },
+        {
+          "round": 5,
+          "operation": "AddRoundKey67",
+          "state_hex": "7c890210df8e11d8571bebacc6ab1efb"
+        },
+        {
+          "round": 6,
+          "operation": "SubBytes67",
+          "state_hex": "a849103e58c44d4142475a84cf91eef4"
+        },
+        {
+          "round": 6,
+          "operation": "ShiftRows67",
+          "state_hex": "42c410f4cf474d3ea8915a415849ee84"
+        },
+        {
+          "round": 6,
+          "operation": "MixColumns67",
+          "state_hex": "b26beb918275fbb426babf7b062e9d8f"
+        },
+        {
+          "round": 6,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "c7caad77b63e72b37b047253f32764b7"
+        },
+        {
+          "round": 6,
+          "operation": "FeistelCrossMix",
+          "state_hex": "ce8e73174cfa7ebf99972ced89f8a88c"
+        },
+        {
+          "round": 6,
+          "operation": "ModularAddition",
+          "state_hex": "bdf0d89ace6e3748e8e45f1ec933ec54"
+        },
+        {
+          "round": 6,
+          "operation": "AddRoundKey67",
+          "state_hex": "7f1be32a8ef1b571e736ee1686da1994"
+        },
+        {
+          "round": 7,
+          "operation": "SubBytes67",
+          "state_hex": "284794bbc4672e923037aaab7dddbf00"
+        },
+        {
+          "round": 7,
+          "operation": "ShiftRows67",
+          "state_hex": "306794007d372ebb28ddaa92c447bfab"
+        },
+        {
+          "round": 7,
+          "operation": "MixColumns67",
+          "state_hex": "d5944344b430b6ef78cc7290bfa10098"
+        },
+        {
+          "round": 7,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "bd18bc196b86ee460c9286900c0dbdca"
+        },
+        {
+          "round": 7,
+          "operation": "ModularAddition",
+          "state_hex": "1e7c1d88cd3e8e5b3abbd8ee2e90a1a7"
+        },
+        {
+          "round": 7,
+          "operation": "AddRoundKey67",
+          "state_hex": "0f23417cbed972ba6775765151ddebc5"
+        },
+        {
+          "round": 8,
+          "operation": "SubBytes67",
+          "state_hex": "1285bea80ee815339b31e302027e5acd"
+        },
+        {
+          "round": 8,
+          "operation": "ShiftRows67",
+          "state_hex": "9be8becd023115a8127ee3330e855a02"
+        },
+        {
+          "round": 8,
+          "operation": "MixColumns67",
+          "state_hex": "15c7cb3c4af32a042f9f6e55d6ef9649"
+        },
+        {
+          "round": 8,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "1793c9711b397abb0b6afb9701d5f1c6"
+        },
+        {
+          "round": 8,
+          "operation": "FeistelCrossMix",
+          "state_hex": "547df890b480111265f07ac76c6047a1"
+        },
+        {
+          "round": 8,
+          "operation": "ModularAddition",
+          "state_hex": "e635c24a569c862a218112abecffd866"
+        },
+        {
+          "round": 8,
+          "operation": "AddRoundKey67",
+          "state_hex": "6c1d86d57ea8b7adb524bbc8f8c5e0c0"
+        },
+        {
+          "round": 9,
+          "operation": "SubBytes67",
+          "state_hex": "89f57d8e76e15f5e2ec5e21db5cd8654"
+        },
+        {
+          "round": 9,
+          "operation": "ShiftRows67",
+          "state_hex": "2ee17d54b5c55f8e89cde25e76f5861d"
+        },
+        {
+          "round": 9,
+          "operation": "MixColumns67",
+          "state_hex": "b5fc80c90eea8994200a0d793131870f"
+        },
+        {
+          "round": 9,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "df43b42404295951106de052f007d9ac"
+        },
+        {
+          "round": 9,
+          "operation": "ModularAddition",
+          "state_hex": "0e5234c248a14baba30bf8ccb4ee3c4b"
+        },
+        {
+          "round": 9,
+          "operation": "AddRoundKey67",
+          "state_hex": "89e1e4de8b6a69edf35ec2f0205c65e8"
+        },
+        {
+          "round": 10,
+          "operation": "SubBytes67",
+          "state_hex": "495278d6f0b6a9dccbc7c2616bfb9e9f"
+        },
+        {
+          "round": 10,
+          "operation": "ShiftRows67",
+          "state_hex": "cbb6789f6bc7a9d649fbc2dcf0529e61"
+        },
+        {
+          "round": 10,
+          "operation": "MixColumns67",
+          "state_hex": "d77cb26e2c4e352771fbf7dc1a89d41b"
+        },
+        {
+          "round": 10,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "a602d232e3f3dc7718dfc0307fdeb5df"
+        },
+        {
+          "round": 10,
+          "operation": "FeistelCrossMix",
+          "state_hex": "19acaea3a724a1ab8db201ce2a7394e0"
+        },
+        {
+          "round": 10,
+          "operation": "ModularAddition",
+          "state_hex": "c0f8c388cee8158bc1840e6d0d96ab5f"
+        },
+        {
+          "round": 10,
+          "operation": "AddRoundKey67",
+          "state_hex": "00e0bdba29341f59128a09203dbbbb6d"
+        }
+      ]
+    },
+    {
+      "name": "fixture",
+      "key_hex": "00112233445566778899aabbccddeeff",
+      "plaintext_hex": "456d6261726b206174206461776e210a",
+      "ciphertext_hex": "1ab2aaf1b41239405a6653a180b22107",
+      "subkeys_hex": [
+        "00112233445566778899aabbccddeeff",
+        "18bbf0e85cee969fd4773c2418aad2db",
+        "518dea1f0d637c80d91440a4c1be927f",
+        "3c77c2553114bed5e800fe7129be6c0e",
+        "5dfeffdd6cea410884eabf79ad54d377",
+        "99de0e83f5344f8b71def0f2dc8a2385",
+        "c85b6b7a3d6f24f14cb1d403903bf786",
+        "3e001623036f32d24fdee6d1dfe51157",
+        "5e4d547b5d2266a912fc8078cd19912f",
+        "9d9e8313c0bce5bad24065c21f59f4ed",
+        "23ea5f7fe356bac53116df072e4f2bea",
+        "66e34bf285b5f137b4a32e309aec05da",
+        "d50a96a450bf6793e41c49a37ef04c79",
+        "783549d2288a2e41cc9667e2b2662b9b",
+        "0e3c265126b60810ea206ff258464469",
+        "cff68f4fe940875f0360e8ad5b26acc4",
+        "24724ef6cd32c9a9ce52210495748dc0",
+        "01d01ad7cce2d37e02b0f27a97c47fba",
+        "1bf829b7d71afac9d5aa08b3426e7709",
+        "1c098d3bcb1377f21eb97f415cd70848",
+        "07608bc0cc73fc32d2ca83738e1d8b3b"
+      ],
+      "snapshots": [
+        {
+          "round": 0,
+          "operation": "AddRoundKey67",
+          "state_hex": "063f0311757d0555bffa8d99f8f08cb6"
+        },
+        {
+          "round": 1,
+          "operation": "SubBytes67",
+          "state_hex": "b8d9934d31ebe98b1bd4a2adb56139cc"
+        },
+        {
+          "round": 1,
+          "operation": "ShiftRows67",
+          "state_hex": "1beb93ccb5d4e94db861a28b31d939ad"
+        },
+        {
+          "round": 1,
+          "operation": "MixColumns67",
+          "state_hex": "b9212114810a19327024005339612fe8"
+        },
+        {
+          "round": 1,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "893c806024854c00c0a1f30cba244df0"
+        },
+        {
+          "round": 1,
+          "operation": "ModularAddition",
+          "state_hex": "a1f770488073e29f94182f30d2ce1fcb"
+        },
+        {
+          "round": 1,
+          "operation": "AddRoundKey67",
+          "state_hex": "b339d914ce53dd5c0e4f2cd75033cef7"
+        },
+        {
+          "round": 2,
+          "operation": "SubBytes67",
+          "state_hex": "5155e8a0b7457efb3d4eafbae54bb75b"
+        },
+        {
+          "round": 2,
+          "operation": "ShiftRows67",
+          "state_hex": "3d45e85be54e7ea0514baffbb755b7ba"
+        },
+        {
+          "round": 2,
+          "operation": "MixColumns67",
+          "state_hex": "145bdf8ff89ac586fa14add03f2097f6"
+        },
+        {
+          "round": 2,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "2f5fbeaf52f55eac3aed52c6280a8ae2"
+        },
+        {
+          "round": 2,
+          "operation": "FeistelCrossMix",
+          "state_hex": "43803b64c9f2eefb572946108c838cf5"
+        },
+        {
+          "round": 2,
+          "operation": "ModularAddition",
+          "state_hex": "7ff7fdb9fa06acd03f294481b541f803"
+        },
+        {
+          "round": 2,
+          "operation": "AddRoundKey67",
+          "state_hex": "614a4127d5afae9bf880b8bb5b566837"
+        },
+        {
+          "round": 3,
+          "operation": "SubBytes67",
+          "state_hex": "9875be018e79346fb566e4e2b9b2de97"
+        },
+        {
+          "round": 3,
+          "operation": "ShiftRows67",
+          "state_hex": "b579be97b966340198b2e46f8e75dee2"
+        },
+        {
+          "round": 3,
+          "operation": "MixColumns67",
+          "state_hex": "dc3f368202d895ad7510aba1f5cb5dc5"
+        },
+        {
+          "round": 3,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "ecc1be277bdc882391811d2637a2dfa6"
+        },
+        {
+          "round": 3,
+          "operation": "ModularAddition",
+          "state_hex": "859fccaa7010d7ae025f0d18132c022b"
+        },
+        {
+          "round": 3,
+          "operation": "AddRoundKey67",
+          "state_hex": "0e87e4930e3cb01c0dad9a58c054b6ee"
+        },
+        {
+          "round": 4,
+          "operation": "SubBytes67",
+          "state_hex": "3d3b78ac3d0dc00bc35e561e54b3ccaa"
+        },
+        {
+          "round": 4,
+          "operation": "ShiftRows67",
+          "state_hex": "c30d78aa545ec0ac3db3560b3d3bcc1e"
+        },
+        {
+          "round": 4,
+          "operation": "MixColumns67",
+          "state_hex": "cbd7ec27d45d1fe7403a82216846ff89"
+        },
+        {
+          "round": 4,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "fe28152bb074b63b87a1b9712e64567d"
+        },
+        {
+          "round": 4,
+          "operation": "FeistelCrossMix",
+          "state_hex": "2cf17a7f3f86c8501283d1923b78e59d"
+        },
+        {
+          "round": 4,
+          "operation": "ModularAddition",
+          "state_hex": "6af190a242f5fa226161b7631a5df6f4"
+        },
+        {
+          "round": 4,
+          "operation": "AddRoundKey67",
+          "state_hex": "77ff879a5c94dfc830de745894072498"
+        },
+        {
+          "round": 5,
+          "operation": "SubBytes67",
+          "state_hex": "f1d23b56fb00581d95d61c1e0077c5c6"
+        },
+        {
+          "round": 5,
+          "operation": "ShiftRows67",
+          "state_hex": "95003bc600d65856f1771c1dfbd2c51e"
+        },
+        {
+          "round": 5,
+          "operation": "MixColumns67",
+          "state_hex": "9e5a8138793f65ee5df27b94c12a71b3"
+        },
+        {
+          "round": 5,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "a7a4d459d897543eb5df0eab21cbac37"
+        },
+        {
+          "round": 5,
+          "operation": "ModularAddition",
+          "state_hex": "4442576c985339f8871f736d4024a024"
+        },
+        {
+          "round": 5,
+          "operation": "AddRoundKey67",
+          "state_hex": "24eb4b503846c07ef54aef292d28c88d"
+        },
+        {
+          "round": 6,
+          "operation": "SubBytes67",
+          "state_hex": "c55a1fe5b03c547690757288f6621da2"
+        },
+        {
+          "round": 6,
+          "operation": "ShiftRows67",
+          "state_hex": "903c1fa2f67554e5c5627276b05a1d88"
+        },
+        {
+          "round": 6,
+          "operation": "MixColumns67",
+          "state_hex": "ba0a7913e01b42e1aa91e075007cf1b8"
+        },
+        {
+          "round": 6,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "c12cc7d3907563acb60343e1871c44a2"
+        },
+        {
+          "round": 6,
+          "operation": "FeistelCrossMix",
+          "state_hex": "5fa61a3fefdf84434ccbce390b47e6a1"
+        },
+        {
+          "round": 6,
+          "operation": "ModularAddition",
+          "state_hex": "c58965317494757a006efc69a533eb7b"
+        },
+        {
+          "round": 6,
+          "operation": "AddRoundKey67",
+          "state_hex": "53c0b0d6676851aaa731f6899880e441"
+        },
+        {
+          "round": 7,
+          "operation": "SubBytes67",
+          "state_hex": "4554c0719bde022ced2f2349c66678be"
+        },
+        {
+          "round": 7,
+          "operation": "ShiftRows67",
+          "state_hex": "eddec0bec62f02714566232c9b547849"
+        },
+        {
+          "round": 7,
+          "operation": "MixColumns67",
+          "state_hex": "a2603db053bb1ff7e276660876e86e38"
+        },
+        {
+          "round": 7,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "ad770ee9a5193c9e0eb32b29f7650692"
+        },
+        {
+          "round": 7,
+          "operation": "ModularAddition",
+          "state_hex": "25ac57bbcda36adfda49920ba9cb312d"
+        },
+        {
+          "round": 7,
+          "operation": "AddRoundKey67",
+          "state_hex": "68d332a9a856218c732abebab2ce3607"
+        },
+        {
+          "round": 8,
+          "operation": "SubBytes67",
+          "state_hex": "de207ca1e1b2d539fdbb0e3383b73777"
+        },
+        {
+          "round": 8,
+          "operation": "ShiftRows67",
+          "state_hex": "fdb27c7783bbd5a1deb70e39e1203733"
+        },
+        {
+          "round": 8,
+          "operation": "MixColumns67",
+          "state_hex": "d24ce4b4afd13d72f7ad8433a3472ae4"
+        },
+        {
+          "round": 8,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "eaff81d7ac8cd6815da8211d22f87fd8"
+        },
+        {
+          "round": 8,
+          "operation": "FeistelCrossMix",
+          "state_hex": "af634f148cf7ba981153d16fe1f819f1"
+        },
+        {
+          "round": 8,
+          "operation": "ModularAddition",
+          "state_hex": "7e59de63753741f714b3b91c3c1ec5b5"
+        },
+        {
+          "round": 8,
+          "operation": "AddRoundKey67",
+          "state_hex": "1968d3d6fb46cb1d99a2db5bea290b36"
+        },
+        {
+          "round": 9,
+          "operation": "SubBytes67",
+          "state_hex": "bfde2071f43c27f5adea1ab914885737"
+        },
+        {
+          "round": 9,
+          "operation": "ShiftRows67",
+          "state_hex": "ad3c203714ea2771bf881af5f4de57b9"
+        },
+        {
+          "round": 9,
+          "operation": "MixColumns67",
+          "state_hex": "6ca31df7c17fca79361612024379e383"
+        },
+        {
+          "round": 9,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "11f8224114f7a1dbee253f6995418fe5"
+        },
+        {
+          "round": 9,
+          "operation": "ModularAddition",
+          "state_hex": "12c83c18e0d97459f0d531e32c050e9f"
+        },
+        {
+          "round": 9,
+          "operation": "AddRoundKey67",
+          "state_hex": "4a7356ec7480cdd3663c7a132d283ad5"
+        },
+        {
+          "round": 10,
+          "operation": "SubBytes67",
+          "state_hex": "75fdb20c1c6668205c0d6ae7f662508e"
+        },
+        {
+          "round": 10,
+          "operation": "ShiftRows67",
+          "state_hex": "5c66b28ef60d680c75626a201cfd50e7"
+        },
+        {
+          "round": 10,
+          "operation": "MixColumns67",
+          "state_hex": "e40f9e853593826f14cde71347a0318f"
+        },
+        {
+          "round": 10,
+          "operation": "BitPlaneTranspose",
+          "state_hex": "87f32a1f1385e4225e161c59841ede6e"
+        },
+        {
+          "round": 10,
+          "operation": "FeistelCrossMix",
+          "state_hex": "4288d537700f0f3fad361450f115e137"
+        },
+        {
+          "round": 10,
+          "operation": "ModularAddition",
+          "state_hex": "5e9162723b228631cbef93914dece97f"
+        },
+        {
+          "round": 10,
+          "operation": "AddRoundKey67",
+          "state_hex": "1ab2aaf1b41239405a6653a180b22107"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "cipher": "Brainrot Cipher v2",
+  "generated_utc": "2026-10-13T14:16:17.154161+00:00",
+  "base_commit": "60e3c77a1adb96445fa744fa9c7fd05357c797dd",
+  "go_version": "go version go1.26.0 linux/amd64",
+  "os": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "source_sha256": {
+    "src/cipher/brainrot/benchmark_test.go": "ad9351849ad699f1ac41a5a1ab5e25068a65c09b732f995affaf779a6f1bd20f",
+    "src/cipher/brainrot/brainrot.go": "cd12064d2467a914a3c9697ecb9b1e83190b8987c8233391ede7c63c7e74f5ad",
+    "src/cipher/brainrot/brainrot_test.go": "8d092d93d25c99a753cb658c5eedb6e2c153caf8b0d019e8df5c60063a4e1f2a",
+    "src/cipher/brainrot/diffusion_test.go": "0c2bf982e8436e30186998ea188dd6eb4f590a268312b53bcb5c831817e326ae",
+    "src/cipher/brainrot/extensions.go": "6362521025b3b991ca95e69d801d695efec5a2a240d792a5b81032b469371d48",
+    "src/cipher/brainrot/tables.go": "54deef2c9413750b63a646ef881fce673560f52e862b9a9870fef96d223fa683",
+    "src/cipher/brainrot/transformations.go": "19809927d35799359def4be0bc982a2ba7961cea3ee71e2d4a50a61ee48a735f"
+  },
+  "fixtures": {
+    "src/testdata/fixtures/byte-pattern.bin": {
+      "bytes": 1027,
+      "sha256": "785501ee5ebafcdaa93a1d29864209464f8e6ca4f4630bd7bf747018d5b96eb9"
+    },
+    "src/testdata/fixtures/one-block.txt": {
+      "bytes": 16,
+      "sha256": "de57dd2d1e678e4ac56dff6009a81670646ccf8bec39ddec7ba9395134f569be"
+    },
+    "src/testdata/fixtures/repeated-text.txt": {
+      "bytes": 404,
+      "sha256": "c05f33e92162f0971aee6b5cacd06dddf7ecc82ec69a4d6d7866d9041b5f70d8"
+    }
+  },
+  "trials": 256,
+  "modes": [
+    "ECB",
+    "CBC",
+    "CFB",
+    "OFB",
+    "CTR"
+  ],
+  "experiments": [
+    {
+      "file": "baseline-text.json",
+      "cipher": "Brainrot Cipher",
+      "input": "testdata/fixtures/repeated-text.txt",
+      "seed": 42,
+      "key_hex": "00112233445566778899aabbccddeeff"
+    },
+    {
+      "file": "baseline-binary.json",
+      "cipher": "Brainrot Cipher",
+      "input": "testdata/fixtures/byte-pattern.bin",
+      "seed": 42,
+      "key_hex": "00112233445566778899aabbccddeeff"
+    },
+    {
+      "file": "text-seed42.json",
+      "cipher": "Brainrot Cipher v2",
+      "input": "testdata/fixtures/repeated-text.txt",
+      "seed": 42,
+      "key_hex": "00112233445566778899aabbccddeeff"
+    },
+    {
+      "file": "binary-seed42.json",
+      "cipher": "Brainrot Cipher v2",
+      "input": "testdata/fixtures/byte-pattern.bin",
+      "seed": 42,
+      "key_hex": "00112233445566778899aabbccddeeff"
+    },
+    {
+      "file": "text-zero-seed1337.json",
+      "cipher": "Brainrot Cipher v2",
+      "input": "testdata/fixtures/repeated-text.txt",
+      "seed": 1337,
+      "key_hex": "00000000000000000000000000000000"
+    },
+    {
+      "file": "binary-ones-seed1337.json",
+      "cipher": "Brainrot Cipher v2",
+      "input": "testdata/fixtures/byte-pattern.bin",
+      "seed": 1337,
+      "key_hex": "ffffffffffffffffffffffffffffffff"
+    }
+  ],
+  "benchmarks": {
+    "baseline": {
+      "encrypt": {
+        "ns_per_block": [
+          20225,
+          20593,
+          19617
+        ],
+        "median_ns_per_block": 20225
+      },
+      "decrypt": {
+        "ns_per_block": [
+          19764,
+          20608,
+          20141
+        ],
+        "median_ns_per_block": 20141
+      }
+    },
+    "v2": {
+      "encrypt": {
+        "ns_per_block": [
+          27808,
+          24959,
+          24456
+        ],
+        "median_ns_per_block": 24959
+      },
+      "decrypt": {
+        "ns_per_block": [
+          24637,
+          24673,
+          25660
+        ],
+        "median_ns_per_block": 24673
+      }
+    }
+  },
+  "limitations": "Samples and local branch bounds do not establish full-cipher security or authentication.",
+  "reference_sha256": "74d35a68ca6018c78f82f332bdf8484cb2b540906eb78ae15f71cd92a34b41ff",
+  "vectors_sha256": "899eef6920c83c0f303aab9f32b8ce70541e8711789f457293d1fa67582aae8a",
+  "render_script_sha256": "4a16d8711ca03f0c587abe59c44c1b6bdf78dc3e9bf0ffd1c5ec4f50716d3337",
+  "python_version": "Python 3.14.4",
+  "plotting_tool": "matplotlib 3.11.2"
+}
