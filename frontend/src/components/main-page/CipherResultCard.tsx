@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Check, Download, BarChart2, ArrowUpRight, Cpu } from 'lucide-react';
+import { Copy, Check, Download, ArrowUpRight, Cpu } from 'lucide-react';
 import { 
   formatDownloadFilename, 
   triggerFileDownload, 
@@ -27,15 +27,12 @@ export interface CipherResult {
 interface CipherResultCardProps {
   result: CipherResult;
   onUseAsInput: (hexOrText: string) => void;
-  onOpenAnalyze: () => void;
-  onClose: () => void;
+  onOpenAnalyze?: () => void;
 }
 
 export const CipherResultCard: React.FC<CipherResultCardProps> = ({
   result,
   onUseAsInput,
-  onOpenAnalyze,
-  onClose,
 }) => {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<'text' | 'hex' | 'base64'>(
@@ -76,7 +73,7 @@ export const CipherResultCard: React.FC<CipherResultCardProps> = ({
 
   const handleDownload = () => {
     let bytesToDownload: Uint8Array;
-    if (result.action === 'encrypt') {
+    if (isEncrypt) {
       bytesToDownload = result.cipherBytes || hexToBytes(result.outputHex);
     } else {
       bytesToDownload =
@@ -111,23 +108,15 @@ export const CipherResultCard: React.FC<CipherResultCardProps> = ({
               </span>
             </h3>
             <p className="text-[11px] text-gray-500 font-mono">
-              Completed in {result.elapsedMs || 1.2} ms • Shannon Entropy: {result.entropy ?? 7.98} bits/byte
+              {result.elapsedMs || 1.2} ms • Entropy: {result.entropy ?? 7.98}
             </p>
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={onClose}
-          className="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-black border-2 border-black font-bold text-xs shadow-[2px_2px_0px_#000000] transition-all cursor-pointer"
-        >
-          ✕ Close
-        </button>
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3 bg-gray-50 border-2 border-black p-3 shadow-[2px_2px_0px_#000000]">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono font-bold text-gray-700">Target File:</span>
+          <span className="text-xs font-mono font-bold text-gray-700">File:</span>
           <span className="text-xs font-mono font-black bg-[#DEC3A1] border border-black px-2 py-0.5 shadow-[1px_1px_0px_#000000]">
             {downloadFileName}
           </span>
@@ -140,7 +129,7 @@ export const CipherResultCard: React.FC<CipherResultCardProps> = ({
           title={`Download file as ${downloadFileName}`}
         >
           <Download className="w-4 h-4 stroke-[2.5]" />
-          Download {isEncrypt ? 'Encrypted' : 'Decrypted'} File ({downloadFileName})
+          Download ({downloadFileName})
         </button>
       </div>
 
@@ -166,7 +155,7 @@ export const CipherResultCard: React.FC<CipherResultCardProps> = ({
                 : 'bg-white text-black hover:bg-gray-100'
             }`}
           >
-            Hex ({result.outputHex.length / 2} Bytes)
+            Hex ({result.outputHex.length / 2} B)
           </button>
           <button
             type="button"
@@ -192,7 +181,7 @@ export const CipherResultCard: React.FC<CipherResultCardProps> = ({
             </>
           ) : (
             <>
-              <Copy className="w-3.5 h-3.5" /> Copy Content
+              <Copy className="w-3.5 h-3.5" /> Copy
             </>
           )}
         </button>
@@ -201,11 +190,11 @@ export const CipherResultCard: React.FC<CipherResultCardProps> = ({
       <div className="relative border-2 border-black bg-slate-900 text-emerald-400 p-4 font-mono text-xs shadow-[4px_4px_0px_#000000]">
         <div className="flex justify-between items-center pb-2 mb-2 border-b border-slate-700 text-slate-400 text-[11px]">
           <span>
-            {activeTab === 'text' && (isEncrypt ? 'CIPHERTEXT OUTPUT STREAM' : 'DECRYPTED PLAINTEXT STREAM')}
-            {activeTab === 'hex' && 'RAW HEX ENCODING'}
-            {activeTab === 'base64' && 'BASE64 ENCODING'}
+            {activeTab === 'text' && (isEncrypt ? 'Ciphertext' : 'Plaintext')}
+            {activeTab === 'hex' && 'Hex'}
+            {activeTab === 'base64' && 'Base64'}
           </span>
-          <span>{currentDisplayText.length} characters • {result.blocksCount} blocks (128-bit)</span>
+          <span>{currentDisplayText.length} chars • {result.blocksCount} blocks</span>
         </div>
 
         <textarea
@@ -213,7 +202,7 @@ export const CipherResultCard: React.FC<CipherResultCardProps> = ({
           value={currentDisplayText}
           rows={7}
           className="w-full bg-transparent text-emerald-300 font-mono text-xs focus:outline-none resize-y selection:bg-pink-500 selection:text-white"
-          placeholder="Decrypted content will appear here..."
+          placeholder="Result will appear here..."
         />
       </div>
 

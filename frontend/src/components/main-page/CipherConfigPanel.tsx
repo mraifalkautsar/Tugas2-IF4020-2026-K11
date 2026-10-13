@@ -63,13 +63,8 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
             <SlidersHorizontal className="w-4 h-4 stroke-[2.5]" />
           </div>
           <h3 className="text-base font-black uppercase tracking-wider text-black">
-            Cipher Configuration 
+            Cipher Configuration
           </h3>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono font-bold bg-[#DEC3A1] border-2 border-black px-2 py-0.5 shadow-[1px_1px_0px_#000000]">
-            BLOCK SIZE: 128-BIT 
-          </span>
         </div>
       </div>
 
@@ -78,7 +73,7 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
           <div className="flex items-center justify-between">
             <label className="text-xs font-bold uppercase tracking-wider text-black flex items-center gap-1.5">
               <KeyRound className="w-4 h-4 stroke-[2.5]" />
-              Master Key (16 Bytes / 128-Bit)
+              Master Key
             </label>
             <span
               className={`text-[10px] font-mono font-bold px-2 py-0.5 border-2 border-black flex items-center gap-1 ${
@@ -89,11 +84,11 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
             >
               {isKeyValid ? (
                 <>
-                  <Check className="w-3 h-3 stroke-[3]" /> 16 / 16 Bytes
+                  <Check className="w-3 h-3 stroke-[3]" /> 16 B
                 </>
               ) : (
                 <>
-                  <AlertCircle className="w-3 h-3 stroke-[3]" /> {keyBytes} / 16 Bytes 
+                  <AlertCircle className="w-3 h-3 stroke-[3]" /> {keyBytes} / 16 B
                 </>
               )}
             </span>
@@ -104,7 +99,7 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
               type="text"
               value={keyStr}
               onChange={(e) => onKeyChange(e.target.value)}
-              placeholder="e.g. BrainrotKey676767"
+              placeholder="16-byte key..."
               className={`flex-1 bg-white border-2 border-black px-3 py-2 text-xs font-mono text-black focus:outline-none shadow-[2px_2px_0px_#000000] ${
                 !isKeyValid ? 'border-rose-600' : ''
               }`}
@@ -112,10 +107,10 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
             <button
               type="button"
               onClick={handleGenerateKey}
-              className="px-3 py-2 bg-[#DEC3A1] hover:bg-[#d4b58e] text-black font-bold text-xs uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center gap-1.5 transition-all shrink-0"
+              className="px-3 py-2 bg-[#DEC3A1] hover:bg-[#d4b58e] text-black font-bold text-xs uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              Generate Random Key
+              Random
             </button>
           </div>
         </div>
@@ -124,11 +119,11 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
           <div className="flex items-center justify-between">
             <label className="text-xs font-bold uppercase tracking-wider text-black flex items-center gap-1.5">
               <ShieldAlert className="w-4 h-4 stroke-[2.5]" />
-              Initialization Vector / Nonce (IV)
+              IV / Nonce
             </label>
             {isEcbMode ? (
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 border-2 border-black bg-gray-200 text-gray-600">
-                ECB DOES NOT USE IV
+                Not Used (ECB)
               </span>
             ) : (
               <span
@@ -140,11 +135,11 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
               >
                 {isIvValid ? (
                   <>
-                    <Check className="w-3 h-3 stroke-[3]" /> 16 / 16 Bytes
+                    <Check className="w-3 h-3 stroke-[3]" /> 16 B
                   </>
                 ) : (
                   <>
-                    <AlertCircle className="w-3 h-3 stroke-[3]" /> {ivBytes} / 16 Bytes
+                    <AlertCircle className="w-3 h-3 stroke-[3]" /> {ivBytes} / 16 B
                   </>
                 )}
               </span>
@@ -157,7 +152,7 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
               value={ivStr}
               disabled={isEcbMode}
               onChange={(e) => onIvChange(e.target.value)}
-              placeholder="16-byte IV for chaining..."
+              placeholder="16-byte IV..."
               className={`flex-1 bg-white border-2 border-black px-3 py-2 text-xs font-mono text-black focus:outline-none shadow-[2px_2px_0px_#000000] ${
                 isEcbMode ? 'bg-gray-100 opacity-40 cursor-not-allowed shadow-none' : ''
               } ${!isIvValid && !isEcbMode ? 'border-rose-600' : ''}`}
@@ -166,23 +161,14 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
               type="button"
               disabled={isEcbMode}
               onClick={handleGenerateIV}
-              className={`px-3 py-2 bg-[#DEC3A1] hover:bg-[#d4b58e] text-black font-bold text-xs uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center gap-1.5 transition-all shrink-0 ${
+              className={`px-3 py-2 bg-[#DEC3A1] hover:bg-[#d4b58e] text-black font-bold text-xs uppercase tracking-wider border-2 border-black shadow-[2px_2px_0px_#000000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#000000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center gap-1.5 transition-all shrink-0 cursor-pointer ${
                 isEcbMode ? 'opacity-40 cursor-not-allowed pointer-events-none' : ''
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
-              Generate Random IV
+              Random
             </button>
           </div>
-          <p className="text-[11px] font-mono text-gray-500">
-            {isEcbMode ? (
-              <span className="text-amber-700 font-bold">
-                ECB mode does not use IV
-              </span>
-            ) : (
-              'required for CBC, CFB, OFB, and CTR.'
-            )}
-          </p>
         </div>
       </div>
 
@@ -199,7 +185,7 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
                   key={m}
                   type="button"
                   onClick={() => onModeChange(m)}
-                  className={`px-4 py-2 text-xs font-mono font-black uppercase transition-all ${
+                  className={`px-4 py-2 text-xs font-mono font-black uppercase transition-all cursor-pointer ${
                     isActive
                       ? 'bg-[#BE4BCE] text-white border-[2.5px] border-black shadow-[3px_3px_0px_#000000] -translate-y-0.5'
                       : 'bg-white text-black border-2 border-black hover:bg-[#DEC3A1]/40 shadow-[1px_1px_0px_#000000]'
@@ -210,13 +196,6 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
               );
             })}
           </div>
-          <p className="text-[11px] text-gray-500 font-mono">
-            {mode === 'ECB' && 'ECB: Electronic Codebook'}
-            {mode === 'CBC' && 'CBC: Cipher Block Chaining'}
-            {mode === 'CFB' && 'CFB: Cipher Feedback'}
-            {mode === 'OFB' && 'OFB: Output Feedback'}
-            {mode === 'CTR' && 'CTR: Counter Mode'}
-          </p>
         </div>
 
         <div className="space-y-2">
@@ -231,7 +210,7 @@ export const CipherConfigPanel: React.FC<CipherConfigPanelProps> = ({
                   key={p.value}
                   type="button"
                   onClick={() => onPaddingChange(p.value)}
-                  className={`px-3.5 py-2 text-xs font-mono font-bold transition-all ${
+                  className={`px-3.5 py-2 text-xs font-mono font-bold transition-all cursor-pointer ${
                     isActive
                       ? 'bg-[#EC8DD1] text-black border-[2.5px] border-black shadow-[3px_3px_0px_#000000] -translate-y-0.5'
                       : 'bg-white text-black border-2 border-black hover:bg-gray-100 shadow-[1px_1px_0px_#000000]'

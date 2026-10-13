@@ -60,12 +60,12 @@ export const UploadField: React.FC<UploadFieldProps> = ({
       <div className="flex items-center justify-between mb-2">
         <label className="text-sm font-bold text-black uppercase tracking-wider flex items-center gap-1.5">
           <UploadCloud className="w-4 h-4 stroke-[2.5]" />
-          Drop your file here
+          Drop file
         </label>
         {file && (
           <span className="text-xs font-bold text-green-700 bg-emerald-100 border border-black px-2 py-0.5 flex items-center gap-1">
             <CheckCircle2 className="w-3.5 h-3.5" />
-            File Loaded
+            Loaded
           </span>
         )}
       </div>
@@ -100,10 +100,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         {isDimmedDueToText ? (
           <div className="p-6 flex-1 flex flex-col items-center justify-center text-center">
             <AlertCircle className="w-8 h-8 text-gray-500 mb-2 stroke-[2]" />
-            <p className="text-xs font-bold text-gray-700">Dropzone Locked</p>
-            <p className="text-[11px] text-gray-500 mt-1 max-w-[200px]">
-              Text input is active. Clear text to enable file upload.
-            </p>
+            <p className="text-xs font-bold text-gray-700">Locked</p>
           </div>
         ) : file ? (
           <div className="p-4 flex-1 flex flex-col justify-between">
@@ -117,7 +114,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                     {file.name}
                   </p>
                   <p className="text-[11px] font-mono text-gray-600 mt-0.5">
-                    {formatBytes(file.size)} ({file.size} Bytes)
+                    {formatBytes(file.size)}
                   </p>
                 </div>
               </div>
@@ -125,19 +122,10 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                 type="button"
                 onClick={handleRemove}
                 title="Remove file"
-                className="w-7 h-7 flex items-center justify-center bg-white border-2 border-black hover:bg-red-500 hover:text-white transition-colors shrink-0 shadow-[1px_1px_0px_#000000]"
+                className="w-7 h-7 flex items-center justify-center bg-white border-2 border-black hover:bg-red-500 hover:text-white transition-colors shrink-0 shadow-[1px_1px_0px_#000000] cursor-pointer"
               >
                 <X className="w-4 h-4 stroke-[3]" />
               </button>
-            </div>
-
-            <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-mono">
-              <span className="bg-[#EC8DD1]/40 border border-black px-2 py-0.5 font-bold">
-                MIME: {file.type || 'application/octet-stream'}
-              </span>
-              <span className="bg-[#DEC3A1]/50 border border-black px-2 py-0.5 font-bold">
-                ~{calculateBlocks(file.size, 16)} Blocks (128-bit)
-              </span>
             </div>
           </div>
         ) : (
@@ -145,23 +133,13 @@ export const UploadField: React.FC<UploadFieldProps> = ({
             <div className="w-12 h-12 rounded-full bg-[#DEC3A1] border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_#000000] mb-3">
               <UploadCloud className="w-6 h-6 stroke-[2.5] text-black" />
             </div>
-            <p className="text-sm font-black text-black tracking-tight">Drop your file here</p>
-            <p className="text-xs text-gray-600 font-medium mt-1">
-              or <span className="underline decoration-2 font-bold text-black">browse files</span>
-            </p>
-            <div className="mt-3 flex items-center gap-1.5 text-[10px] font-mono font-bold text-gray-500">
-              <span className="bg-white px-1.5 py-0.5 border border-black">.TXT</span>
-              <span className="bg-white px-1.5 py-0.5 border border-black">.BIN</span>
-              <span className="bg-white px-1.5 py-0.5 border border-black">.PNG</span>
-              <span className="bg-white px-1.5 py-0.5 border border-black">ANY</span>
-            </div>
+            <p className="text-sm font-black text-black tracking-tight">Drop file or browse</p>
           </div>
         )}
 
-        <div className="border-t-[2.5px] border-black bg-white px-3 py-2 flex items-center justify-between text-xs font-mono">
-          <span className="text-gray-500 font-medium">Binary / Stream Source</span>
+        <div className="border-t-[2.5px] border-black bg-white px-3 py-2 flex items-center justify-end text-xs font-mono">
           <div className="font-bold text-black bg-[#DEC3A1] px-2 py-0.5 border border-black shadow-[1px_1px_0px_#000000]">
-            {file ? `${file.size} Bytes | ${calculateBlocks(file.size, 16)} Blocks` : '0 Bytes | 0 Blocks'}
+            {file ? `${file.size} B | ${calculateBlocks(file.size, 16)} Blocks` : '0 B | 0 Blocks'}
           </div>
         </div>
       </div>
