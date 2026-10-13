@@ -23,18 +23,93 @@ Serialisasi keluaran menggunakan urutan yang sama.
 
 \section{Komponen Transformasi}
 \subsection{SubBytes67}
-Tabel substitusi berisi 256 nilai dan dibangkitkan melalui
+SubBytes67 mengganti setiap byte state menggunakan tabel substitusi
+$S_{67}$ yang dibentuk dari permutasi matriks $16\times16$. Fungsi \texttt{generateSbox67} pada
+\path{src/cipher/brainrot/tables.go} mula-mula mengisi matriks $B^{(0)}$
+dengan nilai 0 sampai 255 secara berurutan per baris:
 \begin{equation}
-  S_{67}(x)=\operatorname{ROTL}_8(S_{\mathrm{AES}}(x\oplus\mathtt{67}),6)
-             \oplus\mathtt{43}.
+  B^{(0)}_{r,c}=16r+c,\qquad 0\leq r,c<16.
 \end{equation}
-Konstanta $\mathtt{67}$ dan $\mathtt{43}$ ditulis dalam heksadesimal;
-$\mathtt{43}$ sama dengan 67 desimal. S-box AES disimpan di
-\path{src/cipher/brainrot/tables.go}. Tabel invers dibentuk dengan
-$S_{67}^{-1}[S_{67}[x]]=x$.
+Semua indeks dimulai dari nol. Jadi, indeks 6 dan 7 menunjukkan baris
+atau kolom ketujuh dan kedelapan. Pengisian awal hanya dilakukan sekali;
+selanjutnya matriks hasil setiap iterasi menjadi masukan iterasi berikutnya.
 
-\Isi{Jelaskan alasan transformasi S-box dan sifat yang sudah diuji.
-Tambahkan tabel S-box lengkap pada lampiran jika diperlukan.}
+Setiap iterasi dimulai dengan pertukaran baris berindeks 6 dengan kolom
+berindeks 6. Untuk setiap $i=0,\ldots,15$, elemen $B_{6,i}$ ditukar
+dengan $B_{i,6}$, bukan disalin satu arah. Setelah seluruh pertukaran
+tersebut selesai, proses yang sama diterapkan pada baris dan kolom
+berindeks 7. Elemen diagonal tetap pada posisinya. Pasangan posisi
+$(6,7)$ dan $(7,6)$ ditukar pada kedua tahap sehingga kembali ke
+susunan sebelum pertukaran. Urutan ini merupakan definisi transposisi
+parsial yang digunakan dalam implementasi.
+
+Selanjutnya, setiap baris digeser melingkar enam posisi ke kanan dan
+setiap kolom digeser melingkar tujuh posisi ke bawah. Pergeseran bekerja
+pada posisi byte, bukan pada bit di dalam byte. Byte yang melewati tepi
+matriks masuk kembali dari tepi berlawanan. Jika $T^{(t)}$ adalah matriks
+setelah kedua tahap pertukaran pada iterasi $t$, hasil pergeserannya adalah
+\begin{equation}
+  B^{(t+1)}_{(r+7)\bmod16,\,(c+6)\bmod16}=T^{(t)}_{r,c}.
+\end{equation}
+Kode menggunakan buffer terpisah untuk menggabungkan kedua pergeseran
+tersebut tanpa menimpa elemen yang belum dipindahkan. Seluruh rangkaian
+pertukaran dan pergeseran diulang 67 kali, yaitu untuk $t=0,\ldots,66$.
+
+Alur pembentukan tabel dapat diringkas sebagai berikut:
+\begin{center}
+\begin{tabular}{c}
+Matriks awal $16\times16$ berisi 0--255 per baris\\
+$\downarrow$\\
+Tukar baris--kolom 6, lalu tukar baris--kolom 7\\
+$\downarrow$\\
+Geser seluruh baris ke kanan 6 dan seluruh kolom ke bawah 7\\
+$\downarrow$\\
+Ulangi pertukaran dan pergeseran hingga 67 iterasi\\
+$\downarrow$\\
+Baca matriks akhir per baris menjadi tabel $S_{67}$
+\end{tabular}
+\end{center}
+
+Matriks akhir dibaca kembali per baris menjadi tabel satu dimensi:
+\begin{equation}
+  S_{67}[x]=B^{(67)}_{\lfloor x/16\rfloor,\,x\bmod16},
+  \qquad x=0,\ldots,255.
+\end{equation}
+Urutan ini berbeda dari pengisian state enkripsi $4\times4$ yang
+menggunakan urutan per kolom. Tabel~\ref{tab:pembentukan-sbox}
+menampilkan contoh pasangan substitusi dan invers setelah 67 iterasi;
+seluruh nilainya ditulis dalam heksadesimal.
+\begin{table}[htbp]
+  \centering
+  \caption{Contoh hasil S-box baru dan pemetaan inversnya.}
+  \label{tab:pembentukan-sbox}
+  \begin{tabular}{@{}ccc@{}}
+    \toprule Masukan $x$ & $y=S_{67}[x]$ & $S_{67}^{-1}[y]$\\ \midrule
+    $\mathtt{00}$ & $\mathtt{54}$ & $\mathtt{00}$\\
+    $\mathtt{01}$ & $\mathtt{91}$ & $\mathtt{01}$\\
+    $\mathtt{02}$ & $\mathtt{fc}$ & $\mathtt{02}$\\
+    $\mathtt{03}$ & $\mathtt{39}$ & $\mathtt{03}$\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Tabel invers dibentuk oleh \texttt{generateInverseSbox67} dengan
+mengunjungi setiap pasangan $x$ dan $y=S_{67}[x]$, kemudian menyimpan
+$x$ pada indeks $y$ dalam tabel invers:
+\begin{equation}
+  S_{67}^{-1}[S_{67}[x]]=x.
+\end{equation}
+Matriks awal memuat setiap nilai byte tepat sekali, sedangkan pertukaran
+dan pergeseran melingkar hanya memindahkan posisi. Karena itu, tabel
+akhir tetap memiliki 256 keluaran unik dan invers yang terdefinisi untuk
+setiap byte. Keunikan menjamin keterbalikan substitusi, bukan ketahanan
+terhadap serangan kriptanalisis; jumlah 67 iterasi juga bukan bukti keamanan.
+
+S-box dan inversnya dibuat sekali saat inisialisasi paket, bersifat tetap,
+dan tidak bergantung pada kunci. Enkripsi menggunakan
+$s'_{r,c}=S_{67}[s_{r,c}]$, sedangkan dekripsi menggunakan tabel invers.
+S-box yang sama juga dipakai pada substitusi dalam ekspansi kunci.
+
 
 \subsection{ShiftRows67}
 Setiap baris $r$ diputar ke kanan sejauh $o_r=(6+r)\bmod4$ posisi:
