@@ -78,7 +78,7 @@ func execute(cipherName, blockPath, inputPath, keyHex, selected string, trials i
 			return fmt.Errorf("write report: %w", err)
 		}
 	}
-	fmt.Printf("%s — experimental plumbing check; NOT security results\n", report.Cipher)
+	fmt.Printf("%s — educational evaluation; cryptographic security is not established\n", report.Cipher)
 	fmt.Printf("block avalanche: plaintext %.2f%%, key %.2f%% (%d trials each)\n",
 		report.BlockPlaintext.MeanPercent, report.BlockKey.MeanPercent, trials)
 	for _, m := range report.Modes {
