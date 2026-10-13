@@ -1,16 +1,20 @@
 \chapter{ANALISIS KEAMANAN}
+\input{data/brainrot/block-avalanche}
+\input{data/brainrot/mode-avalanche}
+\input{data/brainrot/entropy}
+\input{data/brainrot/binary-entropy}
 
 \section{Konfigurasi dan Reproduksibilitas}
-CLI \texttt{analyze} menggunakan Brainrot secara default. Masukan bawaan
-adalah \path{src/testdata/fixtures/one-block.txt} sepanjang 16 byte dan
-\path{src/testdata/fixtures/repeated-text.txt} sepanjang 404 byte.
-Parameter bawaan adalah 256 percobaan, seed 42, serta kunci
+Pengujian memakai Brainrot, fixture satu blok sepanjang 16 byte, teks
+\path{repeated-text.txt} sepanjang 404 byte, dan biner
+\path{byte-pattern.bin} sepanjang 1027 byte. Konfigurasi utama adalah
+256 percobaan, seed 42, serta kunci
 \texttt{00112233445566778899aabbccddeeff}. Seed hanya digunakan untuk
 eksperimen; IV pada CLI enkripsi dibangkitkan secara terpisah.
 
 \begin{lstlisting}[language={},numbers=none,caption={Menjalankan analisis dari root repositori.}]
 go -C src run ./cmd/analyze -cipher brainrot -modes all \
-  -trials 256 -seed 42 -output ../reports/brainrot.json
+  -trials 256 -seed 42 -output ../reports/brainrot/text-seed42.json
 go -C src test ./...
 \end{lstlisting}
 
@@ -19,9 +23,14 @@ avalanche satu blok, hasil round-trip per mode, entropi, histogram 256 bin,
 dan avalanche pesan utuh. Pengukuran mode hanya memakai badan cipherteks;
 IV tidak masuk histogram atau penyebut persentase perubahan bit.
 
-\Isi{Catat commit kode, sistem operasi, versi Go, identitas berkas uji,
-ukuran data, parameter, dan lokasi hasil yang dipakai. Tambahkan sampel
-teks dan biner dengan ukuran serta pola berbeda.}
+Hasil yang ditampilkan berasal dari \path{reports/brainrot/text-seed42.json}
+dan \path{reports/brainrot/binary-seed42.json}. Fixture biner
+\path{src/testdata/fixtures/byte-pattern.bin} terdiri atas nilai byte 0--255
+yang diulang empat kali, diikuti $\mathtt{00,ff,80}$; totalnya 1027 byte.
+Manifest pada folder hasil mencatat kunci, seed, ukuran dan SHA-256 fixture,
+versi Go, sistem operasi, serta asal pengukuran. Dua eksperimen
+tambahan memakai seed 1337 dengan kunci nol pada teks dan kunci semua satu
+pada biner.
 
 \section{Avalanche Effect Satu Blok}
 Pada setiap percobaan, satu bit plainteks diubah dengan kunci tetap;
@@ -34,19 +43,23 @@ serta rata-rata dan jumlah percobaan per posisi bit.
 
 \begin{table}[htbp]
   \centering\small
-  \caption{Isian hasil avalanche Brainrot untuk satu blok.}
+  \caption{Hasil avalanche Brainrot satu blok, 256 percobaan dan seed 42.}
   \begin{tabularx}{\linewidth}{@{}lYYYY@{}}
     \toprule Perubahan & Percobaan & Rata-rata (\%) & Minimum (bit) & Maksimum (bit)\\
     \midrule
-    1 bit plainteks & --- & --- & --- & ---\\
-    1 bit kunci & --- & --- & --- & ---\\
+    \BrainrotBlockRows
     \bottomrule
   \end{tabularx}
 \end{table}
 
-\Isi{Masukkan angka dari JSON Brainrot, grafik per posisi bit bila relevan,
-dan interpretasi terhadap perubahan sekitar separuh bit keluaran.
-Nyatakan cakupan sampel serta variasi hasil.}
+Rata-rata perubahan adalah 49,976\% untuk bit plainteks dan 49,557\%
+untuk bit kunci, mendekati separuh keluaran. Setiap posisi bit hanya diuji
+dua kali; rata-rata per posisi berkisar 53,5--72 bit untuk plainteks dan
+54,5--77 bit untuk kunci. Variasi ini belum cukup untuk menyimpulkan bahwa
+setiap bit keluaran berubah dengan peluang yang sama.
+Dengan seed 1337, kunci nol menghasilkan rata-rata 49,890\%/49,719\%,
+sedangkan kunci semua satu menghasilkan 49,814\%/49,667\%
+(plainteks/kunci).
 
 \section{Avalanche Effect pada Seluruh Mode}
 Untuk pesan utuh, posisi bit plainteks dipilih pseudorandom dan posisi
@@ -57,15 +70,11 @@ ECB/CBC, sehingga berbeda dari pengujian satu blok.
 
 \begin{table}[htbp]
   \centering\small
-  \caption{Isian avalanche pesan utuh untuk semua mode.}
+  \caption{Avalanche pesan teks 404 byte, 256 percobaan dan seed 42.}
   \begin{tabularx}{\linewidth}{@{}lYYY@{}}
     \toprule Mode & Panjang badan (byte) & Perubahan plainteks (\%) & Perubahan kunci (\%)\\
     \midrule
-    ECB & --- & --- & ---\\
-    CBC & --- & --- & ---\\
-    CFB & --- & --- & ---\\
-    OFB & --- & --- & ---\\
-    CTR & --- & --- & ---\\
+    \BrainrotModeRows
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -76,50 +85,89 @@ pada CBC dan CFB pengaruhnya bergantung pada posisi perubahan dan umpan
 balik. Interpretasi hasil harus membedakan sifat mode dari difusi cipher
 satu blok.
 
-\Isi{Bahas hasil kelima mode, posisi bit yang dipilih, pengaruh panjang
-pesan, dan perbedaan perubahan plainteks terhadap perubahan kunci.}
+Pada teks, perubahan plainteks ECB hanya 1,933\% karena pengaruhnya
+terbatas pada satu blok dari badan 416 byte. CBC dan CFB mencapai
+26,001\% dan 24,164\% karena perubahan dapat merambat ke blok berikutnya;
+posisi bit yang dipilih menentukan banyaknya blok yang terkena pengaruh.
+OFB dan CTR sama-sama 0,031\%, yaitu satu bit dari 3232 bit badan.
+Pada biner yang lebih panjang, persentase ECB turun menjadi 0,762\% dan
+OFB/CTR menjadi 0,012\%; CBC/CFB tetap sekitar 25\%.
+Sebaliknya, perubahan kunci menghasilkan sekitar 50\% pada kelima mode
+karena kunci memengaruhi semua pemanggilan cipher. Persentase perubahan
+plainteks yang kecil pada OFB/CTR merupakan sifat mode, bukan kegagalan
+avalanche cipher satu blok.
 
 \section{Analisis Entropi}
 \begin{table}[htbp]
   \centering\small
-  \caption{Isian entropi empiris byte untuk seluruh mode.}
+  \caption{Entropi empiris untuk fixture teks, seed 42; ukuran adalah badan cipherteks.}
   \begin{tabularx}{\linewidth}{@{}lYYY@{}}
     \toprule Mode & Ukuran sampel (byte) & Plainteks (bit/byte) & Cipherteks (bit/byte)\\
     \midrule
-    ECB & --- & --- & ---\\
-    CBC & --- & --- & ---\\
-    CFB & --- & --- & ---\\
-    OFB & --- & --- & ---\\
-    CTR & --- & --- & ---\\
+    \BrainrotEntropyRows
     \bottomrule
   \end{tabularx}
 \end{table}
-\Isi{Isi dari field entropy\_bits\_per\_byte dan bytes dalam JSON.
-Jelaskan pengaruh ukuran sampel, pola plainteks, dan padding. Nilai
-mendekati 8 bit/byte saja tidak membuktikan keamanan kriptografis.}
+\begin{table}[htbp]
+  \centering\small
+  \caption{Entropi empiris untuk fixture biner, seed 42.}
+  \begin{tabularx}{\linewidth}{@{}lYYY@{}}
+    \toprule Mode & Ukuran badan (byte) & Plainteks (bit/byte) & Cipherteks (bit/byte)\\
+    \midrule
+    \BrainrotBinaryEntropyRows
+    \bottomrule
+  \end{tabularx}
+\end{table}
+Entropi teks meningkat dari 4,860 menjadi 7,188 bit/byte pada ECB dan
+7,433--7,571 pada mode lain. Pada biner, plainteks sudah mendekati
+8 bit/byte, tetapi ECB hanya mencapai 7,220 karena blok berulang tetap
+menghasilkan cipherteks berulang. Mode lain mencapai 7,804--7,817.
+Entropi tidak harus meningkat: nilainya bergantung pada distribusi awal,
+ukuran sampel, pengulangan blok, dan tambahan padding ECB/CBC.
 
 \section{Analisis Histogram}
 \begin{figure}[htbp]
   \centering
-  \GambarAtauPlaceholder{histogram-semua-mode.png}{\linewidth}{6cm}
-  \caption{Tempat grafik histogram plainteks dan cipherteks pada lima mode.}
+  \GambarAtauPlaceholder{histogram-semua-mode.png}{\linewidth}{11cm}
+  \caption{Histogram fixture teks dan cipherteks lima mode pada seed 42;
+    sumbu y memakai skala berbeda dan garis putus-putus menandai distribusi seragam.}
   \label{fig:histogram}
 \end{figure}
-\Isi{Gambarkan 256 bin dari field histogram untuk plainteks dan setiap
-mode, dengan sumbu nilai byte 0--255 dan frekuensi atau proporsi.
-Gunakan skala yang memungkinkan perbandingan dan cantumkan ukuran sampel.
-Bahas pola berulang, khususnya ECB, serta kedekatan distribusi empiris
-terhadap distribusi seragam.}
+\begin{figure}[htbp]
+  \centering
+  \GambarAtauPlaceholder{histogram-biner.png}{\linewidth}{11cm}
+  \caption{Histogram fixture biner dan cipherteks lima mode, seed 42;
+    sumbu y memakai skala berbeda.}
+\end{figure}
+Grafik memakai proporsi byte agar panjang badan yang berbeda dapat
+dibandingkan. Skala y berbeda antar panel dan tercantum pada setiap sumbu.
+Pada teks, ECB memiliki 78 nilai byte yang tidak muncul dan puncak
+frekuensi 8 kemunculan, sedangkan mode lain memiliki 41--55 nilai yang
+tidak muncul. Perbedaannya lebih jelas pada biner: ECB memiliki 86 nilai
+yang tidak muncul dan puncak 20 kemunculan; mode lain hanya 3--6 nilai
+yang tidak muncul. Hal ini selaras dengan blok masukan yang berulang dan
+pemetaan ECB yang independen per blok. Sebaran CBC, CFB, OFB, dan CTR
+lebih mendekati seragam pada sampel biner ini, tetapi batang tidak harus
+sama tinggi karena jumlah byte terbatas. Histogram juga tidak menampilkan
+urutan byte, sehingga kemerataan saja tidak membuktikan ketiadaan pola.
 
+% Selesaikan gambar histogram agar tidak menyela penjelasan pengujian.
+\clearpage
 \section{Pengujian Tambahan dan Keterbatasan}
-\Isi{Jika dilakukan, tambahkan pengujian ukuran kecil/sedang/besar,
-waktu proses, penggunaan memori, perubahan per putaran melalui Tracer,
-atau kajian struktur S-box dan matriks. Sertakan metode serta hasil aktual.}
+\subsection{Kebenaran Implementasi}
+Pengujian mode memakai \texttt{TEST-ONLY-XOR}, yaitu cipher sederhana
+khusus pengujian yang hasilnya mudah dihitung, untuk memeriksa urutan
+chaining antarblok. Pengujian dengan Brainrot kemudian memeriksa
+pemulihan data menggunakan algoritma sebenarnya. Empat pasangan kunci
+dan plainteks dicocokkan dengan implementasi referensi Python yang
+terpisah: cipherteks akhir, 21 subkunci, dan 66 state perantara per kasus
+harus sama. Pencocokan state membantu menemukan tahap yang keliru,
+meskipun enkripsi dan dekripsi masih saling membalik.
 
-Pengujian otomatis yang tersedia memakai \texttt{TEST-ONLY-XOR} untuk
-memeriksa statistik, chaining, padding, batas blok, dan overflow CTR.
-Pengujian tersebut perlu dilengkapi dengan bukti khusus Brainrot;
-hasil cipher XOR uji tidak dipakai sebagai hasil keamanan Brainrot.
-
-\Isi{Nyatakan cakupan pengujian akhir, keterbatasan sampel, dan analisis
-yang belum dilakukan. Kaitkan kesimpulan hanya dengan bukti yang tersedia.}
+Pengujian juga memeriksa invers setiap operasi, masukan berpola dan
+pseudorandom, serta buffer masukan/keluaran yang saling tumpang tindih.
+Seluruh 128 posisi bit BPT dan 65.536 pasangan nilai byte/subkunci
+penjumlahan diperiksa. Kelima mode diuji pada masukan kosong dan batas
+blok, beserta penolakan padding tidak valid pada mode yang memakainya
+dan penolakan pelimpahan pencacah CTR. Hasil ini mendukung kesesuaian
+implementasi dengan rancangan pada kasus yang diuji.

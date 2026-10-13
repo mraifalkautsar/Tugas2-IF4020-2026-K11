@@ -13,7 +13,8 @@
     Ukuran blok & 128 bit (16 byte)\\
     Kunci utama & 128 bit (16 byte)\\
     Jumlah putaran & 10\\
-    Kunci hasil ekspansi & 11 kunci, $K_0$ sampai $K_{10}$\\
+    Kunci hasil ekspansi & 21 subkunci, $Q_0$ sampai $Q_{20}$\\
+    Putaran ganjil / genap & 6 / 7 operasi; MixColumns67 selalu digunakan\\
     State & Matriks $4\times4$ byte, diisi per kolom\\
     \bottomrule
   \end{tabularx}
@@ -102,8 +103,7 @@ $x$ pada indeks $y$ dalam tabel invers:
 Matriks awal memuat setiap nilai byte tepat sekali, sedangkan pertukaran
 dan pergeseran melingkar hanya memindahkan posisi. Karena itu, tabel
 akhir tetap memiliki 256 keluaran unik dan invers yang terdefinisi untuk
-setiap byte. Keunikan menjamin keterbalikan substitusi, bukan ketahanan
-terhadap serangan kriptanalisis; jumlah 67 iterasi juga bukan bukti keamanan.
+setiap byte.
 
 S-box dan inversnya dibuat sekali saat inisialisasi paket, bersifat tetap,
 dan tidak bergantung pada kunci. Enkripsi menggunakan
@@ -112,7 +112,7 @@ S-box yang sama juga dipakai pada substitusi dalam ekspansi kunci.
 
 
 \subsection{ShiftRows67}
-Setiap baris $r$ diputar ke kanan sejauh $o_r=(6+r)\bmod4$ posisi:
+Setiap baris $r$ diputar ke kanan sejauh $o_r=(6+(r\bmod2))\bmod4$ posisi:
 \begin{equation}
   s'_{r,(c+o_r)\bmod4}=s_{r,c}.
 \end{equation}
@@ -121,7 +121,7 @@ Setiap baris $r$ diputar ke kanan sejauh $o_r=(6+r)\bmod4$ posisi:
   \caption{Offset permutasi baris dalam implementasi.}
   \begin{tabular}{@{}lrrrr@{}}
     \toprule Baris $r$ & 0 & 1 & 2 & 3\\
-    \midrule Offset kanan $o_r$ & 2 & 3 & 0 & 1\\
+    \midrule Offset kanan $o_r$ & 2 & 3 & 2 & 3\\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -147,15 +147,50 @@ Seluruh elemen berikut ditulis dalam heksadesimal:
 Penjumlahan medan menggunakan XOR. Perkalian menggunakan pergeseran bit
 dan reduksi dengan konstanta $\mathtt{1b}$ setelah bit tertinggi melimpah.
 
-\Isi{Jelaskan pemilihan matriks dan bukti invers atau sifat difusi yang
-telah diperiksa.}
+Matriks dipakai agar setiap keluaran kolom bergantung pada keempat byte
+masukannya, sementara inversnya memungkinkan dekripsi. Pemeriksaan pada
+medan yang sama menghasilkan $MM^{-1}=I$ dan seluruh 69 minor persegi
+bernilai tidak nol. Dengan demikian, $M$ bersifat MDS dengan branch number
+byte 5: jumlah byte aktif pada masukan dan keluaran suatu perbedaan
+nonzero minimal lima.
+
+\subsection{Bit-Plane Transpose (BPT) Revisi}
+Sesudah MixColumns67, state diserialisasi menjadi 16 byte dalam urutan
+kolom. Bit dalam setiap byte diberi indeks dari MSB ke LSB. Untuk indeks
+byte $i\in[0,15]$ dan bit $b\in[0,7]$, pemetaan adalah
+\begin{equation}
+  p=8i+b,\qquad p'=3(16b+i)\bmod128,\qquad Y[p']=X[p].
+\end{equation}
+Invers menghitung $q=43p'\bmod128$, lalu $i=q\bmod16$,
+$b=\lfloor q/16\rfloor$, dan $p=8i+b$. Karena $3\cdot43\equiv1\pmod{128}$,
+pemetaan ini merupakan permutasi. Transformasi ini bertujuan untuk mengacak urutan bit pada bytes.
+
+\subsection{Feistel Cross-Mixing (FCM)}
+Ide untuk transformasi ini adalah memasukkan jaringan Feistel ke dalam Substitution-Permutation Network. FCM hanya diterapkan pada putaran genap. Delapan byte pertama dan terakhir ditafsirkan sebagai $L$ dan $R$, masing-masing integer 64 bit big-endian. Empat langkah internal menjalankan
+\begin{align}
+  F_j(x)&=\operatorname{ROTL}_{64}(x,a_j)
+    \oplus(x\mathbin{\&}\operatorname{ROTL}_{64}(x,b_j))
+    \oplus\operatorname{ROTL}_{64}(x,c_j),\\
+  (L',R')&=(R,L\oplus F_j(R)).
+\end{align}
+Operator $\mathbin{\&}$ menyatakan AND bitwise. Tripel rotasi untuk $j=1,2,3,4$ berturut-turut adalah $(9,21,37)$, $(13,29,43)$,
+$(7,17,31)$, dan $(11,23,41)$. Invers memproses langkah 4 sampai 1, dengan $(L,R)=(R'\oplus F_j(L'),L')$. Fungsi $F_j$ tidak perlu bijektif agar langkah Feistel dapat dibalik. Konstanta dan kekuatan FCM masih bersifat eksperimental.
+
+\subsection{Penjumlahan Modulo Byte}
+Putaran $r$ menggunakan subkunci $Q_{2r-1}$ untuk setiap byte:
+\begin{equation}
+  y_i=(x_i+(Q_{2r-1})_i)\bmod256,\qquad
+  x_i=(y_i-(Q_{2r-1})_i)\bmod256.
+\end{equation}
+Carry hanya merambat di dalam satu byte. Operasi ini juga tidak mengakibatkan pencampuran antarbyte dan tidak memperbesar entropi kunci utama.
 
 \subsection{AddRoundKey67}
-Untuk kunci putaran $K_j$, setiap elemen diperbarui sebagai
+Untuk subkunci XOR $Q_{2r}$ pada putaran $r$, setiap elemen diperbarui sebagai
 \begin{equation}
-  s'_{r,c}=s_{r,c}\oplus (K_j)_{4c+r}\oplus\mathtt{43}.
+  s'_{u,c}=s_{u,c}\oplus (Q_{2r})_{4c+u}\oplus\mathtt{43}.
 \end{equation}
-Transformasi ini merupakan invers dirinya sendiri.
+Indeks $u$ adalah baris state. Transformasi ini merupakan invers dirinya
+sendiri. Whitening awal memakai rumus yang sama dengan $Q_0$.
 
 \section{Alur Enkripsi dan Dekripsi}
 \begin{figure}[htbp]
@@ -166,13 +201,14 @@ Transformasi ini merupakan invers dirinya sendiri.
       minimum height=8mm,font=\small},
     flow/.style={-{Latex},thick}]
     \node[box] (in) {Plainteks 16 byte $\rightarrow$ state $4\times4$};
-    \node[box,below=of in] (initial) {AddRoundKey67 dengan $K_0$};
-    \node[box,below=of initial] (rounds) {Putaran $j=1,\ldots,9$\\
+    \node[box,below=of in] (initial) {Whitening: AddRoundKey67 dengan $Q_0$};
+    \node[box,below=of initial] (rounds) {Putaran $r=1,\ldots,10$\\
       SubBytes67 $\rightarrow$ ShiftRows67 $\rightarrow$ MixColumns67\\
-      $\rightarrow$ AddRoundKey67 dengan $K_j$};
-    \node[box,below=of rounds] (final) {Putaran 10\\
-      SubBytes67 $\rightarrow$ ShiftRows67 $\rightarrow$ AddRoundKey67
-      dengan $K_{10}$};
+      $\rightarrow$ BPT revisi $\rightarrow$ FCM (hanya jika $r$ genap)};
+    \node[box,below=of rounds] (final) {Akhir setiap putaran $r$\\
+      Penjumlahan modulo dengan $Q_{2r-1}$\\
+      $\rightarrow$ AddRoundKey67 dengan $Q_{2r}$\\
+      Ulangi putaran sampai $r=10$};
     \node[box,below=of final] (out) {Serialisasi state $\rightarrow$ cipherteks 16 byte};
     \draw[flow] (in) -- (initial);
     \draw[flow] (initial) -- (rounds);
@@ -182,31 +218,48 @@ Transformasi ini merupakan invers dirinya sendiri.
   \caption{Alur enkripsi satu blok sesuai implementasi saat ini.}
   \label{fig:alur-enkripsi}
 \end{figure}
-Enkripsi dimulai dengan AddRoundKey67 menggunakan $K_0$.
-Putaran 1--9 menjalankan keempat transformasi; putaran terakhir melewati
-MixColumns67, seperti pada Gambar~\ref{fig:alur-enkripsi}.
+Enkripsi dimulai dengan whitening menggunakan $Q_0$, kemudian menjalankan
+sepuluh putaran sesuai Gambar~\ref{fig:alur-enkripsi}.
+Terdapat pola six-seven sepanjang enkripsi. Putaran ganjil
+memiliki enam operasi dan putaran genap tujuh operasi. Putaran 10 tetap
+memakai MixColumns67 dan FCM; tidak ada pengecualian putaran terakhir.
 
-Dekripsi menjalankan AddRoundKey67 dengan $K_{10}$, lalu
-InverseShiftRows67 dan InverseSubBytes67. Untuk $j=9,\ldots,1$, urutannya
-adalah AddRoundKey67 dengan $K_j$, InverseMixColumns67,
-InverseShiftRows67, dan InverseSubBytes67. Proses ditutup dengan
-AddRoundKey67 menggunakan $K_0$.
+Dekripsi memproses $r=10,\ldots,1$: AddRoundKey67 dengan $Q_{2r}$,
+pengurangan modulo dengan $Q_{2r-1}$, invers FCM jika $r$ genap,
+invers BPT, InverseMixColumns67, InverseShiftRows67, dan InverseSubBytes67.
+Terakhir, whitening dibalik dengan AddRoundKey67 menggunakan $Q_0$.
 
-\Isi{Tambahkan contoh state dan kunci untuk satu blok, serta justifikasi
-jumlah putaran dan peniadaan pencampuran pada putaran terakhir.}
+Sebagai contoh, blok \texttt{Embark at dawn!} diikuti newline
+($\mathtt{0a}$) dienkripsi dengan kunci
+\texttt{00112233445566778899aabbccddeeff}. Dalam urutan byte per kolom,
+state setelah whitening adalah
+\texttt{063f0311757d0555bffa8d99f8f08cb6}, sedangkan cipherteks akhirnya
+\texttt{b2b0824b4f12cff57c8b4ea0ae9d402f}. Hasil tersebut cocok dengan
+referensi independen, termasuk seluruh state per operasi.
 
 \section{Pembentukan Kunci Putaran}
 Kunci utama dibagi menjadi empat word $w_0,\ldots,w_3$, masing-masing
-empat byte. Ekspansi menghasilkan 44 word. Untuk $i=4,\ldots,43$,
+empat byte. Ekspansi menghasilkan 84 word. Untuk $i=4,\ldots,83$,
 mula-mula $t=w_{i-1}$. Jika $i\bmod4=0$, $t$ dirotasi satu byte ke kiri,
 setiap byte disubstitusi dengan $S_{67}$, lalu byte pertama di-XOR dengan
 $\mathrm{Rcon}_{i/4-1}\oplus\mathtt{67}$. Selanjutnya,
 \begin{equation}
   w_i=w_{i-4}\oplus t,\qquad
-  K_j=w_{4j}\Vert w_{4j+1}\Vert w_{4j+2}\Vert w_{4j+3}.
+  Q_j=w_{4j}\Vert w_{4j+1}\Vert w_{4j+2}\Vert w_{4j+3},\quad 0\leq j\leq20.
 \end{equation}
-Urutan Rcon adalah $\mathtt{01,02,04,08,10,20,40,80,1b,36}$.
-Simbol $\Vert$ menyatakan konkatenasi byte; $K_0$ adalah kunci utama.
+Rcon dimulai dari $\mathtt{01}$ dan setiap nilai berikutnya merupakan
+perkalian dengan $\mathtt{02}$ pada medan yang sama. Dua puluh nilai Rcon
+adalah $\mathtt{01,02,04,08,10,20,40,80,1b,36}$, dilanjutkan
+$\mathtt{6c,d8,ab,4d,9a,2f,5e,bc,63,c6}$.
+Simbol $\Vert$ menyatakan konkatenasi byte; $Q_0$ adalah kunci utama.
+Putaran $r$ memakai $Q_{2r-1}$ untuk penjumlahan dan $Q_{2r}$ untuk XOR.
 
-\Isi{Tambahkan contoh pembentukan kunci dan alasan pemilihan konstanta.
-Jelaskan kontribusi operasi tambahan terhadap rancangan.}
+Untuk kunci contoh di atas, $w_0=\mathtt{00112233}$ dan
+$w_3=\mathtt{ccddeeff}$ menghasilkan $w_4=\mathtt{1ae7611c}$.
+Word $w_4$ sampai $w_7$ membentuk subkunci penjumlahan putaran pertama
+$Q_1=\mathtt{1ae7611c5eb2076bd62badd01af6432f}$, diikuti subkunci XOR
+$Q_2=\mathtt{aeda785cf0687f372643d2e73cb591c8}$.
+Rotasi word mengubah posisi byte, substitusi menambah nonlinieritas,
+dan Rcon membedakan tahap ekspansi. Konstanta $\mathtt{67}$ dan
+$\mathtt{43}$ memberi identitas rancangan. Penjumlahan menyediakan carry dalam byte, BPT menyusun
+ulang bit, dan FCM menambah pencampuran nonlinier antarhalf state.

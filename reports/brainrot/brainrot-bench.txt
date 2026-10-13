@@ -1,0 +1,12 @@
+goos: linux
+goarch: amd64
+pkg: github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/cipher/brainrot
+cpu: AMD Ryzen 5 5600H with Radeon Graphics         
+BenchmarkEncryptBlock-12    	   38509	     27808 ns/op	   0.58 MB/s	       0 B/op	       0 allocs/op
+BenchmarkEncryptBlock-12    	   49002	     24959 ns/op	   0.64 MB/s	       0 B/op	       0 allocs/op
+BenchmarkEncryptBlock-12    	   47440	     24456 ns/op	   0.65 MB/s	       0 B/op	       0 allocs/op
+BenchmarkDecryptBlock-12    	   48619	     24637 ns/op	   0.65 MB/s	       0 B/op	       0 allocs/op
+BenchmarkDecryptBlock-12    	   49118	     24673 ns/op	   0.65 MB/s	       0 B/op	       0 allocs/op
+BenchmarkDecryptBlock-12    	   48285	     25660 ns/op	   0.62 MB/s	       0 B/op	       0 allocs/op
+PASS
+ok  	github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/cipher/brainrot	8.686s

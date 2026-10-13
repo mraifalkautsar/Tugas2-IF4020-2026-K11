@@ -2,9 +2,11 @@ package integration_test
 
 import (
 	"math"
+	"reflect"
 	"testing"
 
 	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/analysis"
+	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/cipher/brainrot"
 	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/internal/testonly"
 	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/modes"
 )
@@ -16,6 +18,54 @@ func TestDistribution(t *testing.T) {
 	}
 	if d := analysis.Describe(nil); d.Bytes != 0 || d.Entropy != 0 {
 		t.Fatalf("empty distribution: %+v", d)
+	}
+}
+
+func TestBrainrotAnalysisAllModes(t *testing.T) {
+	input := make([]byte, 257)
+	for i := range input {
+		input[i] = byte(i)
+	}
+	config := analysis.Config{
+		Factory: brainrot.Factory{}, Key: make([]byte, 16),
+		BlockInput: make([]byte, 16), Input: input,
+		Modes: modes.All, Trials: 128, Seed: 42,
+	}
+	report, err := analysis.Run(config)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if report.Cipher != "Brainrot Cipher" || !report.Experimental || len(report.Modes) != 5 {
+		t.Fatal("wrong Brainrot report header")
+	}
+	for _, blockTest := range []analysis.Avalanche{report.BlockPlaintext, report.BlockKey} {
+		if blockTest.OutputBits != 128 || len(blockTest.PerInputBitTrials) != 128 {
+			t.Fatal("incomplete block coverage")
+		}
+		for _, count := range blockTest.PerInputBitTrials {
+			if count != 1 {
+				t.Fatal("input bits did not cycle exactly once")
+			}
+		}
+	}
+	for _, mr := range report.Modes {
+		if !mr.RoundTrip || mr.Plaintext.Bytes != 257 || mr.KeyAvalanche.Trials != 128 {
+			t.Fatalf("incomplete %s mode report", mr.Mode)
+		}
+		var total uint64
+		for _, count := range mr.Ciphertext.Histogram {
+			total += count
+		}
+		if total != uint64(mr.Ciphertext.Bytes) || mr.Ciphertext.Entropy < 0 || mr.Ciphertext.Entropy > 8 {
+			t.Fatalf("invalid %s distribution", mr.Mode)
+		}
+		if (mr.Mode == modes.CTR || mr.Mode == modes.OFB) && mr.PlaintextAvalanche.MeanChanged != 1 {
+			t.Fatalf("%s should change exactly one ciphertext bit", mr.Mode)
+		}
+	}
+	repeated, err := analysis.Run(config)
+	if err != nil || !reflect.DeepEqual(report, repeated) {
+		t.Fatalf("seeded Brainrot analysis is not reproducible: %v", err)
 	}
 }
 

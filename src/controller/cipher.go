@@ -185,8 +185,8 @@ func Trace(w http.ResponseWriter, r *http.Request) {
 	}
 
 	roundKeysRaw := b.RoundKeys()
-	roundKeysMatrix := make([]Matrix4x4, brainrot.Rounds+1)
-	for i := 0; i <= brainrot.Rounds; i++ {
+	roundKeysMatrix := make([]Matrix4x4, len(roundKeysRaw))
+	for i := range roundKeysRaw {
 		roundKeysMatrix[i] = BlockToMatrix(roundKeysRaw[i][:])
 	}
 

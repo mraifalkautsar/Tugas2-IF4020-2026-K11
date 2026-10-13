@@ -4,17 +4,26 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/cipher"
+	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/cipher/brainrot"
 	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/internal/testonly"
 	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/modes"
 )
 
 func TestAllModesRoundTripAtBlockBoundaries(t *testing.T) {
-	b, err := (testonly.Factory{}).New(make([]byte, 16))
+	for _, factory := range []cipher.Factory{testonly.Factory{}, brainrot.Factory{}} {
+		t.Run(factory.Name(), func(t *testing.T) { testModeBoundaries(t, factory) })
+	}
+}
+
+func testModeBoundaries(t *testing.T, factory cipher.Factory) {
+	t.Helper()
+	b, err := factory.New(make([]byte, 16))
 	if err != nil {
 		t.Fatal(err)
 	}
 	for _, mode := range modes.All {
-		for _, size := range []int{0, 1, 15, 16, 17, 32, 100} {
+		for _, size := range []int{0, 1, 15, 16, 17, 31, 32, 33, 100, 257, 1027} {
 			plaintext := make([]byte, size)
 			for i := range plaintext {
 				plaintext[i] = byte(i*13 + 9)
@@ -39,6 +48,60 @@ func TestAllModesRoundTripAtBlockBoundaries(t *testing.T) {
 				t.Fatalf("%s size %d: stream mode padded unexpectedly", mode, size)
 			}
 		}
+	}
+}
+
+func TestBrainrotModeValidation(t *testing.T) {
+	b, err := brainrot.New(make([]byte, 16))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, mode := range modes.All {
+		for _, size := range []int{0, 15, 17} {
+			iv := make([]byte, size)
+			if mode == modes.ECB && size == 0 {
+				continue
+			}
+			if _, err := modes.Encrypt(b, mode, iv, []byte{0, 255, 128}); err == nil {
+				t.Errorf("%s accepted %d-byte IV for encrypt", mode, size)
+			}
+			if _, err := modes.Decrypt(b, mode, iv, make([]byte, 16)); err == nil {
+				t.Errorf("%s accepted %d-byte IV for decrypt", mode, size)
+			}
+		}
+	}
+	for _, mode := range []modes.Mode{modes.ECB, modes.CBC} {
+		var iv []byte
+		if mode == modes.CBC {
+			iv = make([]byte, 16)
+		}
+		for _, size := range []int{0, 15, 17} {
+			if _, err := modes.Decrypt(b, mode, iv, make([]byte, size)); err == nil {
+				t.Errorf("%s accepted padded ciphertext size %d", mode, size)
+			}
+		}
+		for _, suffix := range [][]byte{{0}, {17}, {1, 2}, {2, 3, 3}} {
+			// Encrypt a deliberately invalid padded block with the raw primitive,
+			// so failure does not depend on random ciphertext or a padding oracle.
+			plain, encrypted := make([]byte, 16), make([]byte, 16)
+			copy(plain[16-len(suffix):], suffix)
+			b.EncryptBlock(encrypted, plain)
+			if _, err := modes.Decrypt(b, mode, iv, encrypted); err == nil {
+				t.Errorf("%s accepted padding suffix %x", mode, suffix)
+			}
+		}
+	}
+	iv := bytes.Repeat([]byte{255}, 16)
+	for _, operation := range []func(cipher.Block, modes.Mode, []byte, []byte) ([]byte, error){modes.Encrypt, modes.Decrypt} {
+		if _, err := operation(b, modes.CTR, iv, make([]byte, 17)); err == nil {
+			t.Error("Brainrot CTR accepted counter overflow")
+		}
+		if _, err := operation(b, modes.CTR, iv, make([]byte, 16)); err != nil {
+			t.Errorf("Brainrot CTR rejected last counter: %v", err)
+		}
+	}
+	if !bytes.Equal(iv, bytes.Repeat([]byte{255}, 16)) {
+		t.Error("mode mutated caller IV")
 	}
 }
 

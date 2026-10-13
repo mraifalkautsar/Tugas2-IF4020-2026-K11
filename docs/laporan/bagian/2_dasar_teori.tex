@@ -22,8 +22,10 @@ bahwa suatu cipher telah aman.
 \section{S-box, Permutasi, dan Operasi Tambahan}
 S-box memetakan nilai byte menggunakan tabel. Pemetaan bijektif memiliki
 tabel invers untuk dekripsi. Permutasi mengubah posisi byte tanpa mengubah
-nilainya. Operasi XOR, pergeseran melingkar posisi byte, serta pencampuran pada $\mathrm{GF}(2^8)$
-digunakan oleh implementasi Brainrot. Perkalian medan dalam kode memakai
+nilainya. Brainrot memakai XOR, pergeseran melingkar posisi byte, rotasi
+bit, pencampuran pada $\mathrm{GF}(2^8)$, penjumlahan modulo, dan
+pencampuran Feistel. Langkah Feistel dapat dibalik tanpa mensyaratkan
+fungsi internal bijektif. Perkalian medan dalam kode memakai
 polinomial reduksi $x^8+x^4+x^3+x+1$, yang juga digunakan
 AES~\cite{aes}.
 
@@ -39,9 +41,10 @@ berlawanan arah.
 \textit{Key schedule} menurunkan kunci-kunci putaran secara deterministik
 dari kunci utama. AES menggunakan rotasi word, substitusi, XOR, dan
 konstanta putaran dalam proses perluasan kunci~\cite{aes}. Pendekatan ini
-menjadi acuan Brainrot, yang menghasilkan sebelas kunci berukuran
-16 byte: satu untuk tahap awal dan sepuluh untuk putaran enkripsi.
-Kunci yang sama digunakan dalam urutan terbalik pada dekripsi. Perluasan
+menjadi acuan Brainrot, yang menghasilkan 21 subkunci berukuran
+16 byte: satu untuk whitening dan dua untuk setiap putaran, yaitu
+penjumlahan modulo dan XOR. Dekripsi memakai subkunci yang sesuai
+dalam urutan operasi dan putaran terbalik. Perluasan
 ini tidak menambah entropi kunci utama; seluruh kunci putaran tetap
 ditentukan oleh kunci utama 128 bit. Rincian modifikasinya dijelaskan
 pada Bab III.
@@ -107,5 +110,4 @@ Pengukuran satu blok harus dibedakan dari pengukuran seluruh pesan.
 Sebagai contoh, pada OFB dan CTR dengan kunci serta IV tetap, perubahan
 satu bit plainteks hanya mengubah satu bit cipherteks karena keystream
 yang digunakan tetap sama. Oleh karena itu, ukuran statistik perlu
-ditafsirkan bersama ukuran sampel dan sifat mode operasi, bukan dijadikan
-bukti tunggal keamanan algoritma.
+ditafsirkan bersama ukuran sampel dan sifat mode operasi.

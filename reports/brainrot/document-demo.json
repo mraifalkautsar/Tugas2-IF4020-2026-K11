@@ -1,0 +1,293 @@
+{
+  "cbc_example": {
+    "ciphertext_hex": "fe03c8783a0b5dbf06957dfa382c5347",
+    "plaintext": "Halo Brainrot",
+    "recovered": "Halo Brainrot"
+  },
+  "cipher": "Brainrot Cipher",
+  "generated_utc": "2026-10-13T15:59:19Z",
+  "go_version": "go1.26.0",
+  "iv_hex": "000102030405060708090a0b0c0d0e0f",
+  "key_hex": "00112233445566778899aabbccddeeff",
+  "limitations": {
+    "automatic_iv_returned": false,
+    "automatic_iv_roundtrip_equal": false,
+    "invalid_key_message": "invalid key: must be 16 bytes or 32 hex characters",
+    "invalid_key_status": 400,
+    "invalid_padding_message": "decrypt error: invalid PKCS#7 padding length",
+    "invalid_padding_status": 400,
+    "zero_input_hex": "0100",
+    "zero_recovered_hex": "01"
+  },
+  "method": "HTTP multipart requests to the real controller; no browser fallback",
+  "modification_checks": [
+    {
+      "mode": "ECB",
+      "case": "ciphertext_changed",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "ECB",
+      "case": "ciphertext_truncated",
+      "http_status": 400,
+      "bytes_equal": false,
+      "message": "decrypt error: invalid ciphertext length for block mode"
+    },
+    {
+      "mode": "ECB",
+      "case": "wrong_key",
+      "http_status": 400,
+      "bytes_equal": false,
+      "message": "decrypt error: invalid PKCS#7 padding length"
+    },
+    {
+      "mode": "CBC",
+      "case": "ciphertext_changed",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "CBC",
+      "case": "ciphertext_truncated",
+      "http_status": 400,
+      "bytes_equal": false,
+      "message": "decrypt error: invalid ciphertext length for block mode"
+    },
+    {
+      "mode": "CBC",
+      "case": "wrong_key",
+      "http_status": 400,
+      "bytes_equal": false,
+      "message": "decrypt error: invalid PKCS#7 padding length"
+    },
+    {
+      "mode": "CBC",
+      "case": "iv_changed",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "CFB",
+      "case": "ciphertext_changed",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "CFB",
+      "case": "ciphertext_truncated",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "CFB",
+      "case": "wrong_key",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "CFB",
+      "case": "iv_changed",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "OFB",
+      "case": "ciphertext_changed",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "OFB",
+      "case": "ciphertext_truncated",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "OFB",
+      "case": "wrong_key",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "OFB",
+      "case": "iv_changed",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "CTR",
+      "case": "ciphertext_changed",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "CTR",
+      "case": "ciphertext_truncated",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "CTR",
+      "case": "wrong_key",
+      "http_status": 200,
+      "bytes_equal": false
+    },
+    {
+      "mode": "CTR",
+      "case": "iv_changed",
+      "http_status": 200,
+      "bytes_equal": false
+    }
+  ],
+  "padding_checks": [
+    {
+      "bytes_equal": true,
+      "ciphertext_bytes": 16,
+      "padding_bytes": 16,
+      "plaintext_bytes": 0
+    },
+    {
+      "bytes_equal": true,
+      "ciphertext_bytes": 16,
+      "padding_bytes": 15,
+      "plaintext_bytes": 1
+    },
+    {
+      "bytes_equal": true,
+      "ciphertext_bytes": 16,
+      "padding_bytes": 1,
+      "plaintext_bytes": 15
+    },
+    {
+      "bytes_equal": true,
+      "ciphertext_bytes": 32,
+      "padding_bytes": 16,
+      "plaintext_bytes": 16
+    },
+    {
+      "bytes_equal": true,
+      "ciphertext_bytes": 32,
+      "padding_bytes": 15,
+      "plaintext_bytes": 17
+    },
+    {
+      "bytes_equal": true,
+      "ciphertext_bytes": 48,
+      "padding_bytes": 16,
+      "plaintext_bytes": 32
+    }
+  ],
+  "recoveries": [
+    {
+      "mode": "ECB",
+      "fixture": "repeated-text.txt",
+      "plaintext_bytes": 404,
+      "ciphertext_bytes": 416,
+      "encrypt_status": 200,
+      "decrypt_status": 200,
+      "bytes_equal": true,
+      "plaintext_sha256": "c05f33e92162f0971aee6b5cacd06dddf7ecc82ec69a4d6d7866d9041b5f70d8",
+      "recovered_sha256": "c05f33e92162f0971aee6b5cacd06dddf7ecc82ec69a4d6d7866d9041b5f70d8"
+    },
+    {
+      "mode": "ECB",
+      "fixture": "byte-pattern.bin",
+      "plaintext_bytes": 1027,
+      "ciphertext_bytes": 1040,
+      "encrypt_status": 200,
+      "decrypt_status": 200,
+      "bytes_equal": true,
+      "plaintext_sha256": "785501ee5ebafcdaa93a1d29864209464f8e6ca4f4630bd7bf747018d5b96eb9",
+      "recovered_sha256": "785501ee5ebafcdaa93a1d29864209464f8e6ca4f4630bd7bf747018d5b96eb9"
+    },
+    {
+      "mode": "CBC",
+      "fixture": "repeated-text.txt",
+      "plaintext_bytes": 404,
+      "ciphertext_bytes": 416,
+      "encrypt_status": 200,
+      "decrypt_status": 200,
+      "bytes_equal": true,
+      "plaintext_sha256": "c05f33e92162f0971aee6b5cacd06dddf7ecc82ec69a4d6d7866d9041b5f70d8",
+      "recovered_sha256": "c05f33e92162f0971aee6b5cacd06dddf7ecc82ec69a4d6d7866d9041b5f70d8"
+    },
+    {
+      "mode": "CBC",
+      "fixture": "byte-pattern.bin",
+      "plaintext_bytes": 1027,
+      "ciphertext_bytes": 1040,
+      "encrypt_status": 200,
+      "decrypt_status": 200,
+      "bytes_equal": true,
+      "plaintext_sha256": "785501ee5ebafcdaa93a1d29864209464f8e6ca4f4630bd7bf747018d5b96eb9",
+      "recovered_sha256": "785501ee5ebafcdaa93a1d29864209464f8e6ca4f4630bd7bf747018d5b96eb9"
+    },
+    {
+      "mode": "CFB",
+      "fixture": "repeated-text.txt",
+      "plaintext_bytes": 404,
+      "ciphertext_bytes": 404,
+      "encrypt_status": 200,
+      "decrypt_status": 200,
+      "bytes_equal": true,
+      "plaintext_sha256": "c05f33e92162f0971aee6b5cacd06dddf7ecc82ec69a4d6d7866d9041b5f70d8",
+      "recovered_sha256": "c05f33e92162f0971aee6b5cacd06dddf7ecc82ec69a4d6d7866d9041b5f70d8"
+    },
+    {
+      "mode": "CFB",
+      "fixture": "byte-pattern.bin",
+      "plaintext_bytes": 1027,
+      "ciphertext_bytes": 1027,
+      "encrypt_status": 200,
+      "decrypt_status": 200,
+      "bytes_equal": true,
+      "plaintext_sha256": "785501ee5ebafcdaa93a1d29864209464f8e6ca4f4630bd7bf747018d5b96eb9",
+      "recovered_sha256": "785501ee5ebafcdaa93a1d29864209464f8e6ca4f4630bd7bf747018d5b96eb9"
+    },
+    {
+      "mode": "OFB",
+      "fixture": "repeated-text.txt",
+      "plaintext_bytes": 404,
+      "ciphertext_bytes": 404,
+      "encrypt_status": 200,
+      "decrypt_status": 200,
+      "bytes_equal": true,
+      "plaintext_sha256": "c05f33e92162f0971aee6b5cacd06dddf7ecc82ec69a4d6d7866d9041b5f70d8",
+      "recovered_sha256": "c05f33e92162f0971aee6b5cacd06dddf7ecc82ec69a4d6d7866d9041b5f70d8"
+    },
+    {
+      "mode": "OFB",
+      "fixture": "byte-pattern.bin",
+      "plaintext_bytes": 1027,
+      "ciphertext_bytes": 1027,
+      "encrypt_status": 200,
+      "decrypt_status": 200,
+      "bytes_equal": true,
+      "plaintext_sha256": "785501ee5ebafcdaa93a1d29864209464f8e6ca4f4630bd7bf747018d5b96eb9",
+      "recovered_sha256": "785501ee5ebafcdaa93a1d29864209464f8e6ca4f4630bd7bf747018d5b96eb9"
+    },
+    {
+      "mode": "CTR",
+      "fixture": "repeated-text.txt",
+      "plaintext_bytes": 404,
+      "ciphertext_bytes": 404,
+      "encrypt_status": 200,
+      "decrypt_status": 200,
+      "bytes_equal": true,
+      "plaintext_sha256": "c05f33e92162f0971aee6b5cacd06dddf7ecc82ec69a4d6d7866d9041b5f70d8",
+      "recovered_sha256": "c05f33e92162f0971aee6b5cacd06dddf7ecc82ec69a4d6d7866d9041b5f70d8"
+    },
+    {
+      "mode": "CTR",
+      "fixture": "byte-pattern.bin",
+      "plaintext_bytes": 1027,
+      "ciphertext_bytes": 1027,
+      "encrypt_status": 200,
+      "decrypt_status": 200,
+      "bytes_equal": true,
+      "plaintext_sha256": "785501ee5ebafcdaa93a1d29864209464f8e6ca4f4630bd7bf747018d5b96eb9",
+      "recovered_sha256": "785501ee5ebafcdaa93a1d29864209464f8e6ca4f4630bd7bf747018d5b96eb9"
+    }
+  ]
+}

@@ -97,11 +97,12 @@ func multiplyColumns(s *state, matrix [4][4]byte) {
 	}
 }
 
-func keyExpansion67(masterKey [KeySize]byte) [Rounds + 1][BlockSize]byte {
-	var words [4 * (Rounds + 1)][4]byte
+func keyExpansion67(masterKey [KeySize]byte) [subkeyCount][BlockSize]byte {
+	var words [4 * subkeyCount][4]byte
 	for i := 0; i < 4; i++ {
 		copy(words[i][:], masterKey[4*i:4*i+4])
 	}
+	rcon := byte(0x01)
 	for i := 4; i < len(words); i++ {
 		temp := words[i-1]
 		if i%4 == 0 {
@@ -110,13 +111,14 @@ func keyExpansion67(masterKey [KeySize]byte) [Rounds + 1][BlockSize]byte {
 			for j := range temp {
 				temp[j] = sbox67[temp[j]]
 			}
-			temp[0] ^= aesRcon[i/4-1] ^ 0x67
+			temp[0] ^= rcon ^ 0x67
+			rcon = gfMul(rcon, 0x02)
 		}
 		for j := range temp {
 			words[i][j] = words[i-4][j] ^ temp[j]
 		}
 	}
-	var keys [Rounds + 1][BlockSize]byte
+	var keys [subkeyCount][BlockSize]byte
 	for round := range keys {
 		for word := 0; word < 4; word++ {
 			copy(keys[round][4*word:4*word+4], words[4*round+word][:])
