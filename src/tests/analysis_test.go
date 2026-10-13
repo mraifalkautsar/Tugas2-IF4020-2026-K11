@@ -35,7 +35,7 @@ func TestBrainrotAnalysisAllModes(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if report.Cipher != "Brainrot Cipher v2" || !report.Experimental || len(report.Modes) != 5 {
+	if report.Cipher != "Brainrot Cipher" || !report.Experimental || len(report.Modes) != 5 {
 		t.Fatal("wrong Brainrot report header")
 	}
 	for _, blockTest := range []analysis.Avalanche{report.BlockPlaintext, report.BlockKey} {

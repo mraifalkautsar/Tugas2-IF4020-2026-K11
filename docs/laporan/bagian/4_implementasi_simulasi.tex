@@ -1,125 +1,131 @@
 \chapter{IMPLEMENTASI DAN SIMULASI}
+\input{data/brainrot/roundtrip}
 
-\section{Struktur Program dan Dependensi}
-Program menggunakan Go 1.23 atau lebih baru. Cipher dan mode operasi
-diimplementasikan dalam repositori tanpa pustaka kriptografi pihak ketiga.
-Pustaka standar \texttt{crypto/rand} dipakai oleh CLI untuk membangkitkan
-IV; \texttt{math/rand} hanya dipakai untuk eksperimen yang dapat diulang.
-Grafik histogram dibangkitkan dari JSON melalui skrip Python dengan
-matplotlib sebagai kakas dokumentasi. Referensi cipher Python hanya
-memakai pustaka standar. Keduanya tidak dipakai pada proses enkripsi Go.
+\section{Frontend, Backend, dan CLI}
+Antarmuka web menggunakan React, TypeScript, dan Vite. Pengguna dapat
+mengetik teks atau mengunggah berkas, memilih mode serta padding,
+memasukkan kunci dan IV, lalu mengunduh hasil enkripsi atau dekripsi.
+Grafik histogram dan entropi dihitung dari byte masukan/keluaran;
+pengujian avalanche meminta hasil dari backend.
 
-\input{data/v2/roundtrip}
-\begin{table}[htbp]
-  \centering\small
-  \caption{Komponen kode sumber.}
-  \begin{tabularx}{\linewidth}{@{}p{0.48\linewidth}Y@{}}
-    \toprule Lokasi & Peran\\ \midrule
-    \path{src/cipher/cipher.go} & Kontrak Block, Factory, dan Tracer.\\
-    \path{src/cipher/brainrot/} & Cipher, transformasi, tabel, dan ekspansi kunci.\\
-    \path{src/modes/modes.go} & Lima mode, PKCS\#7, dan pencacah CTR.\\
-    \path{src/cmd/crypt/main.go} & CLI enkripsi teks dan dekripsi hex.\\
-    \path{src/cmd/analyze/main.go} & CLI analisis berkas uji dan keluaran JSON.\\
-    \path{src/analysis/} & Statistik distribusi dan eksperimen perubahan bit.\\
-    \path{src/tests/} & Pengujian mode dan analisis dengan XOR uji serta Brainrot v2.\\
-    \bottomrule
-  \end{tabularx}
-\end{table}
+Backend Go menerima JSON untuk teks dan multipart untuk berkas melalui
+\path{/api/cipher/process}. Cipher diimplementasikan pada
+\path{src/cipher/brainrot/}, sedangkan controller menangani pembacaan data,
+padding, pemanggilan mode, dan respons hex/base64. Endpoint
+\path{/api/cipher/avalanche} menyediakan perubahan bit per putaran dan
+\path{/api/cipher/trace} menyediakan state untuk visualisasi.
+Frontend saat ini memiliki fallback simulasi XOR ketika API gagal;
+fallback tersebut bukan Brainrot dan tidak digunakan pada pengujian laporan.
 
-\section{Antarmuka dan Format Data}
-CLI \texttt{crypt} menerima \texttt{-op}, \texttt{-mode},
-\texttt{-key-hex}, dan \texttt{-input}. Kunci harus berupa 32 karakter
-heksadesimal. Saat enkripsi, masukan berupa teks; saat dekripsi,
-masukan berupa hex hasil enkripsi. Mode selain ECB menyimpan IV 16 byte
-di depan badan cipherteks: $\mathrm{IV}\Vert C$. Mode ECB hanya menyimpan $C$.
-Mode dan kunci tidak disertakan dalam keluaran; pengguna memasukkan
-keduanya lagi saat dekripsi.
-Brainrot v2 menggantikan cipher lama. Cipherteks lama tidak kompatibel;
-tidak ada fallback atau penanda versi pada format hex saat ini.
-Kontrak Block, Factory, dan Tracer tetap sama. Tracer menghasilkan
-66 snapshot: satu whitening, lima putaran dengan enam operasi, serta
-lima putaran dengan tujuh operasi. Setiap snapshot menyimpan salinan state.
+Sebagai antarmuka pendukung, CLI \texttt{crypt} mengenkripsi argumen teks
+atau mendekripsi hex, sedangkan \texttt{analyze} membaca berkas dan menulis
+statistik JSON. Keduanya dijalankan dengan \texttt{go -C src run ./cmd/...}.
 
-\begin{lstlisting}[language={},numbers=none,caption={Contoh simulasi CBC dari root repositori pada Bash.}]
-key_hex=00112233445566778899aabbccddeeff
-ciphertext=$(go -C src run ./cmd/crypt -op encrypt \
-  -mode CBC -key-hex "$key_hex" -input "Halo Brainrot")
-go -C src run ./cmd/crypt -op decrypt \
-  -mode CBC -key-hex "$key_hex" -input "$ciphertext"
+\section{Demonstrasi Teks dan Berkas Biner}
+Alur penggunaan web adalah mengisi kunci 16 byte, memilih mode, memasukkan
+IV 16 byte untuk mode selain ECB, dan memilih PKCS\#7. Setelah berkas
+terenkripsi diunduh, unggah kembali berkas tersebut dan pilih dekripsi
+menggunakan kunci, mode, padding, dan IV yang sama. Berkas hasil dekripsi
+dapat diunduh dalam bentuk byte aslinya.
+
+Pengujian demonstrasi mengirim permintaan multipart ke endpoint backend
+melalui server HTTP lokal sementara yang memakai controller yang sama
+seperti program web. Jadi, hasil berikut berasal dari Brainrot, bukan
+fallback browser. Demonstrasi dapat diulang dari root repositori:
+\begin{lstlisting}[language={},numbers=none,caption={Menjalankan demonstrasi dan pemeriksaan pemulihan data.}]
+go -C src run ../scripts/report_demonstration.go
 \end{lstlisting}
-
-\Isi{Cantumkan keluaran aktual atau tangkapan terminal. Ulangi simulasi
-untuk ECB, CBC, CFB, OFB, dan CTR. Deskripsikan antarmuka akhir jika berubah.}
-
-\section{Mode Operasi, IV, dan Counter}
-\begin{table}[htbp]
-  \centering\small
-  \caption{Perilaku mode operasi dalam kode saat ini.}
-  \label{tab:mode}
-  \begin{tabularx}{\linewidth}{@{}lp{0.23\linewidth}Y@{}}
-    \toprule Mode & IV / counter & Blok akhir dan umpan balik\\ \midrule
-    ECB & Tidak digunakan & Blok independen; PKCS\#7.\\
-    CBC & IV 16 byte & XOR dengan blok cipherteks sebelumnya; PKCS\#7.\\
-    CFB & IV 16 byte & Umpan balik blok penuh (CFB-128); potongan akhir
-      memakai sebagian keystream tanpa padding.\\
-    OFB & IV 16 byte & Umpan balik keluaran cipher; tanpa padding.\\
-    CTR & Counter awal 16 byte & Pencacah big-endian 128 bit;
-      menolak overflow jika masih ada data; tanpa padding.\\
-    \bottomrule
+Untuk contoh CBC, teks \texttt{Halo Brainrot} dienkripsi dengan parameter
+berikut, kemudian dipulihkan menjadi teks yang sama.
+\begin{center}
+  \begin{tabularx}{\linewidth}{@{}lY@{}}
+    Kunci (hex) & \texttt{00112233445566778899aabbccddeeff}\\
+    IV (hex) & \texttt{000102030405060708090a0b0c0d0e0f}\\
+    Badan cipherteks (hex) & \texttt{2279a13f90be5ee72e370ff313f37519}\\
   \end{tabularx}
-\end{table}
-Untuk CBC, CFB, dan OFB, IV dibuat oleh CLI menggunakan
-\texttt{crypto/rand}. Nilai yang sama menjadi counter awal CTR.
-Dekripsi CFB, OFB, dan CTR menggunakan fungsi enkripsi blok untuk
-membangkitkan keystream.
-
-\Isi{Jelaskan alasan pengelolaan IV/counter dan mekanisme penyimpanannya
-pada format berkas akhir. Catat cara mencegah penggunaan ulang keystream.}
-
-\section{Penanganan Padding}
-Untuk ECB dan CBC dengan $b=16$, panjang badan cipherteks adalah
-$16(\lfloor L/16\rfloor+1)$ byte. Untuk CFB, OFB, dan CTR, panjang badan
-cipherteks sama dengan panjang plainteks. Panjang IV tidak termasuk dalam
-kedua ukuran tersebut. Dekripsi ECB/CBC memeriksa panjang cipherteks,
-nilai byte padding terakhir, dan kesamaan seluruh byte padding.
-
-\Isi{Justifikasi PKCS\#7 dan lengkapi bukti untuk masukan 0, 1, 15, 16,
-17, dan 32 byte. Catat panjang plainteks, padding, badan cipherteks,
-dan hasil pemulihan; sertakan kasus padding tidak valid.}
-
-\section{Simulasi Berkas Teks dan Biner}
-Fungsi mode menerima slice byte, sedangkan CLI analisis membaca berkas.
-CLI \texttt{crypt} saat ini hanya menerima teks dari argumen dan belum
-menyediakan pembacaan serta penulisan berkas biner sembarang.
-
-\Isi{Lengkapi bagian ini setelah alur enkripsi/dekripsi berkas tersedia.
-Gunakan berkas teks dan biner pada seluruh mode; jangan menganggap
-simulasi argumen teks sebagai bukti dukungan berkas biner.}
+\end{center}
 
 \begin{table}[htbp]
   \centering\small
-  \caption{Pemulihan fixture melalui CLI analisis dan API mode, seed 42.}
+  \caption{Pemulihan berkas melalui endpoint HTTP dengan PKCS\#7.}
   \label{tab:simulasi}
   \begin{tabularx}{\linewidth}{@{}lYYYY@{}}
     \toprule Mode & Teks (byte) & Biner (byte) &
       Badan teks / biner (byte) & Byte hasil dekripsi sama\\ \midrule
-    \VTwoRoundTripRows
+    \BrainrotRoundTripRows
     \bottomrule
   \end{tabularx}
 \end{table}
-Teks berasal dari \path{repeated-text.txt} dan biner dari
-\path{byte-pattern.bin}; lokasi lengkap dan hash tercatat pada manifest
-hasil. Bukti pemulihan ini berasal dari analisis yang membaca fixture
-dan memanggil API mode, bukan antarmuka enkripsi/dekripsi berkas umum.
+Masukan teks adalah \path{repeated-text.txt} sepanjang 404 byte dan biner
+\path{byte-pattern.bin} sepanjang 1027 byte. Seluruh sepuluh kombinasi
+berkas/mode menghasilkan respons HTTP 200, kesamaan byte langsung,
+serta SHA-256 masukan dan hasil dekripsi yang sama.
 
-\section{Verifikasi Integritas dan Kasus Gagal}
-Analisis menggunakan \texttt{bytes.Equal} untuk memeriksa bahwa hasil
-dekripsi sama persis dengan masukan. Kode saat ini belum menyimpan
-tag autentikasi atau mekanisme verifikasi perubahan cipherteks. Pemeriksaan
-padding hanya memvalidasi bentuk padding, sehingga tidak mencakup
-seluruh perubahan pada isi pesan.
+\section{Justifikasi dan Bukti Padding}
+PKCS\#7 dipilih karena dapat mengembalikan panjang pesan tanpa
+menghilangkan byte nol asli. ECB/CBC menambahkan $p=16-(L\bmod16)$ byte,
+masing-masing bernilai $p$, termasuk satu blok penuh ketika $L$ sudah
+kelipatan 16. Dekripsi memeriksa nilai dan seluruh byte padding.
+CFB, OFB, dan CTR menggunakan sebagian keystream untuk potongan terakhir,
+sehingga tidak memerlukan padding.
 
-\Isi{Jelaskan mekanisme integritas yang dipilih pada implementasi akhir
-sesuai spesifikasi. Bedakan bukti round-trip dengan deteksi modifikasi
-data. Sertakan hasil pengujian kunci salah, data berubah, IV berubah,
-data terpotong, dan masukan tidak valid.}
+\begin{table}[htbp]
+  \centering\small
+  \caption{Pemeriksaan batas blok pada CBC dengan PKCS\#7.}
+  \begin{tabular}{@{}rrrrrr@{}}
+    \toprule Panjang masukan (byte) & 0 & 1 & 15 & 16 & 17\\
+    \midrule Byte padding & 16 & 15 & 1 & 16 & 15\\
+    Badan cipherteks (byte) & 16 & 16 & 16 & 32 & 32\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+Masukan 32 byte juga dipulihkan identik setelah memperoleh padding
+16 byte dan badan cipherteks 48 byte. Padding tidak valid ditolak dengan
+HTTP 400. Opsi ANSI X9.23 dan zero padding tersedia pada web, tetapi
+simulasi memakai PKCS\#7. Zero padding tidak dipilih karena data asli
+$\mathtt{01\,00}$ dipulihkan sebagai $\mathtt{01}$ oleh implementasi
+saat ini; byte nol akhir tidak dapat dibedakan dari padding.
+
+\section{Pengelolaan IV dan Counter}
+ECB tidak memakai IV. CBC, CFB, dan OFB menggunakan IV 16 byte; CTR
+menafsirkan 16 byte tersebut sebagai pencacah awal big-endian.
+IV CBC/CFB harus tidak dapat diprediksi, sedangkan IV OFB dan blok
+pencacah CTR harus unik untuk kunci yang sama~\cite{mode}. Karena itu,
+IV/counter perlu dibuat baru untuk pesan berbeda dan nilai aslinya
+harus tersedia saat dekripsi. CTR menolak pelimpahan pencacah apabila
+masih ada blok yang perlu diproses.
+
+CLI memakai \texttt{crypto/rand} dan menyertakan IV di depan cipherteks
+sebagai $\mathrm{IV}\Vert C$. Web/API saat ini menyimpan IV terpisah
+melalui isian pengguna; badan berkas hasil belum memuat IV, mode, atau
+padding. Pengujian memakai IV eksplisit yang sama saat enkripsi dan
+dekripsi. Jika IV API dikosongkan, backend membuat nilai acak tetapi tidak
+mengembalikannya; pengujian OFB pada jalur ini gagal memulihkan pesan.
+Dengan demikian, demonstrasi memakai IV eksplisit, dan penyimpanan IV
+otomatis masih perlu diperbaiki.
+
+\section{Bukti Pemulihan Data dan Batas Integritas}
+Kesamaan byte dan SHA-256 pada Tabel~\ref{tab:simulasi} menunjukkan
+pemulihan tanpa perubahan untuk masukan dan parameter yang diuji. Untuk menilai batas verifikasi saat ini, badan cipherteks
+teks diubah satu bit pada byte pertama, dipotong satu byte, atau
+didekripsi dengan kunci/IV yang berbeda.
+
+\begin{table}[htbp]
+  \centering\small
+  \caption{Pengujian perubahan data.}
+  \begin{tabularx}{\linewidth}{@{}Yrrrrr@{}}
+    \toprule Kasus & ECB & CBC & CFB & OFB & CTR\\ \midrule
+    Cipherteks diubah 1 bit & 200 & 200 & 200 & 200 & 200\\
+    Cipherteks dipotong 1 byte & 400 & 400 & 200 & 200 & 200\\
+    Kunci berbeda & 400 & 400 & 200 & 200 & 200\\
+    IV berbeda & --- & 200 & 200 & 200 & 200\\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+Respons 400 pada ECB/CBC berasal dari pemeriksaan panjang atau padding;
+penolakan pada sampel ini tidak menjamin semua manipulasi akan terdeteksi.
+Respons 200 pada data yang berubah menunjukkan bahwa program belum
+memverifikasi autentikasi integritas. Kunci terlalu pendek juga ditolak
+HTTP 400, tetapi belum ada MAC/tag untuk menolak perubahan isi berkas
+secara menyeluruh. Bukti yang tersedia adalah pemulihan data pada
+round-trip, bukan jaminan integritas terhadap pihak yang memodifikasi data.

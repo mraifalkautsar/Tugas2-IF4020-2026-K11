@@ -26,6 +26,10 @@
 \setlength{\parindent}{1.27cm}
 \setlength{\parskip}{0.2\baselineskip}
 \usepackage{indentfirst,microtype}
+% Pertahankan paragraf rata kiri-kanan tanpa memenggal kata.
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\tolerance=2000
 \emergencystretch=3em
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -81,10 +85,10 @@
 \lstset{basicstyle=\ttfamily\footnotesize,
   numbers=left,numberstyle=\tiny,numbersep=8pt,
   frame=single,rulecolor=\color{black!30},
-  backgroundcolor=\color{black!3},breaklines=true,
+  backgroundcolor=\color{black!3},breaklines=true,breakatwhitespace=true,
   columns=fullflexible,keepspaces=true,showstringspaces=false,
   tabsize=4,captionpos=b}
-\usepackage{xurl}
+\usepackage{url}
 \usepackage[hidelinks,unicode,hypertexnames=false]{hyperref}
 \urlstyle{same}
 \AtBeginDocument{

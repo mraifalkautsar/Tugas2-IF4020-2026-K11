@@ -16,7 +16,7 @@ const (
 
 type Factory struct{}
 
-func (Factory) Name() string { return "Brainrot Cipher v2" }
+func (Factory) Name() string { return "Brainrot Cipher" }
 func (Factory) KeySize() int { return KeySize }
 func (Factory) New(key []byte) (cipher.Block, error) {
 	b, err := New(key)
@@ -48,7 +48,8 @@ func New(key []byte) (*Block, error) {
 
 func (*Block) BlockSize() int { return BlockSize }
 
-func (b *Block) RoundKeys() [Rounds + 1][BlockSize]byte { return b.roundKeys }
+// RoundKeys returns Q0 (whitening), then alternating addition/XOR subkeys.
+func (b *Block) RoundKeys() [subkeyCount][BlockSize]byte { return b.roundKeys }
 
 func SBoxTable() [256]byte { return sbox67 }
 

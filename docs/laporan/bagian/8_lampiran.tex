@@ -37,12 +37,6 @@ Cantumkan juga tautannya pada README repositori.}
   \end{tabularx}
 \end{table}
 
-\BagianLampiran{Berkas Uji dan Hasil Lengkap}
-\Isi{Cantumkan lokasi berkas teks dan biner, laporan JSON per berkas,
-histogram, hasil enkripsi/dekripsi, serta tabel tambahan yang mendukung
-Bab IV dan V. Jangan menyertakan reports/toy.json sebagai bukti keamanan
-Brainrot.}
-
 \BagianLampiran{Petunjuk Menjalankan}
 Jalankan dari root repositori dengan Go 1.23 atau lebih baru.
 \begin{lstlisting}[language={},numbers=none,caption={Perintah verifikasi dan analisis.}]
@@ -57,5 +51,9 @@ Di PowerShell, satukan setiap perintah menjadi satu baris atau gunakan
 backtick sebagai penyambung baris. README repositori memuat contoh
 enkripsi/dekripsi dengan variabel PowerShell.
 
-\Isi{Perbarui perintah sesuai antarmuka akhir, khususnya masukan dan
-keluaran berkas serta verifikasi integritas.}
+Backend web dijalankan dengan \texttt{go -C src run ./cmd/server},
+sedangkan frontend memakai \texttt{npm --prefix frontend run dev}
+setelah dependensinya dipasang. Demonstrasi pemulihan data dan kasus
+perubahan dapat diulang dengan
+\texttt{go -C src run ../scripts/report\_demonstration.go}.
+Pengelolaan IV dan batas verifikasi integritas dijelaskan pada Bab IV.

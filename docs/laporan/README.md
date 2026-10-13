@@ -1,4 +1,4 @@
-# Laporan Tugas 2 IF4020 — Brainrot Cipher v2
+# Laporan Tugas 2 IF4020 — Brainrot Cipher
 
 Kerangka laporan mengikuti bagian **Laporan** pada
 [`Tugas2-IF4020-2026.md`](../../Tugas2-IF4020-2026.md).
@@ -9,9 +9,9 @@ pernyataan dari tugas lama juga tidak digunakan karena tidak diminta oleh
 spesifikasi tugas ini.
 
 Teks awal rancangan dan implementasi berasal dari kode saat penyiapan
-template dan diperbarui untuk v2; tinjau kembali jika kode berubah.
-Tabel hasil dan histogram v2 telah dihasilkan dari eksperimen teks/biner,
-sedangkan pembahasan lanjutan dan kesimpulan masih berupa isian.
+template dan diperbarui untuk Brainrot; tinjau kembali jika kode berubah.
+Tabel, histogram, demonstrasi HTTP, dan pembahasan perancangan/keamanan
+sudah terisi berdasarkan kode dan pengujian. Kesimpulan masih berupa isian.
 `---` pada tabel berarti **belum diisi**, bukan nol atau lulus.
 Seluruh identitas anggota memakai placeholder sesuai permintaan.
 
@@ -41,28 +41,28 @@ Seluruh identitas anggota memakai placeholder sesuai permintaan.
 | [`bagian/5_analisis_keamanan.tex`](bagian/5_analisis_keamanan.tex) | Metode, avalanche blok/mode, entropi, histogram, keterbatasan |
 | [`bagian/6_kesimpulan.tex`](bagian/6_kesimpulan.tex) | Kesimpulan dan saran pengembangan |
 | [`bagian/7_pustaka.tex`](bagian/7_pustaka.tex) | Referensi dengan `thebibliography`; tidak memerlukan BibTeX |
-| [`bagian/8_lampiran.tex`](bagian/8_lampiran.tex) | Repositori, bonus, pembagian tugas, bukti tambahan, cara menjalankan |
+| [`bagian/8_lampiran.tex`](bagian/8_lampiran.tex) | Repositori, bonus, pembagian tugas, cara menjalankan |
 
 ## Temuan kode yang perlu diperhatikan saat menulis
 
 | Ketentuan / bukti | Kondisi kode saat template disiapkan |
 | --- | --- |
-| Cipher dan kunci minimal 64 bit | Brainrot v2 memakai blok/kunci 128 bit, 10 putaran, dan 21 subkunci |
+| Cipher dan kunci minimal 64 bit | Brainrot memakai blok/kunci 128 bit, 10 putaran, dan 21 subkunci |
 | Substitusi, permutasi, operasi tambahan | S-box turunan AES, rotasi baris, MixColumns, BPT revisi sesudah MixColumns, FCM putaran genap, penjumlahan modulo, dan XOR |
 | Rancangan baru dan penjelasan komponen | Struktur dan key schedule menyerupai AES-128; jelaskan asal ide dan perubahan yang dibuat terhadap pembanding |
 | Lima mode operasi | ECB, CBC, CFB-128, OFB, CTR tersedia di `src/modes` |
 | Padding | PKCS#7 untuk ECB/CBC; CFB/OFB/CTR memproses sisa byte tanpa padding |
 | Masukan/keluaran teks dan berkas biner | API mode menerima byte; `crypt` hanya menerima argumen teks/hex. CLI analisis membaca berkas uji, tetapi belum menjadi antarmuka enkripsi/dekripsi berkas |
 | Verifikasi hasil dekripsi | Analisis memeriksa `bytes.Equal`; belum ada autentikasi/tag integritas pada cipherteks |
-| Avalanche, entropi, histogram semua mode | Tabel dan grafik dari JSON v2 tersedia di Bab V; pembahasan lanjutan masih perlu dilengkapi |
-| Bukti pengujian | Vektor independen, subkunci, 66 snapshot, invers, batas difusi, serta pengujian mode/statistik khusus v2 tersedia; XOR uji dipertahankan untuk chaining |
+| Avalanche, entropi, histogram semua mode | Tabel, grafik, dan pembahasan dari JSON Brainrot tersedia di Bab V |
+| Bukti pengujian | Vektor independen, subkunci, 66 snapshot, invers, batas difusi, serta pengujian mode/statistik khusus Brainrot tersedia; XOR uji dipertahankan untuk chaining |
 
 Analisis bawaan dapat dijalankan dari root repositori:
 
 ```sh
 go -C src test ./...
 go -C src run ./cmd/analyze -cipher brainrot -modes all \
-  -trials 256 -seed 42 -output ../reports/brainrot-v2/text-seed42.json
+  -trials 256 -seed 42 -output ../reports/brainrot/text-seed42.json
 ```
 
 Gunakan `-input testdata/...` untuk berkas lain; path masukan relatif terhadap
@@ -72,11 +72,17 @@ Gunakan nama laporan berbeda untuk tiap berkas agar hasil tidak tertimpa.
 JSON dan pesan terminal menandai eksperimen; nilai statistik bukan bukti
 keamanan kriptografis. Metode lengkap ada di [`../methodology.md`](../methodology.md).
 
-Spesifikasi v2 tersedia di [`../../addition.md`](../../addition.md).
+Demonstrasi endpoint HTTP, padding, kesamaan byte/hash, serta perubahan
+data di Bab IV dapat diulang dengan
+`go -C src run ../scripts/report_demonstration.go`. Hasilnya tersimpan di
+`reports/brainrot/document-demo.json`. Bukti ini menunjukkan pemulihan data
+yang diuji, sekaligus memperlihatkan bahwa autentikasi integritas belum tersedia.
+
+Spesifikasi Brainrot tersedia di [`../../addition.md`](../../addition.md).
 Cipherteks lama tidak kompatibel dan format hex CLI belum memuat penanda versi.
 Hasil yang direkam, benchmark, dan manifest ada di
-[`../../reports/brainrot-v2/README.md`](../../reports/brainrot-v2/README.md).
-Tabel terbangkitkan di `data/v2/` dan histogram di `gambar/` dapat diperbarui
+[`../../reports/brainrot/README.md`](../../reports/brainrot/README.md).
+Tabel terbangkitkan di `data/brainrot/` dan histogram di `gambar/` dapat diperbarui
 dengan `python3 scripts/render_brainrot_results.py` dari root repositori
 (memerlukan matplotlib untuk rendering). PDF memakai berkas yang sudah
 termasuk di folder laporan, sehingga kompilasi tidak memerlukan Python.

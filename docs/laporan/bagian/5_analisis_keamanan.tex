@@ -1,20 +1,20 @@
 \chapter{ANALISIS KEAMANAN}
-\input{data/v2/block-avalanche}
-\input{data/v2/mode-avalanche}
-\input{data/v2/entropy}
-\input{data/v2/binary-entropy}
+\input{data/brainrot/block-avalanche}
+\input{data/brainrot/mode-avalanche}
+\input{data/brainrot/entropy}
+\input{data/brainrot/binary-entropy}
 
 \section{Konfigurasi dan Reproduksibilitas}
-CLI \texttt{analyze} menggunakan Brainrot v2 secara default. Masukan bawaan
-adalah \path{src/testdata/fixtures/one-block.txt} sepanjang 16 byte dan
-\path{src/testdata/fixtures/repeated-text.txt} sepanjang 404 byte.
-Parameter bawaan adalah 256 percobaan, seed 42, serta kunci
+Pengujian memakai Brainrot, fixture satu blok sepanjang 16 byte, teks
+\path{repeated-text.txt} sepanjang 404 byte, dan biner
+\path{byte-pattern.bin} sepanjang 1027 byte. Konfigurasi utama adalah
+256 percobaan, seed 42, serta kunci
 \texttt{00112233445566778899aabbccddeeff}. Seed hanya digunakan untuk
 eksperimen; IV pada CLI enkripsi dibangkitkan secara terpisah.
 
 \begin{lstlisting}[language={},numbers=none,caption={Menjalankan analisis dari root repositori.}]
 go -C src run ./cmd/analyze -cipher brainrot -modes all \
-  -trials 256 -seed 42 -output ../reports/brainrot-v2/text-seed42.json
+  -trials 256 -seed 42 -output ../reports/brainrot/text-seed42.json
 go -C src test ./...
 \end{lstlisting}
 
@@ -23,12 +23,12 @@ avalanche satu blok, hasil round-trip per mode, entropi, histogram 256 bin,
 dan avalanche pesan utuh. Pengukuran mode hanya memakai badan cipherteks;
 IV tidak masuk histogram atau penyebut persentase perubahan bit.
 
-Hasil yang ditampilkan berasal dari \path{reports/brainrot-v2/text-seed42.json}
-dan \path{reports/brainrot-v2/binary-seed42.json}. Fixture biner
+Hasil yang ditampilkan berasal dari \path{reports/brainrot/text-seed42.json}
+dan \path{reports/brainrot/binary-seed42.json}. Fixture biner
 \path{src/testdata/fixtures/byte-pattern.bin} terdiri atas nilai byte 0--255
 yang diulang empat kali, diikuti $\mathtt{00,ff,80}$; totalnya 1027 byte.
 Manifest pada folder hasil mencatat kunci, seed, ukuran dan SHA-256 fixture,
-versi Go, sistem operasi, commit dasar, serta hash sumber v2. Dua eksperimen
+versi Go, sistem operasi, serta asal pengukuran. Dua eksperimen
 tambahan memakai seed 1337 dengan kunci nol pada teks dan kunci semua satu
 pada biner. Seluruh angka adalah pengamatan sampel, bukan ambang kelulusan
 keamanan.
@@ -44,19 +44,24 @@ serta rata-rata dan jumlah percobaan per posisi bit.
 
 \begin{table}[htbp]
   \centering\small
-  \caption{Hasil avalanche Brainrot v2 satu blok, 256 percobaan dan seed 42.}
+  \caption{Hasil avalanche Brainrot satu blok, 256 percobaan dan seed 42.}
   \begin{tabularx}{\linewidth}{@{}lYYYY@{}}
     \toprule Perubahan & Percobaan & Rata-rata (\%) & Minimum (bit) & Maksimum (bit)\\
     \midrule
-    \VTwoBlockRows
+    \BrainrotBlockRows
     \bottomrule
   \end{tabularx}
 \end{table}
 
-Dengan 256 percobaan, setiap posisi bit diuji dua kali. Rata-rata perubahan
-bit plainteks dan kunci mendekati separuh keluaran pada sampel ini.
-\Isi{Kembangkan pembahasan variasi per posisi bit dari JSON dan
-bandingkan dengan eksperimen kunci/seed lainnya.}
+Rata-rata perubahan adalah 49,643\% untuk bit plainteks dan 50,177\%
+untuk bit kunci, mendekati separuh keluaran. Setiap posisi bit hanya diuji
+dua kali; rata-rata per posisi berkisar 51--75,5 bit untuk plainteks dan
+52--76 bit untuk kunci. Variasi ini belum cukup untuk menyimpulkan bahwa
+setiap bit keluaran berubah dengan peluang yang sama.
+Dengan seed 1337, kunci nol menghasilkan rata-rata 49,875\%/50,146\%,
+sedangkan kunci semua satu menghasilkan 50,055\%/50,488\%
+(plainteks/kunci). Kedekatan hasil pada tiga konfigurasi mendukung adanya
+difusi pada sampel, tetapi tidak membuktikan ketahanan terhadap serangan.
 
 \section{Avalanche Effect pada Seluruh Mode}
 Untuk pesan utuh, posisi bit plainteks dipilih pseudorandom dan posisi
@@ -71,7 +76,7 @@ ECB/CBC, sehingga berbeda dari pengujian satu blok.
   \begin{tabularx}{\linewidth}{@{}lYYY@{}}
     \toprule Mode & Panjang badan (byte) & Perubahan plainteks (\%) & Perubahan kunci (\%)\\
     \midrule
-    \VTwoModeRows
+    \BrainrotModeRows
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -82,8 +87,17 @@ pada CBC dan CFB pengaruhnya bergantung pada posisi perubahan dan umpan
 balik. Interpretasi hasil harus membedakan sifat mode dari difusi cipher
 satu blok.
 
-\Isi{Bahas hasil kelima mode, posisi bit yang dipilih, pengaruh panjang
-pesan, dan perbedaan perubahan plainteks terhadap perubahan kunci.}
+Pada teks, perubahan plainteks ECB hanya 1,931\% karena pengaruhnya
+terbatas pada satu blok dari badan 416 byte. CBC dan CFB mencapai
+25,969\% dan 24,204\% karena perubahan dapat merambat ke blok berikutnya;
+posisi bit yang dipilih menentukan banyaknya blok yang terkena pengaruh.
+OFB dan CTR sama-sama 0,031\%, yaitu satu bit dari 3232 bit badan.
+Pada biner yang lebih panjang, persentase ECB turun menjadi 0,768\% dan
+OFB/CTR menjadi 0,012\%; CBC/CFB tetap sekitar 25\%.
+Sebaliknya, perubahan kunci menghasilkan sekitar 50\% pada kelima mode
+karena kunci memengaruhi semua pemanggilan cipher. Persentase perubahan
+plainteks yang kecil pada OFB/CTR merupakan sifat mode, bukan kegagalan
+avalanche cipher satu blok.
 
 \section{Analisis Entropi}
 \begin{table}[htbp]
@@ -92,7 +106,7 @@ pesan, dan perbedaan perubahan plainteks terhadap perubahan kunci.}
   \begin{tabularx}{\linewidth}{@{}lYYY@{}}
     \toprule Mode & Ukuran sampel (byte) & Plainteks (bit/byte) & Cipherteks (bit/byte)\\
     \midrule
-    \VTwoEntropyRows
+    \BrainrotEntropyRows
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -102,12 +116,19 @@ pesan, dan perbedaan perubahan plainteks terhadap perubahan kunci.}
   \begin{tabularx}{\linewidth}{@{}lYYY@{}}
     \toprule Mode & Ukuran badan (byte) & Plainteks (bit/byte) & Cipherteks (bit/byte)\\
     \midrule
-    \VTwoBinaryEntropyRows
+    \BrainrotBinaryEntropyRows
     \bottomrule
   \end{tabularx}
 \end{table}
-\Isi{Jelaskan pengaruh ukuran sampel, pola plainteks, dan padding.
-Nilai mendekati 8 bit/byte saja tidak membuktikan keamanan kriptografis.}
+Entropi teks meningkat dari 4,860 menjadi 7,217 bit/byte pada ECB dan
+7,456--7,513 pada mode lain. Pada biner, plainteks sudah mendekati
+8 bit/byte, tetapi ECB hanya mencapai 7,197 karena blok berulang tetap
+menghasilkan cipherteks berulang. Mode lain mencapai 7,777--7,807.
+Entropi tidak harus meningkat: nilainya bergantung pada distribusi awal,
+ukuran sampel, pengulangan blok, dan tambahan padding ECB/CBC.
+Selisih kecil antar-CBC, CFB, OFB, dan CTR pada sampel ini tidak menjadi
+peringkat keamanan. Entropi empiris tinggi tidak mengukur seluruh
+korelasi maupun kemungkinan serangan terhadap cipher.
 
 \section{Analisis Histogram}
 \begin{figure}[htbp]
@@ -125,43 +146,87 @@ Nilai mendekati 8 bit/byte saja tidak membuktikan keamanan kriptografis.}
 \end{figure}
 Grafik memakai proporsi byte agar panjang badan yang berbeda dapat
 dibandingkan. Skala y berbeda antar panel dan tercantum pada setiap sumbu.
-\Isi{Bahas pola berulang, khususnya ECB, serta kedekatan distribusi empiris
-terhadap distribusi seragam dengan memperhatikan ukuran sampel.}
+Pada teks, ECB memiliki 76 nilai byte yang tidak muncul dan puncak
+frekuensi 10 kemunculan, sedangkan mode lain memiliki 48--54 nilai yang
+tidak muncul. Perbedaannya lebih jelas pada biner: ECB memiliki 93 nilai
+yang tidak muncul dan puncak 28 kemunculan; mode lain hanya 3--8 nilai
+yang tidak muncul. Hal ini selaras dengan blok masukan yang berulang dan
+pemetaan ECB yang independen per blok. Sebaran CBC, CFB, OFB, dan CTR
+lebih mendekati seragam pada sampel biner ini, tetapi batang tidak harus
+sama tinggi karena jumlah byte terbatas. Histogram juga tidak menampilkan
+urutan byte, sehingga kemerataan saja tidak membuktikan ketiadaan pola.
 
+% Selesaikan gambar histogram agar tidak menyela penjelasan pengujian.
+\clearpage
 \section{Pengujian Tambahan dan Keterbatasan}
-\Isi{Jika dilakukan, tambahkan pengujian ukuran kecil/sedang/besar,
-waktu proses, penggunaan memori, perubahan per putaran melalui Tracer,
-atau kajian struktur S-box dan matriks. Sertakan metode serta hasil aktual.}
+\subsection{Kebenaran Implementasi}
+Pengujian mode memakai \texttt{TEST-ONLY-XOR}, yaitu cipher sederhana
+khusus pengujian yang hasilnya mudah dihitung, untuk memeriksa urutan
+chaining antarblok. Pengujian dengan Brainrot kemudian memeriksa
+pemulihan data menggunakan algoritma sebenarnya. Empat pasangan kunci
+dan plainteks dicocokkan dengan implementasi referensi Python yang
+terpisah: cipherteks akhir, 21 subkunci, dan 66 state perantara per kasus
+harus sama. Pencocokan state membantu menemukan tahap yang keliru,
+meskipun enkripsi dan dekripsi masih saling membalik.
 
-Pengujian otomatis mempertahankan \texttt{TEST-ONLY-XOR} untuk hasil
-chaining yang dapat diprediksi, dan menambahkan pengujian khusus Brainrot
-v2. Empat vektor referensi independen memeriksa cipherteks, 21 subkunci
-per kasus, serta 66 snapshot. Invers, input berpola dan pseudorandom,
-overlap buffer, pemetaan semua 128 bit BPT, serta seluruh 65.536 pasangan
-byte/subkunci untuk penjumlahan diperiksa. Lima mode juga diuji dengan
-Brainrot pada masukan kosong, batas blok, padding tidak valid, dan overflow CTR.
+Pengujian juga memeriksa invers setiap operasi, masukan berpola dan
+pseudorandom, serta buffer masukan/keluaran yang saling tumpang tindih.
+Seluruh 128 posisi bit BPT dan 65.536 pasangan nilai byte/subkunci
+penjumlahan diperiksa. Kelima mode diuji pada masukan kosong dan batas
+blok, beserta penolakan padding tidak valid pada mode yang memakainya
+dan penolakan pelimpahan pencacah CTR. Hasil ini mendukung kesesuaian
+implementasi dengan rancangan pada kasus yang diuji.
 
-Pemeriksaan rank biner menguji 36.416 pasangan support untuk setiap
-jenis propagasi dan membuktikan branch number byte minimal 5 pada
-lapisan ShiftRows67--MixColumns67--BPT revisi untuk perbedaan dan masker
-linier. Referensi Python memeriksa batas yang sama secara independen.
-Batas tersebut tidak mencakup FCM, penjumlahan, atau seluruh cipher.
+\subsection{Batas Penyebaran pada Lapisan Linier}
+Branch number byte minimal 5 berarti jumlah byte aktif pada masukan
+dan keluaran lapisan linier paling sedikit 5 untuk pola bukan nol.
+Pada analisis diferensial, byte aktif berarti byte dengan perbedaan
+XOR bukan nol. Jadi, perbedaan pada satu byte masukan harus menghasilkan
+perbedaan pada setidaknya empat byte keluaran. Batas serupa diperiksa
+untuk masker linier, yaitu pola bit yang dipilih dalam hubungan XOR
+masukan dan keluaran.
 
-Benchmark tiga kali pada Linux amd64, AMD Ryzen 5 5600H, menghasilkan
-median enkripsi 20.225 ns/blok pada cipher lama dan 24.959 ns/blok pada
-v2 (kenaikan waktu sekitar 23,4\%). Median dekripsi berubah dari
-20.141 menjadi 24.673 ns/blok (sekitar 22,5\%). Tidak ada alokasi heap
-per blok pada kedua versi. Angka tersebut berasal dari benchmark lokal
-dan bukan batas performa universal; keluaran mentah disimpan bersama hasil.
+Pemeriksaan menguji 36.416 pasangan posisi byte aktif untuk setiap
+jenis propagasi. Rank matriks biner digunakan untuk memastikan tidak
+ada pola bukan nol dengan jumlah byte aktif kurang dari 5; pemeriksaan
+Python memberikan hasil yang sama secara independen. Batas ini hanya
+berlaku pada gabungan ShiftRows67, MixColumns67, dan BPT. Batas tersebut
+tidak otomatis berlaku setelah FCM atau penjumlahan, dan belum memberikan
+batas probabilitas serangan pada sepuluh putaran Brainrot.
 
-FCM memiliki simetri rotasi pada kedua half, dan fungsi internalnya
-memiliki empat kemungkinan perbedaan keluaran dengan probabilitas
-$1/4$ untuk perbedaan masukan satu bit pada input seragam. Penjumlahan
-byte mempertahankan perbedaan XOR bit tertinggi untuk setiap subkunci.
-Pasangan subkunci penjumlahan/XOR $(a,b)$ dan
-$((a+128)\bmod256,b\oplus128)$ juga menghasilkan pemetaan byte sama.
-Ini adalah sifat komponen, bukan bukti serangan pada cipher lengkap
-atau adanya kunci utama ekuivalen.
+\subsection{Biaya Komputasi}
+Benchmark tiga kali pada Linux amd64 dengan AMD Ryzen 5 5600H
+menghasilkan median waktu enkripsi 20.225 ns/blok pada implementasi
+awal dan 24.959 ns/blok pada Brainrot, meningkat sekitar 23,4\%.
+Median dekripsi meningkat dari 20.141 menjadi 24.673 ns/blok,
+sekitar 22,5\%. Setiap blok berukuran 16 byte; pembuatan subkunci
+tidak termasuk pengukuran. Kedua implementasi tidak mengalokasikan
+memori heap per blok. Angka ini menunjukkan biaya tambahan rancangan
+pada mesin pengujian, bukan jaminan kecepatan pada semua perangkat.
 
-\Isi{Nyatakan cakupan pengujian akhir, keterbatasan sampel, dan analisis
-yang belum dilakukan. Kaitkan kesimpulan hanya dengan bukti yang tersedia.}
+\subsection{Keterbatasan Keamanan}
+Beberapa komponen masih memiliki pola matematis yang perlu dikaji.
+FCM memiliki simetri rotasi: merotasi kedua bagian 64 bit dengan
+jumlah yang sama juga merotasi hasil FCM. Untuk perbedaan masukan
+satu bit pada input seragam, setiap fungsi internal $F_j$ memiliki
+empat kemungkinan perbedaan keluaran, masing-masing berpeluang $1/4$.
+Peluang tersebut berlaku pada satu fungsi internal, bukan pada seluruh
+FCM atau cipher sepuluh putaran.
+
+Penjumlahan byte juga mempertahankan perbedaan XOR pada bit tertinggi
+untuk setiap subkunci. Selain itu, pasangan subkunci penjumlahan/XOR
+$(a,b)$ dan $((a+128)\bmod256,b\oplus128)$ menghasilkan pemetaan byte
+yang sama. Artinya, kombinasi dua operasi tersebut tidak selalu
+membedakan semua pasangan subkunci. Sifat ini belum membuktikan adanya
+dua kunci utama yang menghasilkan cipher identik, karena seluruh
+subkunci diturunkan bersama dari satu kunci utama.
+
+Pengukuran statistik memakai tiga konfigurasi kunci/seed dan dua
+berkas kecil yang berpola. Belum dicari rangkaian perbedaan atau
+hubungan XOR yang bertahan selama banyak putaran, serangan dengan
+kunci yang saling terkait, maupun kebocoran melalui waktu eksekusi
+atau akses memori. Karena itu, pemulihan data yang benar dan avalanche
+mendekati 50\% mendukung hasil pengujian, tetapi belum membuktikan
+ketahanan terhadap serangan tersebut. Program juga belum memakai
+MAC/tag autentikasi, sehingga perubahan cipherteks masih dapat
+diterima sebagaimana diperlihatkan pada demonstrasi integritas.

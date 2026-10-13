@@ -24,7 +24,7 @@ S-box memetakan nilai byte menggunakan tabel. Pemetaan bijektif memiliki
 tabel invers untuk dekripsi. Permutasi mengubah posisi byte tanpa mengubah
 nilainya. Operasi XOR, rotasi bit, serta pencampuran pada $\mathrm{GF}(2^8)$
 serta penjumlahan modulo dan pencampuran Feistel digunakan oleh implementasi
-Brainrot v2. Langkah Feistel dapat dibalik tanpa mensyaratkan fungsi internal
+Brainrot. Langkah Feistel dapat dibalik tanpa mensyaratkan fungsi internal
 bijektif. Perkalian medan dalam kode memakai
 polinomial reduksi $x^8+x^4+x^3+x+1$, yang juga digunakan
 AES~\cite{aes}.
@@ -41,9 +41,10 @@ berlawanan arah.
 \textit{Key schedule} menurunkan kunci-kunci putaran secara deterministik
 dari kunci utama. AES menggunakan rotasi word, substitusi, XOR, dan
 konstanta putaran dalam proses perluasan kunci~\cite{aes}. Pendekatan ini
-menjadi acuan Brainrot, yang menghasilkan sebelas kunci berukuran
-16 byte: satu untuk tahap awal dan sepuluh untuk putaran enkripsi.
-Kunci yang sama digunakan dalam urutan terbalik pada dekripsi. Perluasan
+menjadi acuan Brainrot, yang menghasilkan 21 subkunci berukuran
+16 byte: satu untuk whitening dan dua untuk setiap putaran, yaitu
+penjumlahan modulo dan XOR. Dekripsi memakai subkunci yang sesuai
+dalam urutan operasi dan putaran terbalik. Perluasan
 ini tidak menambah entropi kunci utama; seluruh kunci putaran tetap
 ditentukan oleh kunci utama 128 bit. Rincian modifikasinya dijelaskan
 pada Bab III.

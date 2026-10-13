@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent flat-byte reference for frozen Brainrot v2 test vectors.
+"""Independent flat-byte reference for frozen Brainrot test vectors.
 
 Uses polynomial long division and derives the AES S-box algebraically rather
 than importing Go tables or transformations. Python is only a development tool.
@@ -12,7 +12,7 @@ from itertools import combinations
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DESTINATION = ROOT / "src/cipher/brainrot/testdata/v2-vectors.json"
+DESTINATION = ROOT / "src/cipher/brainrot/testdata/brainrot-vectors.json"
 MATRIX = ((12, 10, 6, 6), (7, 14, 9, 7), (6, 6, 12, 10), (9, 7, 7, 14))
 ROTATIONS = ((9, 21, 37), (13, 29, 43), (7, 17, 31), (11, 23, 41))
 
@@ -174,7 +174,7 @@ def main():
     parser.add_argument("--check-diffusion", action="store_true")
     args = parser.parse_args()
     fixture = {
-        "cipher": "Brainrot Cipher v2",
+        "cipher": "Brainrot Cipher",
         "provenance": "scripts/brainrot_reference.py; algebraic S-box, polynomial GF multiplication",
         "vectors": [
             vector("zero", bytes(16), bytes(16)),

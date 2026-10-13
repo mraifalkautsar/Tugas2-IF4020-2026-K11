@@ -1,5 +1,5 @@
 {
-  "cipher": "Brainrot Cipher v2",
+  "cipher": "Brainrot Cipher",
   "provenance": "scripts/brainrot_reference.py; algebraic S-box, polynomial GF multiplication",
   "vectors": [
     {

@@ -22,7 +22,7 @@ func decodeHex(t *testing.T, value string) []byte {
 }
 
 func TestIndependentKnownAnswers(t *testing.T) {
-	data, err := os.ReadFile("testdata/v2-vectors.json")
+	data, err := os.ReadFile("testdata/brainrot-vectors.json")
 	if err != nil {
 		t.Fatal(err)
 	}

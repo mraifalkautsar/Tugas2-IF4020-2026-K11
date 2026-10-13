@@ -1,13 +1,13 @@
 {
-  "cipher": "Brainrot Cipher v2",
+  "cipher": "Brainrot Cipher",
   "generated_utc": "2026-10-13T14:16:17.154161+00:00",
   "base_commit": "60e3c77a1adb96445fa744fa9c7fd05357c797dd",
   "go_version": "go version go1.26.0 linux/amd64",
   "os": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
   "source_sha256": {
     "src/cipher/brainrot/benchmark_test.go": "ad9351849ad699f1ac41a5a1ab5e25068a65c09b732f995affaf779a6f1bd20f",
-    "src/cipher/brainrot/brainrot.go": "cd12064d2467a914a3c9697ecb9b1e83190b8987c8233391ede7c63c7e74f5ad",
-    "src/cipher/brainrot/brainrot_test.go": "8d092d93d25c99a753cb658c5eedb6e2c153caf8b0d019e8df5c60063a4e1f2a",
+    "src/cipher/brainrot/brainrot.go": "e1d3802f82d2df1738a29d10eb197ceb755b1d7ffb132a8d61aec8b22f3624aa",
+    "src/cipher/brainrot/brainrot_test.go": "c6450f39a1b7db3d21d08e58ac4a8f6c84ca2a65e42e6fa7a1173f5ccc08a047",
     "src/cipher/brainrot/diffusion_test.go": "0c2bf982e8436e30186998ea188dd6eb4f590a268312b53bcb5c831817e326ae",
     "src/cipher/brainrot/extensions.go": "6362521025b3b991ca95e69d801d695efec5a2a240d792a5b81032b469371d48",
     "src/cipher/brainrot/tables.go": "54deef2c9413750b63a646ef881fce673560f52e862b9a9870fef96d223fa683",
@@ -52,28 +52,28 @@
     },
     {
       "file": "text-seed42.json",
-      "cipher": "Brainrot Cipher v2",
+      "cipher": "Brainrot Cipher",
       "input": "testdata/fixtures/repeated-text.txt",
       "seed": 42,
       "key_hex": "00112233445566778899aabbccddeeff"
     },
     {
       "file": "binary-seed42.json",
-      "cipher": "Brainrot Cipher v2",
+      "cipher": "Brainrot Cipher",
       "input": "testdata/fixtures/byte-pattern.bin",
       "seed": 42,
       "key_hex": "00112233445566778899aabbccddeeff"
     },
     {
       "file": "text-zero-seed1337.json",
-      "cipher": "Brainrot Cipher v2",
+      "cipher": "Brainrot Cipher",
       "input": "testdata/fixtures/repeated-text.txt",
       "seed": 1337,
       "key_hex": "00000000000000000000000000000000"
     },
     {
       "file": "binary-ones-seed1337.json",
-      "cipher": "Brainrot Cipher v2",
+      "cipher": "Brainrot Cipher",
       "input": "testdata/fixtures/byte-pattern.bin",
       "seed": 1337,
       "key_hex": "ffffffffffffffffffffffffffffffff"
@@ -98,7 +98,7 @@
         "median_ns_per_block": 20141
       }
     },
-    "v2": {
+    "brainrot": {
       "encrypt": {
         "ns_per_block": [
           27808,
@@ -118,9 +118,22 @@
     }
   },
   "limitations": "Samples and local branch bounds do not establish full-cipher security or authentication.",
-  "reference_sha256": "74d35a68ca6018c78f82f332bdf8484cb2b540906eb78ae15f71cd92a34b41ff",
-  "vectors_sha256": "899eef6920c83c0f303aab9f32b8ce70541e8711789f457293d1fa67582aae8a",
-  "render_script_sha256": "4a16d8711ca03f0c587abe59c44c1b6bdf78dc3e9bf0ffd1c5ec4f50716d3337",
+  "reference_sha256": "acd5e2f5e2e7e485cab3dd63ab6466ff9b878b079d9bc52c67b4c7fcf3101fd2",
+  "vectors_sha256": "5e6cfb7e3faec9ce7f077c78f7f6d2ddb61501e198493a37fdee397118b01db3",
+  "render_script_sha256": "fc20dbce50c47c15c9e5683a688c4df3a0afca59bec47730ea208306f49dc25c",
   "python_version": "Python 3.14.4",
-  "plotting_tool": "matplotlib 3.11.2"
+  "plotting_tool": "matplotlib 3.11.2",
+  "initial_measurement_source_sha256": {
+    "src/cipher/brainrot/benchmark_test.go": "ad9351849ad699f1ac41a5a1ab5e25068a65c09b732f995affaf779a6f1bd20f",
+    "src/cipher/brainrot/brainrot.go": "cd12064d2467a914a3c9697ecb9b1e83190b8987c8233391ede7c63c7e74f5ad",
+    "src/cipher/brainrot/brainrot_test.go": "8d092d93d25c99a753cb658c5eedb6e2c153caf8b0d019e8df5c60063a4e1f2a",
+    "src/cipher/brainrot/diffusion_test.go": "0c2bf982e8436e30186998ea188dd6eb4f590a268312b53bcb5c831817e326ae",
+    "src/cipher/brainrot/extensions.go": "6362521025b3b991ca95e69d801d695efec5a2a240d792a5b81032b469371d48",
+    "src/cipher/brainrot/tables.go": "54deef2c9413750b63a646ef881fce673560f52e862b9a9870fef96d223fa683",
+    "src/cipher/brainrot/transformations.go": "19809927d35799359def4be0bc982a2ba7961cea3ee71e2d4a50a61ee48a735f"
+  },
+  "demonstration_script_sha256": "877bb8ae8d1ef0a52131c50d937100cedc4d018c6a23070509897e0082fc50ba",
+  "demonstration_report": "document-demo.json",
+  "refreshed_utc": "2026-10-13T15:34:41.309803+00:00",
+  "source_note": "Current source hashes identify the renamed algorithm; initial hashes and benchmark timings preserve the original measurement provenance."
 }
