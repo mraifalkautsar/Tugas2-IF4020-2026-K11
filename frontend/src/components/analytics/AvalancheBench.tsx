@@ -89,8 +89,8 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
 
   if (!initialBlockHex || initialBlockHex.length !== 32) {
     return (
-      <div className="bg-white border-[2.5px] border-black p-12 text-center shadow-[4px_4px_0px_#000000]">
-        <Zap className="w-10 h-10 mx-auto text-gray-400 mb-3 stroke-[2]" />
+      <div className="bg-white border-[2.5px] border-black p-8 sm:p-12 text-center shadow-[4px_4px_0px_#000000]">
+        <Zap className="w-8 h-8 sm:w-10 sm:h-10 mx-auto text-gray-400 mb-3 stroke-[2]" />
         <p className="font-mono text-sm font-bold text-gray-700 uppercase">No Avalanche Data</p>
       </div>
     );
@@ -100,30 +100,28 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
   const bitOffset = 7 - (flipBitIndex % 8);
 
   return (
-    <div className="bg-white border-[2.5px] border-black shadow-[6px_6px_0px_#000000] p-6 md:p-8 space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b-2 border-black">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-sm bg-[#BE4BCE] border-2 border-black flex items-center justify-center text-white shadow-[2px_2px_0px_#000000]">
-            <Zap className="w-5 h-5 stroke-[2.5]" />
+    <div className="bg-white border-[2.5px] border-black shadow-[6px_6px_0px_#000000] p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 sm:pb-4 border-b-2 border-black">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-sm bg-[#BE4BCE] border-2 border-black flex items-center justify-center text-white shadow-[2px_2px_0px_#000000]">
+            <Zap className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
           </div>
-          <div>
-            <h3 className="text-lg font-black uppercase tracking-wider text-black">
-              Avalanche Effect
-            </h3>
-          </div>
+          <h3 className="text-base sm:text-lg font-black uppercase tracking-wider text-black">
+            Avalanche Effect
+          </h3>
         </div>
 
         <button
           type="button"
           onClick={handleRandomize}
-          className="px-3 py-1.5 bg-[#DEC3A1] hover:bg-[#d4b58e] text-black border-2 border-black font-bold text-xs shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 transition-all cursor-pointer"
+          className="px-2.5 sm:px-3 py-1.5 bg-[#DEC3A1] hover:bg-[#d4b58e] text-black border-2 border-black font-bold text-xs shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 transition-all cursor-pointer"
         >
           <Sparkles className="w-3.5 h-3.5" />
           Randomize
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 border-2 border-black p-5 shadow-[3px_3px_0px_#000000]">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 bg-gray-50 border-2 border-black p-3.5 sm:p-5 shadow-[3px_3px_0px_#000000]">
         <div className="space-y-4">
           <div>
             <label className="text-xs font-mono font-bold uppercase tracking-wider text-black block mb-2">
@@ -133,7 +131,7 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
               <button
                 type="button"
                 onClick={() => setTarget('plaintext')}
-                className={`flex-1 py-2 text-xs font-mono font-bold uppercase border-2 border-black transition-all cursor-pointer ${
+                className={`flex-1 py-1.5 sm:py-2 text-xs font-mono font-bold uppercase border-2 border-black transition-all cursor-pointer ${
                   target === 'plaintext'
                     ? 'bg-[#4542E0] text-white shadow-[2px_2px_0px_#000000]'
                     : 'bg-white text-black hover:bg-gray-100'
@@ -144,7 +142,7 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
               <button
                 type="button"
                 onClick={() => setTarget('key')}
-                className={`flex-1 py-2 text-xs font-mono font-bold uppercase border-2 border-black transition-all cursor-pointer ${
+                className={`flex-1 py-1.5 sm:py-2 text-xs font-mono font-bold uppercase border-2 border-black transition-all cursor-pointer ${
                   target === 'key'
                     ? 'bg-[#E75FA8] text-white shadow-[2px_2px_0px_#000000]'
                     : 'bg-white text-black hover:bg-gray-100'
@@ -158,7 +156,7 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
           <div>
             <div className="flex justify-between items-center mb-1 text-xs font-mono font-bold">
               <span>Flip Bit (0 - 127):</span>
-              <span className="bg-[#DEC3A1] border border-black px-2 py-0.5">
+              <span className="bg-[#DEC3A1] border border-black px-1.5 py-0.5 text-[11px]">
                 Bit #{flipBitIndex} (B{byteIndex}.{bitOffset})
               </span>
             </div>
@@ -182,7 +180,7 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
               type="text"
               value={blockHex}
               onChange={(e) => setBlockHex(e.target.value)}
-              className="w-full bg-white border-2 border-black px-3 py-1.5 font-mono text-xs text-black shadow-[1px_1px_0px_#000000] focus:outline-none"
+              className="w-full bg-white border-2 border-black px-2.5 sm:px-3 py-1.5 font-mono text-xs text-black shadow-[1px_1px_0px_#000000] focus:outline-none break-all"
               placeholder="32 hex chars"
             />
           </div>
@@ -195,7 +193,7 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
               type="text"
               value={keyHex}
               onChange={(e) => setKeyHex(e.target.value)}
-              className="w-full bg-white border-2 border-black px-3 py-1.5 font-mono text-xs text-black shadow-[1px_1px_0px_#000000] focus:outline-none"
+              className="w-full bg-white border-2 border-black px-2.5 sm:px-3 py-1.5 font-mono text-xs text-black shadow-[1px_1px_0px_#000000] focus:outline-none break-all"
               placeholder="32 hex chars"
             />
           </div>
@@ -227,28 +225,28 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
       )}
 
       {result && (
-        <div className="space-y-6 pt-2">
-          <div className="border-[2.5px] border-black p-5 bg-[#DEC3A1]/30 shadow-[4px_4px_0px_#000000] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="space-y-4 sm:space-y-6 pt-2">
+          <div className="border-[2.5px] border-black p-4 sm:p-5 bg-[#DEC3A1]/30 shadow-[4px_4px_0px_#000000] flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
             <div className="space-y-1 text-center md:text-left">
               <span className="text-xs font-mono font-bold uppercase text-gray-600 block">
                 Total Avalanche (Round 10)
               </span>
               <div className="flex items-baseline justify-center md:justify-start gap-2">
-                <span className="text-5xl font-black font-mono text-black">
+                <span className="text-4xl sm:text-5xl font-black font-mono text-black">
                   {result.total_avalanche_percentage.toFixed(2)}%
                 </span>
-                <span className="text-sm font-mono font-bold text-gray-600">
-                  ({Math.round((result.total_avalanche_percentage / 100) * 128)} / 128 bits)
+                <span className="text-xs sm:text-sm font-mono font-bold text-gray-600">
+                  ({Math.round((result.total_avalanche_percentage / 100) * 128)} / 128 b)
                 </span>
               </div>
             </div>
 
-            <div className="border-2 border-black p-3 bg-white shadow-[2px_2px_0px_#000000] font-mono text-xs space-y-1">
-              <div>
+            <div className="border-2 border-black p-2.5 sm:p-3 bg-white shadow-[2px_2px_0px_#000000] font-mono text-[11px] sm:text-xs space-y-1 w-full md:w-auto">
+              <div className="break-all">
                 <span className="text-gray-500 font-bold">Orig: </span>
                 <code className="text-black font-black">{result.original_ciphertext_hex}</code>
               </div>
-              <div>
+              <div className="break-all">
                 <span className="text-gray-500 font-bold">Mod:  </span>
                 <code className="text-[#E75FA8] font-black">{result.modified_ciphertext_hex}</code>
               </div>
@@ -256,21 +254,21 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
           </div>
 
           <div className="border-2 border-black bg-white shadow-[4px_4px_0px_#000000] overflow-hidden">
-            <div className="bg-black text-white px-4 py-2 font-mono font-black text-xs uppercase flex justify-between items-center">
+            <div className="bg-black text-white px-3 sm:px-4 py-2 font-mono font-black text-xs uppercase flex justify-between items-center">
               <span>Round Progression</span>
               <span className="text-emerald-400">Target: ~50%</span>
             </div>
 
-            <div className="p-4 space-y-3">
+            <div className="p-3 sm:p-4 space-y-2.5 sm:space-y-3">
               {result.round_progression.map((r) => {
                 const isNearIdeal = Math.abs(r.percentage - 50) < 10;
                 return (
-                  <div key={r.round} className="flex items-center gap-3 font-mono text-xs">
-                    <span className="w-20 font-black text-black shrink-0">
+                  <div key={r.round} className="flex items-center gap-2 sm:gap-3 font-mono text-xs">
+                    <span className="w-14 sm:w-20 font-black text-black shrink-0 text-[11px] sm:text-xs">
                       Round {r.round}:
                     </span>
 
-                    <div className="flex-1 h-5 bg-gray-100 border-2 border-black overflow-hidden relative shadow-[1px_1px_0px_#000000]">
+                    <div className="flex-1 h-4 sm:h-5 bg-gray-100 border-2 border-black overflow-hidden relative shadow-[1px_1px_0px_#000000]">
                       <div
                         className={`h-full border-r-2 border-black transition-all duration-300 ${
                           isNearIdeal
@@ -283,10 +281,10 @@ export const AvalancheBench: React.FC<AvalancheBenchProps> = ({
                       />
                     </div>
 
-                    <span className="w-24 text-right font-black text-black shrink-0">
-                      {r.percentage.toFixed(2)}%
+                    <span className="w-16 sm:w-24 text-right font-black text-black shrink-0 text-[11px] sm:text-xs">
+                      {r.percentage.toFixed(1)}%
                     </span>
-                    <span className="w-24 text-right text-gray-500 text-[11px] shrink-0 hidden sm:inline">
+                    <span className="w-20 text-right text-gray-500 text-[10px] shrink-0 hidden md:inline">
                       ({r.bits_flipped} / 128 b)
                     </span>
                   </div>

@@ -39,8 +39,8 @@ export const MainPage: React.FC<MainPageProps> = ({
   const [selectedFile, setSelectedFile] = useState<File | null>(initialFile);
   const [filePreview, setFilePreview] = useState<string>('');
 
-  const [key, setKey] = useState('BrainrotKey676767');
-  const [iv, setIv] = useState('0011223344556677');
+  const [key, setKey] = useState('');
+  const [iv, setIv] = useState('');
   const [mode, setMode] = useState<CipherMode>('CBC');
   const [padding, setPadding] = useState<PaddingScheme>('PKCS7');
 
@@ -257,13 +257,6 @@ export const MainPage: React.FC<MainPageProps> = ({
     scrollToSection('section-1');
   };
 
-  const handleResetAll = () => {
-    setInputText('');
-    setSelectedFile(null);
-    setResult(null);
-    scrollToSection('section-1');
-  };
-
   const effectivePlainBytes = useMemo(() => {
     if (result?.plainBytes && result.plainBytes.length > 0) {
       return result.plainBytes;
@@ -286,16 +279,16 @@ export const MainPage: React.FC<MainPageProps> = ({
   }, [result]);
 
   return (
-    <div className="h-screen overflow-y-auto snap-y snap-proximity md:snap-mandatory scroll-smooth relative bg-white text-black selection:bg-[#EC8DD1] selection:text-black">
+    <div className="min-h-[100dvh] h-screen overflow-y-auto md:snap-y md:snap-proximity scroll-smooth relative bg-white text-black selection:bg-[#EC8DD1] selection:text-black">
       <FloatingBubbles />
 
       <section
         id="section-1"
-        className="min-h-screen snap-start flex flex-col justify-between py-6 px-4 md:px-8 max-w-6xl mx-auto w-full relative z-10"
+        className="min-h-[100dvh] md:min-h-screen md:snap-start flex flex-col justify-between py-4 sm:py-6 px-3 sm:px-4 md:px-8 max-w-6xl mx-auto w-full relative z-10"
       >
-        <header className="w-full border-b-[2.5px] border-black bg-white pb-4 mb-4">
+        <header className="w-full border-b-[2.5px] border-black bg-white pb-3 sm:pb-4 mb-3 sm:mb-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 type="button"
                 onClick={onBackToLanding}
@@ -305,28 +298,26 @@ export const MainPage: React.FC<MainPageProps> = ({
                 <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
               </button>
 
-              <div className="w-9 h-9 rounded-md bg-[#4542E0] border-[2.5px] border-black flex items-center justify-center text-white font-mono font-black text-sm shadow-[2px_2px_0px_#000000]">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-md bg-[#4542E0] border-[2.5px] border-black flex items-center justify-center text-white font-mono font-black text-xs sm:text-sm shadow-[2px_2px_0px_#000000]">
                 67
               </div>
 
               <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-lg md:text-xl font-black uppercase tracking-tight text-black">
-                    BRAINROT CIPHER
-                  </h1>
-                </div>
+                <h1 className="text-base sm:text-lg md:text-xl font-black uppercase tracking-tight text-black">
+                  BRAINROT CIPHER
+                </h1>
               </div>
             </div>
           </div>
         </header>
 
-        <div className="space-y-5 flex-1 flex flex-col justify-center">
+        <div className="space-y-4 sm:space-y-5 flex-1 flex flex-col justify-center">
           <div className="flex items-center gap-2 font-mono text-xs font-black uppercase text-black">
             <span className="w-2.5 h-2.5 bg-[#4542E0] inline-block border border-black" />
             <span>Section 01: Input</span>
           </div>
 
-          <div className="flex flex-col md:flex-row items-stretch gap-4 md:gap-6 relative">
+          <div className="flex flex-col md:flex-row items-stretch gap-3 sm:gap-4 md:gap-6 relative">
             {!hasFile && (
               <RichTextField
                 value={inputText}
@@ -341,8 +332,8 @@ export const MainPage: React.FC<MainPageProps> = ({
             )}
 
             {!hasText && !hasFile && (
-              <div className="flex items-center justify-center my-[-8px] md:my-0 md:self-center shrink-0 z-20">
-                <div className="w-[44px] h-[44px] rounded-full bg-[#DEC3A1] border-[2.5px] border-black flex items-center justify-center font-black uppercase text-xs text-black shadow-[3px_3px_0px_#000000]">
+              <div className="flex items-center justify-center my-[-4px] md:my-0 md:self-center shrink-0 z-20">
+                <div className="w-[36px] h-[36px] sm:w-[44px] sm:h-[44px] rounded-full bg-[#DEC3A1] border-[2.5px] border-black flex items-center justify-center font-black uppercase text-xs text-black shadow-[3px_3px_0px_#000000]">
                   or
                 </div>
               </div>
@@ -376,11 +367,11 @@ export const MainPage: React.FC<MainPageProps> = ({
           />
         </div>
 
-        <div className="pt-4 pb-2 flex justify-center">
+        <div className="pt-3 sm:pt-4 pb-2 flex justify-center">
           <button
             type="button"
             onClick={() => scrollToSection(result ? 'section-2' : 'section-3')}
-            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 border-2 border-black font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 transition-all cursor-pointer"
+            className="w-full sm:w-auto px-4 py-2 bg-gray-100 hover:bg-gray-200 border-2 border-black font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_#000000] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
           >
             <span>{result ? 'Scroll Down to Result (Section 2)' : 'Scroll Down to Analysis (Section 3)'}</span>
             <ChevronDown className="w-4 h-4 stroke-[2.5]" />
@@ -391,7 +382,7 @@ export const MainPage: React.FC<MainPageProps> = ({
       {result && (
         <section
           id="section-2"
-          className="min-h-screen snap-start flex flex-col justify-between py-8 px-4 md:px-8 max-w-6xl mx-auto w-full relative z-10"
+          className="min-h-[100dvh] md:min-h-screen md:snap-start flex flex-col justify-between py-6 sm:py-8 px-3 sm:px-4 md:px-8 max-w-6xl mx-auto w-full relative z-10"
         >
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b-2 border-black pb-3">
@@ -420,7 +411,7 @@ export const MainPage: React.FC<MainPageProps> = ({
             <button
               type="button"
               onClick={() => scrollToSection('section-3')}
-              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 border-2 border-black font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_#000000] flex items-center gap-1.5 transition-all cursor-pointer"
+              className="w-full sm:w-auto px-4 py-2 bg-gray-100 hover:bg-gray-200 border-2 border-black font-mono font-bold text-xs uppercase shadow-[2px_2px_0px_#000000] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
             >
               <span>Scroll Down to Analysis (Section 3)</span>
               <ChevronDown className="w-4 h-4 stroke-[2.5]" />
@@ -431,7 +422,7 @@ export const MainPage: React.FC<MainPageProps> = ({
 
       <section
         id="section-3"
-        className="min-h-screen snap-start flex flex-col justify-start py-8 px-4 md:px-8 max-w-6xl mx-auto w-full space-y-6 relative z-10"
+        className="min-h-[100dvh] md:min-h-screen md:snap-start flex flex-col justify-start py-6 sm:py-8 px-3 sm:px-4 md:px-8 max-w-6xl mx-auto w-full space-y-4 sm:space-y-6 relative z-10"
       >
         <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-black pb-3">
           <div className="flex items-center gap-2 font-mono text-xs font-black uppercase text-black">
@@ -445,48 +436,48 @@ export const MainPage: React.FC<MainPageProps> = ({
             className="text-xs font-mono font-bold text-gray-600 hover:text-black hover:underline flex items-center gap-1 cursor-pointer"
           >
             <ChevronUp className="w-3.5 h-3.5" />
-            Back to Top (Section 1)
+            Back to Top
           </button>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 bg-gray-100 border-2 border-black p-2 shadow-[3px_3px_0px_#000000]">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 bg-gray-100 border-2 border-black p-1.5 sm:p-2 shadow-[3px_3px_0px_#000000]">
           <button
             type="button"
             onClick={() => setActiveAnalysisTab('avalanche')}
-            className={`flex-1 min-w-[140px] py-2.5 px-3 font-mono font-black text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+            className={`py-2 sm:py-2.5 px-1.5 sm:px-3 font-mono font-black text-[11px] sm:text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 ${
               activeAnalysisTab === 'avalanche'
-                ? 'bg-[#BE4BCE] text-white shadow-[3px_3px_0px_#000000] -translate-y-0.5'
+                ? 'bg-[#BE4BCE] text-white shadow-[2px_2px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] -translate-y-0.5'
                 : 'bg-white text-black hover:bg-gray-50'
             }`}
           >
-            <Zap className="w-4 h-4 stroke-[2.5]" />
-            Avalanche
+            <Zap className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="truncate">Avalanche</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveAnalysisTab('histogram')}
-            className={`flex-1 min-w-[140px] py-2.5 px-3 font-mono font-black text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+            className={`py-2 sm:py-2.5 px-1.5 sm:px-3 font-mono font-black text-[11px] sm:text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 ${
               activeAnalysisTab === 'histogram'
-                ? 'bg-[#E75FA8] text-white shadow-[3px_3px_0px_#000000] -translate-y-0.5'
+                ? 'bg-[#E75FA8] text-white shadow-[2px_2px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] -translate-y-0.5'
                 : 'bg-white text-black hover:bg-gray-50'
             }`}
           >
-            <BarChart2 className="w-4 h-4 stroke-[2.5]" />
-            Histogram
+            <BarChart2 className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="truncate">Histogram</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveAnalysisTab('entropy')}
-            className={`flex-1 min-w-[140px] py-2.5 px-3 font-mono font-black text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+            className={`py-2 sm:py-2.5 px-1.5 sm:px-3 font-mono font-black text-[11px] sm:text-xs uppercase border-2 border-black transition-all cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 ${
               activeAnalysisTab === 'entropy'
-                ? 'bg-[#4542E0] text-white shadow-[3px_3px_0px_#000000] -translate-y-0.5'
+                ? 'bg-[#4542E0] text-white shadow-[2px_2px_0px_#000000] sm:shadow-[3px_3px_0px_#000000] -translate-y-0.5'
                 : 'bg-white text-black hover:bg-gray-50'
             }`}
           >
-            <Activity className="w-4 h-4 stroke-[2.5]" />
-            Entropy
+            <Activity className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span className="truncate">Entropy</span>
           </button>
         </div>
 
