@@ -4,12 +4,20 @@
 \textit{Block cipher} memetakan blok plainteks berukuran tetap menjadi
 blok cipherteks dengan kunci rahasia. Untuk setiap kunci $K$, enkripsi
 $E_K$ memiliki invers $D_K$ sehingga $D_K(E_K(P))=P$.
-SPN mengulang lapisan substitusi, permutasi atau pencampuran, dan
-penggabungan kunci. Substitusi nonlinier mendukung \textit{confusion},
-sedangkan penyebaran pengaruh byte masukan mendukung \textit{diffusion}.
+\textit{Substitution--Permutation Network} (SPN) mengulang lapisan
+substitusi, permutasi atau pencampuran, dan penggabungan kunci. Dekripsi
+menerapkan invers setiap transformasi dalam urutan terbalik. Struktur
+dasar tersebut dijelaskan dalam kajian SPN oleh Heys~\cite{heys}.
 
-\Isi{Tambahkan rujukan teori confusion, diffusion, dan SPN yang benar-benar
-digunakan. Pertahankan bab ini ringkas.}
+Shannon memperkenalkan prinsip \textit{confusion} dan \textit{diffusion}
+untuk mempersulit analisis statistik cipher~\cite{shannon}.
+\textit{Confusion} membuat hubungan antara statistik cipherteks dan kunci
+menjadi kompleks, sedangkan \textit{diffusion} menyebarkan struktur
+statistik plainteks ke banyak bagian cipherteks. Dalam Brainrot,
+substitusi nonlinier dan penggabungan kunci mendukung \textit{confusion},
+sedangkan pergeseran baris serta pencampuran kolom mendukung
+\textit{diffusion}. Keduanya merupakan prinsip perancangan, bukan bukti
+bahwa suatu cipher telah aman.
 
 \section{S-box, Permutasi, dan Operasi Tambahan}
 S-box memetakan nilai byte menggunakan tabel. Pemetaan bijektif memiliki
@@ -19,6 +27,25 @@ digunakan oleh implementasi Brainrot. Perkalian medan dalam kode memakai
 polinomial reduksi $x^8+x^4+x^3+x+1$, yang juga digunakan
 AES~\cite{aes}.
 
+Pada medan tersebut, satu byte merepresentasikan polinomial biner
+berderajat paling tinggi tujuh. Penjumlahan dilakukan dengan XOR,
+sedangkan perkalian diikuti reduksi polinomial, bukan perkalian bilangan
+bulat biasa. Matriks pencampuran harus memiliki invers agar kolom state
+dapat dipulihkan. XOR dengan nilai yang sama membalik operasi sebelumnya,
+$(x\oplus k)\oplus k=x$, sedangkan rotasi bit dibalik dengan rotasi
+berlawanan arah.
+
+\section{Pembentukan Kunci Putaran}
+\textit{Key schedule} menurunkan kunci-kunci putaran secara deterministik
+dari kunci utama. AES menggunakan rotasi word, substitusi, XOR, dan
+konstanta putaran dalam proses perluasan kunci~\cite{aes}. Pendekatan ini
+menjadi acuan Brainrot, yang menghasilkan sebelas kunci berukuran
+16 byte: satu untuk tahap awal dan sepuluh untuk putaran enkripsi.
+Kunci yang sama digunakan dalam urutan terbalik pada dekripsi. Perluasan
+ini tidak menambah entropi kunci utama; seluruh kunci putaran tetap
+ditentukan oleh kunci utama 128 bit. Rincian modifikasinya dijelaskan
+pada Bab III.
+
 \section{Mode Operasi}
 ECB, CBC, CFB, OFB, dan CTR adalah lima mode kerahasiaan yang dijelaskan
 pada NIST SP 800-38A~\cite{mode}. ECB memproses blok secara independen;
@@ -27,28 +54,58 @@ cipherteks, OFB memakai umpan balik keluaran cipher, dan CTR mengenkripsi
 nilai pencacah. Rincian implementasi dan penanganan blok akhir tersedia
 pada Bab IV.
 
+ECB tidak menggunakan \textit{initialization vector} (IV), sehingga blok
+plainteks yang sama menghasilkan blok cipherteks yang sama untuk kunci
+yang sama. CBC dan CFB memerlukan IV yang tidak dapat diprediksi;
+OFB memerlukan IV yang unik untuk setiap pesan dengan kunci yang sama.
+Pada CTR, seluruh blok pencacah harus unik untuk kunci yang sama,
+termasuk antarberkas atau antarpesan. IV tidak perlu dirahasiakan, tetapi
+harus memenuhi persyaratan mode yang digunakan~\cite{mode}.
+
 \section{Padding dan Verifikasi Data}
 ECB dan CBC memerlukan masukan berupa blok lengkap. Untuk panjang blok
 $b$ byte dan pesan $L$ byte, PKCS\#7 menambahkan $p=b-(L\bmod b)$ byte,
 masing-masing bernilai $p$. Pesan yang sudah tepat kelipatan blok tetap
 mendapat satu blok padding sehingga penghapusannya tidak ambigu~\cite{padding}.
+Pada dekripsi, nilai $p$ harus berada pada rentang $1$ sampai $b$ dan
+seluruh $p$ byte terakhir harus bernilai $p$. Dalam implementasi ini,
+CFB, OFB, dan CTR memproses sisa byte melalui XOR dengan keystream
+tanpa padding.
+
 Kesamaan byte hasil dekripsi dengan masukan membuktikan pemulihan data
-pada pengujian tersebut. Deteksi perubahan cipherteks oleh pihak lain
-memerlukan mekanisme verifikasi tambahan yang harus dijelaskan tersendiri.
+pada pengujian tersebut, bukan autentikasi integritas. Padding yang valid
+juga tidak membuktikan bahwa cipherteks belum dimodifikasi. Deteksi
+manipulasi memerlukan mekanisme autentikasi, misalnya
+\textit{Message Authentication Code} (MAC), yaitu tag yang dihitung
+menggunakan kunci rahasia dan diverifikasi oleh penerima~\cite[bagian 9]{padding}.
+Implementasi Brainrot saat ini belum menyertakan MAC atau tag autentikasi.
 
 \section{Ukuran Statistik}
-Jika dua cipherteks $C$ dan $C'$ memiliki $N$ bit, persentase perubahan
-bit dinyatakan sebagai
+\textit{Avalanche effect} diamati dengan mengubah tepat satu bit plainteks
+atau kunci, sementara parameter lainnya dipertahankan. Jika dua
+cipherteks $C$ dan $C'$ memiliki panjang yang sama, yaitu $N>0$ bit,
+persentase perubahan bit dinyatakan sebagai
 \begin{equation}
   A(C,C')=\frac{\operatorname{HW}(C\oplus C')}{N}\times100\%,
 \end{equation}
 dengan $\operatorname{HW}$ menyatakan banyaknya bit bernilai satu.
-Untuk satu blok Brainrot, $N=128$. Entropi empiris byte dihitung dari
+Untuk satu blok Brainrot, $N=128$. Rata-rata mendekati $50\%$ menunjukkan
+bahwa sekitar separuh bit keluaran berubah pada sampel pengujian,
+tetapi tidak membuktikan ketahanan terhadap kriptanalisis.
+
+Entropi empiris byte dihitung dari
 frekuensi relatif $p_v$ setiap nilai byte $v$:
 \begin{equation}
   H=-\sum_{v=0}^{255}p_v\log_2 p_v,\qquad 0\log_2 0=0.
 \end{equation}
-Nilai maksimum distribusi byte adalah 8 bit/byte. Histogram menampilkan
-jumlah kemunculan masing-masing nilai $v$. Ketiga ukuran ini memberikan
-deskripsi statistik sampel; hasilnya perlu dibahas bersama ukuran sampel
-dan perilaku mode operasi.
+Nilai maksimum distribusi byte adalah 8 bit/byte, tercapai ketika seluruh
+256 nilai byte memiliki frekuensi relatif yang sama. Histogram menampilkan
+jumlah kemunculan masing-masing nilai $v$. Entropi tinggi dan histogram
+merata tidak menjamin tidak adanya pola atau korelasi antarbyte.
+
+Pengukuran satu blok harus dibedakan dari pengukuran seluruh pesan.
+Sebagai contoh, pada OFB dan CTR dengan kunci serta IV tetap, perubahan
+satu bit plainteks hanya mengubah satu bit cipherteks karena keystream
+yang digunakan tetap sama. Oleh karena itu, ukuran statistik perlu
+ditafsirkan bersama ukuran sampel dan sifat mode operasi, bukan dijadikan
+bukti tunggal keamanan algoritma.

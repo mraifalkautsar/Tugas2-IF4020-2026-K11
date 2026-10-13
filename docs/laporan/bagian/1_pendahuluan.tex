@@ -1,34 +1,8 @@
 \chapter{PENDAHULUAN}
 
-\section{Latar Belakang}
-Tugas 2 IF4020 Kriptografi meminta perancangan \textit{block cipher} baru,
-implementasi enkripsi dan dekripsi dalam lima mode operasi, serta pengujian
-\textit{avalanche effect}, entropi, dan histogram. Rancangan harus memiliki
-substitusi berbasis tabel, permutasi, kunci putaran, dan operasi tambahan
-di luar substitusi serta transposisi~\cite{spesifikasi}.
+Perkembangan pertukaran informasi digital menimbulkan kebutuhan untuk melindungi kerahasiaan data, baik dalam bentuk teks maupun berkas biner. Salah satu pendekatan yang digunakan adalah kriptografi simetris, yaitu proses enkripsi dan dekripsi menggunakan kunci rahasia yang sama. Block cipher merupakan algoritma kriptografi simetris yang memproses data dalam blok berukuran tetap. Untuk menangani pesan yang lebih panjang, block cipher digunakan bersama mode operasi tertentu.
 
-\Isi{Kembangkan motivasi rancangan, masalah yang ingin dijawab, dan alasan
-memilih pendekatan Brainrot Cipher.}
+DES dan AES menjadi pembanding dalam perancangan algoritma ini. DES menggunakan blok 64 bit, kunci efektif 56 bit, dan struktur Feistel dengan 16 putaran. DES merupakan standar historis yang telah ditarik oleh NIST. Sementara itu, AES menggunakan blok 128 bit dengan pilihan panjang kunci 128, 192, atau 256 bit, masing-masing menggunakan 10, 12, atau 14 putaran. AES menggabungkan substitusi byte, pergeseran baris, pencampuran kolom, dan penambahan kunci putaran. Rancangan Brainrot Cipher lebih dekat dengan pendekatan AES daripada DES. Referensi pembanding yang digunakan adalah \href{https://csrc.nist.gov/files/pubs/fips/46-3/final/docs/fips46-3.pdf}{spesifikasi DES} dan \href{https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf}{spesifikasi AES}.
 
-\section{Tinjauan Cipher Pembanding}
-AES menjadi pembanding yang relevan karena menggunakan blok 128 bit serta
-transformasi substitusi dan permutasi~\cite{aes}. Implementasi Brainrot
-menggunakan \textit{state} berukuran $4\times4$ byte, sepuluh putaran,
-S-box hasil transformasi S-box AES, dan ekspansi kunci dengan pola serupa
-AES-128. Parameter permutasi, matriks pencampuran, konstanta penambahan
-kunci, dan substitusi dimodifikasi sebagaimana dijelaskan pada Bab III.
+Brainrot Cipher dirancang sebagai block cipher eksperimental berbasis Substitution–Permutation Network atau SPN. Algoritma ini menggunakan blok 128 bit, kunci 128 bit, dan 10 putaran. Gagasan utamanya adalah menggabungkan substitusi nonlinear dan transformasi linear yang dapat dibalik, kemudian mengikat setiap putaran dengan kunci yang diturunkan dari kunci utama. Karakteristik khususnya terdapat pada modifikasi Kotak-S, pola pergeseran baris, matriks pencampuran kolom, serta penggunaan konstanta tertentu pada pembentukan dan penambahan kunci putaran.
 
-\Isi{Uraikan secara singkat persamaan, perbedaan, dan alasan pemilihan
-komponen terhadap cipher pembanding. Jelaskan asal ide serta komponen
-yang dirancang sendiri sesuai ketentuan tugas; jangan menyimpulkan
-keamanan setara AES hanya dari kesamaan struktur.}
-
-\section{Gagasan dan Ruang Lingkup}
-\NamaAlgoritma{} menggunakan \textit{Substitution-Permutation Network}
-(SPN), blok dan kunci utama sepanjang 128 bit, serta sepuluh putaran.
-Program ditulis dalam Go dan menyediakan mode ECB, CBC, CFB, OFB, serta CTR.
-Analisis memisahkan pengujian satu blok dari perilaku enkripsi pesan
-utuh pada setiap mode.
-
-\Isi{Lengkapi tujuan rancangan, alasan pemilihan parameter, dan batas
-ruang lingkup laporan berdasarkan implementasi akhir.}
