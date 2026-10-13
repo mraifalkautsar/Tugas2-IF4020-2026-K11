@@ -48,8 +48,7 @@ func byteSupports(size int) [][]int {
 	return result
 }
 
-func TestLinearLayerBranchBounds(t *testing.T) {
-	var matrix, transpose [128]binaryVector
+func linearLayerMatrices() (matrix, transpose [128]binaryVector) {
 	for inputBit := range matrix {
 		var input, output [16]byte
 		input[inputBit/8] = 1 << uint(inputBit%8)
@@ -67,18 +66,28 @@ func TestLinearLayerBranchBounds(t *testing.T) {
 			transpose[row][column/64] |= matrix[column].bit(row) << uint(column%64)
 		}
 	}
+	return matrix, transpose
+}
+
+func TestLinearLayerBranchBounds(t *testing.T) {
+	matrix, transpose := linearLayerMatrices()
 	var supports [4][][]int
 	for size := 1; size <= 3; size++ {
 		supports[size] = byteSupports(size)
 	}
 	for _, tc := range []struct {
-		name    string
-		columns [128]binaryVector
-	}{{"differential", matrix}, {"linear masks", transpose}} {
+		name         string
+		columns      [128]binaryVector
+		bound        int
+		supportCount int
+	}{
+		{"differential", matrix, 5, 36416},
+		{"linear masks", transpose, 4, 4096},
+	} {
 		t.Run(tc.name, func(t *testing.T) {
 			checked := 0
-			for inputSize := 1; inputSize <= 3; inputSize++ {
-				for outputSize := 1; inputSize+outputSize <= 4; outputSize++ {
+			for inputSize := 1; inputSize < tc.bound-1; inputSize++ {
+				for outputSize := 1; inputSize+outputSize < tc.bound; outputSize++ {
 					for _, inputSupport := range supports[inputSize] {
 						columns := make([]binaryVector, 0, 8*inputSize)
 						for _, i := range inputSupport {
@@ -90,17 +99,42 @@ func TestLinearLayerBranchBounds(t *testing.T) {
 								keep[i/8] &^= uint64(255) << uint(8*(i%8))
 							}
 							if dependent(columns, keep) {
-								t.Fatalf("branch number <5: input %v, output %v", inputSupport, outputSupport)
+								t.Fatalf("branch number <%d: input %v, output %v", tc.bound, inputSupport, outputSupport)
 							}
 							checked++
 						}
 					}
 				}
 			}
-			if checked != 36416 {
+			if checked != tc.supportCount {
 				t.Fatalf("incomplete support enumeration: %d", checked)
 			}
-			t.Logf("all %d supports exclude branch weights below 5", checked)
+			t.Logf("all %d supports exclude branch weights below %d", checked, tc.bound)
 		})
+	}
+}
+
+func TestLinearMaskBranchWitness(t *testing.T) {
+	_, transpose := linearLayerMatrices()
+	// Output mask 09 at byte 0 activates one byte. The resulting input mask
+	// activates bytes 1, 4, and 6, proving an upper bound of 1+3=4.
+	// The exhaustive rank test independently proves the matching lower bound.
+	actual := binaryVector{
+		transpose[0][0] ^ transpose[3][0],
+		transpose[0][1] ^ transpose[3][1],
+	}
+	expected := [16]byte{1: 0xc9, 4: 0xc9, 6: 0x20}
+	active := 1
+	for i, want := range expected {
+		got := byte(actual[i/8] >> uint(8*(i%8)))
+		if got != want {
+			t.Fatalf("linear mask byte %d = %02x; want %02x", i, got, want)
+		}
+		if got != 0 {
+			active++
+		}
+	}
+	if active != 4 {
+		t.Fatalf("witness activates %d bytes; want 4", active)
 	}
 }

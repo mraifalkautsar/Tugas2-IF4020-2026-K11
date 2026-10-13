@@ -14,7 +14,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DESTINATION = ROOT / "src/cipher/brainrot/testdata/brainrot-vectors.json"
-MATRIX = ((12, 10, 6, 6), (7, 14, 9, 7), (6, 6, 12, 10), (9, 7, 7, 14))
+MATRIX = ((0x67, 0x06, 0x07, 0x07), (0x06, 0x67, 0x06, 0x07),
+          (0x07, 0x06, 0x67, 0x06), (0x07, 0x07, 0x06, 0x67))
 ROTATIONS = ((9, 21, 37), (13, 29, 43), (7, 17, 31), (11, 23, 41))
 
 
@@ -137,14 +138,16 @@ def check_diffusion():
         columns.append(int.from_bytes(bytes(transpose(mix(shift(data)))), "little"))
     transposed = [sum(((column >> row) & 1) << index
                       for index, column in enumerate(columns)) for row in range(128)]
-    for name, matrix in [("differences", columns), ("linear masks", transposed)]:
+    for name, matrix, bound, expected_count in [
+            ("differences", columns, 5, 36416),
+            ("linear masks", transposed, 4, 4096)]:
         # Row elimination: a full-rank restriction excludes any nonzero input
         # supported on I whose output is supported on O.
         rows = [sum(((column >> row) & 1) << index
                     for index, column in enumerate(matrix)) for row in range(128)]
         checked = 0
-        for input_size in range(1, 4):
-            for output_size in range(1, 5 - input_size):
+        for input_size in range(1, bound - 1):
+            for output_size in range(1, bound - input_size):
                 for inputs in combinations(range(16), input_size):
                     input_mask = sum(255 << (8 * i) for i in inputs)
                     for outputs in combinations(range(16), output_size):
@@ -164,8 +167,17 @@ def check_diffusion():
                                 break
                         assert len(pivots) == 8 * input_size, (name, inputs, outputs)
                         checked += 1
-        assert checked == 36416
-        print(f"Independent {name} check: all {checked} supports exclude byte branch number <5")
+        assert checked == expected_count
+        print(f"Independent {name} check: all {checked} supports exclude byte branch number <{bound}")
+
+    # A concrete mask proves the linear bound is exactly 4, not just >=4.
+    # A^T maps output mask 09 at byte 0 to input masks c9,c9,20 at bytes 1,4,6.
+    witness = transposed[0] ^ transposed[3]
+    expected = bytes([0, 0xc9, 0, 0, 0xc9, 0, 0x20] + [0] * 9)
+    assert witness.to_bytes(16, "little") == expected
+    assert 1 + sum(value != 0 for value in expected) == 4
+    print("Independent linear-mask witness: 09000000000000000000000000000000 -> "
+          + expected.hex() + "; byte branch number =4")
 
 
 def main():

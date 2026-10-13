@@ -3,10 +3,72 @@ package brainrot
 import (
 	"bytes"
 	"fmt"
+	"math/bits"
 	"testing"
 
 	"github.com/mraifalkautsar/Tugas2-IF4020-2026-K11/src/modes"
 )
+
+func TestMixColumnsMDSAndInverse(t *testing.T) {
+	for _, matrices := range [][2][4][4]byte{
+		{mix67, inverseMix67}, {inverseMix67, mix67},
+	} {
+		for row := 0; row < 4; row++ {
+			for col := 0; col < 4; col++ {
+				var got, want byte
+				for k := 0; k < 4; k++ {
+					got ^= gfMul(matrices[0][row][k], matrices[1][k][col])
+				}
+				if row == col {
+					want = 1
+				}
+				if got != want {
+					t.Fatalf("matrix/inverse product at (%d,%d) = %02x; want %02x", row, col, got, want)
+				}
+			}
+		}
+	}
+	checked := 0
+	for rowMask := 1; rowMask < 16; rowMask++ {
+		for colMask := 1; colMask < 16; colMask++ {
+			if bits.OnesCount(uint(rowMask)) != bits.OnesCount(uint(colMask)) {
+				continue
+			}
+			var rows, cols []int
+			for i := 0; i < 4; i++ {
+				if rowMask&(1<<i) != 0 {
+					rows = append(rows, i)
+				}
+				if colMask&(1<<i) != 0 {
+					cols = append(cols, i)
+				}
+			}
+			// In characteristic two, determinant signs are all +1. Sum the
+			// products for every column permutation using XOR.
+			var determinant byte
+			var visit func(int, int, byte)
+			visit = func(row, used int, product byte) {
+				if row == len(rows) {
+					determinant ^= product
+					return
+				}
+				for col := range cols {
+					if used&(1<<col) == 0 {
+						visit(row+1, used|(1<<col), gfMul(product, mix67[rows[row]][cols[col]]))
+					}
+				}
+			}
+			visit(0, 0, 1)
+			if determinant == 0 {
+				t.Fatalf("MixColumns is not MDS: singular minor rows %v, columns %v", rows, cols)
+			}
+			checked++
+		}
+	}
+	if checked != 69 {
+		t.Fatalf("checked %d square minors; want 69", checked)
+	}
+}
 
 func TestSBox67PermutationAndInverse(t *testing.T) {
 	// Reference from an independent simulation: zero-based axes 6 then 7,
